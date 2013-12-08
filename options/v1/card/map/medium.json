@@ -1,0 +1,33 @@
+{
+  "id": "/api/v1/card/map/medium.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Medium Map Schema",
+  "type": "object",
+  "description": "A medium map card",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the map"
+    },
+    "center": {
+      "description": "Coordinates center of a map",
+      "$ref": "http://json-schema.org/geo"
+    },
+    "pins": {
+      "description": "Coordinates of pins on a map",
+      "type": "array",
+      "items": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of a pin"
+          },
+          "location": {
+            "$ref": "http://json-schema.org/geo",
+            "description": "Location of pin"
+          }
+        }
+      }
+    }
+  }
+}

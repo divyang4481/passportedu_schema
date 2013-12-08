@@ -1,0 +1,89 @@
+{
+  "id": "/api/v1/student/card.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "cards",
+  "type": "object",
+  "name": "cards",
+  "description": "A card is a simple way to display content types across the site, they can be read, written. Cards break up into mobile format easily and can pile vertically or horizontally.",
+  "properties": {
+    "data": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "/api/v1/card/form/small.json"
+        },
+        {
+          "$ref": "/api/v1/card/form/medium.json"
+        },
+        {
+          "$ref": "/api/v1/card/form/large.json"
+        },
+        {
+          "$ref": "/api/v1/card/dial/small.json"
+        }
+      ]
+    },
+    "mediaType": {
+      "title": "mediaType",
+      "description": "mediaType of the data",
+      "identity": false,
+      "enum": [
+        "/api/v1/card/form/small.json",
+        "/api/v1/card/form/medium.json",
+        "/api/v1/card/form/large.json",
+        "/api/v1/card/dial/small.json"
+      ]
+    },
+    "updated": {
+      "title": "updated",
+      "description": "updated",
+      "identity": false,
+      "readonly": false,
+      "type": "date-time"
+    },
+    "_id": {
+      "title": "_id",
+      "description": "_id",
+      "identity": true,
+      "readonly": true,
+      "type": "string"
+    }
+  },
+  "links": {
+    "self": {
+      "rel": "self",
+      "href": "/api/v1/cards/{_id}"
+    },
+    "destroy": {
+      "rel": "destroy",
+      "href": "/api/v1/cards/{_id}",
+      "method": "DELETE"
+    },
+    "update": {
+      "title": "Update a Card",
+      "rel": "update",
+      "href": "/api/v1/cards/{_id}",
+      "properties": {
+        "data": {
+          "title": "data",
+          "description": "data ",
+          "identity": false,
+          "readonly": false,
+          "type": "any"
+        },
+        "updated": {
+          "title": "updated",
+          "description": "updated ",
+          "identity": false,
+          "readonly": false,
+          "type": "date-time"
+        }
+      },
+      "method": "PUT"
+    },
+    "root": {
+      "rel": "root",
+      "href": "#/result"
+    }
+  }
+}

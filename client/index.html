@@ -1,0 +1,25 @@
+<html>
+<head>
+  <title>Schema Browser</title>
+</head>
+<body ng-app="client">
+<h1>Schema Browser</h1>
+
+<div id="schema">
+  <div ng-controller="ClientArea">
+    <h2 ng-bind="schema.title"></h2>
+    <h3 ng-bind="schema.description"></h3>
+    <ul>
+      <li ng-repeat="link in schema.links">
+        <a ng-href="{{link.href}}" ng-bind="link.rel"></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<script src="/libs/underscore-1.4.4.js"></script>
+<script src="/libs/angular-1.1.5.js"></script>
+<script src="/libs/angular/angular-resource.js"></script>
+<script src="/schemaCrawler.js"></script>
+<script src="/client.js"></script>
+</body>
+</html>

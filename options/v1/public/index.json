@@ -1,0 +1,29 @@
+{
+  "id": "/api/v1/public",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "PassportEDU API",
+  "name": "PassportEDU API",
+  "type": "object",
+  "description": "The root resource for the PassportEDU API.",
+  "properties": {
+
+  },
+  "links": {
+    "authenticate": {
+      "rel": "authenticate",
+      "href": "/api/v1/public/authenticate",
+      "method": "POST",
+      "schema": {
+        "$ref": "/api/v1/public/authenticate"
+      }
+    },
+    "cards": {
+      "rel": "cards",
+      "href": "/api/v1/resources/cards",
+      "method": "GET",
+      "schema": {
+        "$ref": "/api/v1/public/card"
+      }
+    }
+  }
+}

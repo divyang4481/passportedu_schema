@@ -1,0 +1,27 @@
+{
+  "id": "/api/v1/card/image/small.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Small Image Schema",
+  "type": "object",
+  "description": "A small image card",
+  "properties": {
+    "imgData": {
+      "title": "Image (small)",
+      "description": "Data containing a small photo to go with paragraph.",
+      "type": "string",
+      "maxLength": 2000,
+      "media": {
+        "binaryEncoding": "base64",
+        "type": "image/png"
+      }
+    },
+    "alt": {
+      "title": "Alternate text.",
+      "description": "Text for browser that cannot render images.",
+      "type": "string"
+    }
+  },
+  "links": [
+
+  ]
+}
