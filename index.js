@@ -29,20 +29,10 @@ app.use('/api/v1/resources', rest(user));
  */
 app.use(express.json());
 app.use(express.urlencoded());
-var authenticate = require('./server/helpers/authenticate');
 app.options('/api*', function(req, res) {
-  authenticate.auth(req, function(err, auth) {
-    var portal = 'public';
-    if (!err) {
-      portal = auth.permission[0];
-      if (auth.permission.length === 0) {
-        portal = 'public';
-      }
-    }
-    var schemaLoc = path.join(__dirname, 'options', 'v1', portal, req.url.replace('/api/v1', ''));
-    var schema = require(schemaLoc);
-    res.json(schema);
-  });
+  var schemaLoc = path.join(__dirname, 'options', 'v1', req.url.replace('/api/v1', ''));
+  var schema = require(schemaLoc);
+  res.json(schema);
 });
 app.all('/api*', function(req, res) {
   var endLoc = path.join(__dirname, 'server', 'api', req.url.replace('/api', ''));

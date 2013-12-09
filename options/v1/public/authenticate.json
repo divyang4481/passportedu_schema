@@ -1,40 +1,50 @@
 {
   "id": "/api/v1/public/authenticate",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Login",
+  "title": "Login to Access Private Content",
   "name": "Login",
   "type": "object",
   "description": "Login to the PassportEDU API.",
-  "targetSchema": {
-    "properties": {
-      "token": {
-        "title": "Session Token",
-        "description": "Unique token for your user session",
-        "type": "string"
+  "links": {
+    "login": {
+      "href": "/api/v1/public/authenticate",
+      "method": "POST",
+      "targetSchema": {
+        "properties": {
+          "token": {
+            "title": "Session Token",
+            "description": "Unique token for your user session",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "description": "Your username",
+            "type": "string"
+          },
+          "fullName": {
+            "title": "Your full name",
+            "description": "Your first and last name.",
+            "type": "string"
+          }
+        }
       },
-      "username": {
-        "title": "Username",
-        "description": "Your username",
-        "type": "string"
+      "properties": {
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        }
       },
-      "fullName": {
-        "title": "Your full name",
-        "description": "Your first and last name.",
-        "type": "string"
-      }
-    }
-  },
-  "properties": {
-    "username": {
-      "title": "Your username",
-      "description": "Your email address or username",
-      "type": "string"
+      "required": ["username", "password"]
     },
-    "password": {
-      "title": "Your password",
-      "description": "Your password",
-      "type": "password"
+    "self": {
+      "href": "/api/v1/public/authenticate",
+      "method": "GET"
     }
-  },
-  "required": ["username", "password"]
+  }
 }

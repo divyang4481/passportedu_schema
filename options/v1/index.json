@@ -9,7 +9,15 @@
 
   },
   "links": {
-    "school": {
+    "public": {
+      "rel": "public",
+      "href": "/api/v1/public",
+      "method": "GET",
+      "schema": {
+        "$ref": "/api/v1/public"
+      }
+    },
+    "student": {
       "rel": "student",
       "href": "/api/v1/student",
       "method": "GET",
@@ -17,12 +25,12 @@
         "$ref": "/api/v1/student"
       }
     },
-    "cards": {
+    "school": {
       "rel": "cards",
-      "href": "/api/v1/resources/cards",
+      "href": "/api/v1/school",
       "method": "GET",
       "schema": {
-        "$ref": "/api/v1/card"
+        "$ref": "/api/v1/school"
       }
     },
     "authenticate": {
