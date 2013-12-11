@@ -1,59 +1,100 @@
 angular.module('schema', ['ngResource'])
   .config(function($interpolateProvider) {
-    //    $interpolateProvider.startSymbol("{");
-    //    $interpolateProvider.endSymbol("}");
+    $interpolateProvider.startSymbol("[");
+    $interpolateProvider.endSymbol("]");
   })
   .factory('jsonSchema', function($resource, $interpolate, $q, $http) {
     return function(url) {
-      var def = $q.defer();
-      var self = this;
-      var resolveSchema = function(url) {
+      var def = $q.defer()
+        , self = this
+        , staticHeaders = {};
+      self.data = {};
+      function resolveSchema(url) {
         var deferred = $q.defer();
         $http({method: "OPTIONS", url: url}).success(function(data, status, headers, config) {
           deferred.resolve(data);
-        });
+        }).error(function(data, status, headers, config) {
+            console.error(data, status, headers);
+          });
         return deferred.promise;
       };
       resolveSchema(url).then(function(schema) {
         self.schema = schema;
         def.resolve(self);
       });
-      this.options = function(path) {
-        var deferred = $q.defer();
-        var link = self.schema.links[path];
-        resolveSchema(link.href).then(function(schema) {
+      this.setHeader = function(headerName, headerValue) {
+        staticHeaders[headerName] = headerValue;
+      };
+      this.options = function(path, params) {
+        var payload = {};
+        angular.extend(payload, params, self.data);
+        var deferred = $q.defer()
+          , link = self.schema.links[path]
+          , href = $interpolate(link.href)
+          , url = href(payload)
+          , href = $interpolate(link.href)
+          , url = href(self);
+        resolveSchema(url).then(function(schema) {
           deferred.resolve(schema);
         });
         return deferred.promise;
       };
+      this.traverse = function(path, params) {
+        var payload = {};
+        angular.extend(payload, params, self.data);
+        var deferred = $q.defer()
+          , link = self.schema.links[path]
+          , href = $interpolate(link.href)
+          , url = href(payload);
+        resolveSchema(url).then(function(schema) {
+          self.link(path, params).then(function(data) {
+            self.data = data;
+            self.schema = schema;
+            deferred.resolve(self);
+          });
+        });
+        return deferred.promise;
+      };
       this.link = function(path, params, addHeaders) {
-        var deferred = $q.defer();
-        var link = self.schema.links[path];
-        var href = $interpolate(link.href);
-        var method = link.method ? link.method : 'GET';
-        var methods = {};
+        var payload = {};
+        angular.extend(payload, params, self.data);
+        var deferred = $q.defer()
+          , link = self.schema.links[path]
+          , href = $interpolate(link.href)
+          , url = href(payload)
+          , method = link.method ? link.method : 'GET'
+          , methods = {}
+          , parameters = {}
+          , targetSchema = link.targetSchema
+          , headers = {
+            "Content-Type": "application/json"
+          }
+          , httpConfig;
         methods[method.toLowerCase()] = {
           method: method
         };
-        var parameters = {};
         angular.forEach(link.properties, function(config, prop) {
           parameters[prop] = config.default ? config.default : null;
         });
-        var targetSchema = link.targetSchema;
-        var headers = {
-          "Content-Type": "application/json"
-        };
-        angular.extend(headers, addHeaders);
-        var httpConfig = {
+        angular.extend(headers, staticHeaders, addHeaders);
+        httpConfig = {
           headers: headers,
           method: method,
-          url: href(params),
+          url: url,
           data: params,
           responseType: 'json'
-        }
-        $http(httpConfig).success(function(data, status, headers, config) {
-          deferred.resolve(data);
-        });
+        };
+        $http(httpConfig)
+          .success(function(data, status, headers, config) {
+            angular.extend(self.data, data);
+            deferred.resolve(data);
+          }).error(function(data, status, headers, config) {
+            if (status === 300) {
+              self.traverse(headers().location).then(function(client) {
+                deferred.resolve(client);
+              });
+            }
+          });
         return deferred.promise;
       }
       return def.promise;

@@ -2,7 +2,7 @@
   "id": "/api/v1/public/card.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "title": "cards",
+  "title": "Public Cards",
   "name": "cards",
   "description": "A card is a simple way to display content types across the site, they can be read, written. These permissions are specific to roles.",
   "properties": {

@@ -17,6 +17,7 @@ var mongoose = require('mongoose')
     "/api/v1/card/weather/medium.json"
   ];
 var CardSchema = new mongoose.Schema({
+  ownerId: String,
   data: Schema.Types.Mixed,
   mediaType: [
     { type: String, enum: mediaTypes }

@@ -28,8 +28,8 @@ api.use(express.urlencoded());
  * Main method
  */
 var rest = function(model) {
-  var model_path = "/" + resourceName(model)
-    , model_path_id = "/" + path.join(resourceName(model), ':id');
+  var model_path = "/"
+    , model_path_id = "/:id";
   api.options(model_path, optionsM(model_path, model));
   api.options(model_path_id, optionsM(model_path_id, model));
   api.get(model_path_id, getM(model));

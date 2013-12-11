@@ -1,7 +1,7 @@
 var _ = require('underscore');
-var authorize = require('../../../helpers/authenticate');
+var authenticate = require('../../../helpers/authenticate');
 module.exports = function(req, res) {
-  authorize.login(req, function(err, response) {
+  authenticate.login(req, function(err, response) {
     response = _.extend({}, response);
     if (_.isUndefined(response.token)) {
       response.instructions = "Authenticate with a username and password.";

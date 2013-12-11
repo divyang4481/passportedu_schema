@@ -9,7 +9,7 @@
 
   },
   "links": {
-    "school": {
+    "student": {
       "rel": "student",
       "href": "/api/v1/student",
       "method": "GET",

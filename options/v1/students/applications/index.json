@@ -1,13 +1,19 @@
 {
-  "id": "/api/v1/student/index.json",
+  "id": "/api/v1/student/application.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "student",
+  "title": "application",
   "type": "object",
-  "name": "student",
-  "description": "A Student's entry point or home page.",
+  "name": "application",
+  "description": "An application to attend a college or a university as a student.",
   "properties": {
-    "_id": {
+    "applicationId": {
       "title": "Unique ID of an Application",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "studentId": {
+      "title": "Unique ID of an Student",
       "readonly": true,
       "identity": true,
       "type": "string"
@@ -24,11 +30,10 @@
       }
     }
   },
-  "links": [
-    {
-      "title": "Search Cards",
+  "links": {
+    "cards": {
       "rel": "cards",
-      "href": "/api/v1.0/application/:studentId/cards",
+      "href": "/api/v1/student/[studentId]/application/[applicationId]/cards",
       "properties": {
         "offset": {
           "title": "offset",
@@ -72,27 +77,34 @@
         }
       }
     },
-    {
+    "newCard": {
       "title": "Create a Card",
-      "rel": "new_card",
-      "href": "/api/v1.0/application/:studentId/cards",
+      "rel": "newCard",
+      "method": "POST",
+      "href": "/api/v1/student/[studentId]/application/[applicationId]/cards",
       "properties": {
         "data": {
           "title": "data",
-          "description": "data ",
-          "identity": false,
-          "readonly": false,
+          "description": "data",
           "type": "any"
+        },
+        "mediaType": {
+          "title": "mediaType",
+          "description": "mediaType of the data",
+          "enum": [
+            "/api/v1/card/form/small.json",
+            "/api/v1/card/form/medium.json",
+            "/api/v1/card/form/large.json",
+            "/api/v1/card/dial/small.json"
+          ]
         },
         "updated": {
           "title": "updated",
-          "description": "updated ",
-          "identity": false,
-          "readonly": false,
+          "description": "updated",
           "type": "date-time"
         }
       }
     }
-  ]
+  }
 }
 

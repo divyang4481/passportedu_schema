@@ -26,6 +26,7 @@ var login = function(req, callback) {
     User.token = token;
     User.save(function(err, savedUser) {
       callback(null, {
+        id: savedUser._id,
         token: token,
         fullName: savedUser.fullName,
         username: savedUser.username
@@ -34,22 +35,24 @@ var login = function(req, callback) {
   });
 };
 var auth = function(req, callback) {
-  var authToken = req.get('Token');
+  var authToken = req.get('Authorization');
   if (_.isUndefined(authToken)) {
     callback(null, {
       permission: ['public']
     });
     return;
   }
-  authToken = new Buffer(authToken, 'base64').toString();
+  console.log(authToken);
+  authToken = new Buffer(authToken.replace(/Basic /, ''), 'base64').toString();
   var credentials = authToken.split(':');
+  console.log(credentials);
   UserModel.auth(credentials[0], credentials[1], function(err, User) {
-    console.log(err, User);
     if (err || !User) {
       callback({error: 'User not found'});
       return;
     }
     callback(null, {
+      id: User._id,
       permission: User.userPerms,
       username: credentials[0]
     });
@@ -58,4 +61,4 @@ var auth = function(req, callback) {
 module.exports = {
   login: login,
   auth: auth
-}
+};

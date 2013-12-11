@@ -7,11 +7,18 @@
 
 <div id="schema">
   <div ng-controller="ClientArea">
-    <h2 ng-bind="schema.title"></h2>
-    <h3 ng-bind="schema.description"></h3>
+    <h2 ng-bind="client.schema.title"></h2>
+    <h3 ng-bind="client.schema.description"></h3>
     <ul>
-      <li ng-repeat="link in schema.links">
-        <a ng-href="{{link.href}}" ng-bind="link.rel"></a>
+      <li ng-repeat="rel in client.schema.links">
+        <form ng-show="{{rel.method == 'POST'}}">
+          <h4 ng-bind="rel.title"></h4>
+          <div ng-repeat="property in rel.properties">
+            <input type="text">
+            <label ng-bind="property.title"></label>
+          </div>
+        </form>
+        <button ng-click="link()" ng-bind="rel.rel"></button>
       </li>
     </ul>
   </div>

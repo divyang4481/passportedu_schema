@@ -1,7 +1,7 @@
 {
   "id": "/api/v1/student/card.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "cards",
+  "title": "Student Cards",
   "type": "object",
   "name": "cards",
   "description": "A card is a simple way to display content types across the site, they can be read, written. Cards break up into mobile format easily and can pile vertically or horizontally.",

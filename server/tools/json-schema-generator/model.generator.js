@@ -84,12 +84,12 @@ var getProperties = function(model, types, postFix, description) {
  * @returns {Array}
  */
 var getLinks = function(resource_path, model) {
-  var data = []
+  var data = {}
     , schemas = model.schema.paths;
-  data.push({
+  data["self"] = {
     rel: "self",
     href: path.join(resource_path, resourceName(model))
-  });
+  };
   var equalTo = getProperties(model, ['Number', 'Date', 'String', 'Boolean', 'Mixed'], '', 'is equal to');
   var lookAhead = getProperties(model, ['String'], '*', 'contains');
   var greaterThan = getProperties(model, ['Number', 'Date', 'String'], '>', 'is greater than');
@@ -110,33 +110,35 @@ var getLinks = function(resource_path, model) {
     }
   }
   var properties = _.extend({}, paging, equalTo, lookAhead, greaterThan, lessThan, notEqual);
-  data.push({
+  data["instances"] = {
     rel: "instances",
     href: path.join(resource_path, resourceName(model)),
     properties: properties
-  });
-  data.push({
+  };
+  data["create"] = {
     title: 'Create a ' + model.modelName,
     rel: "create",
+    method: "POST",
     href: path.join(resource_path, resourceName(model)),
     properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
-  });
-  data.push({
+  };
+  data["destroy"] = {
+    title: 'Delete a ' + model.modelName,
     rel: "destroy",
-    href: path.join(resourceName(model), "{_id}"),
-    method: "DELETE"
-  })
-  data.push({
+    method: "DELETE",
+    href: path.join(resourceName(model), "{_id}")
+  };
+  data["update"] = {
     title: 'Update a ' + model.modelName,
     rel: "update",
+    method: "PUT",
     href: path.join(resource_path, resourceName(model), "{_id}"),
-    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean']),
-    method: "PUT"
-  });
-  data.push({
+    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
+  };
+  data["root"] = {
     rel: "root",
     href: "#/result"
-  })
+  };
   return data;
 };
 /**

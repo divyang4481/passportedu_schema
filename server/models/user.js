@@ -36,6 +36,11 @@ UserSchema.pre('save', function(next) {
     });
   });
 });
+/**
+ *
+ * @param candidatePassword
+ * @param cb
+ */
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if (err) {
@@ -44,6 +49,9 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
     cb(null, isMatch);
   });
 };
+/**
+ * Login method
+ */
 UserSchema.static('login', function(credentials, callback) {
   return this.findOne({ username: credentials.username }, function(err, User) {
     if (_.isNull(User)) {
@@ -55,7 +63,20 @@ UserSchema.static('login', function(credentials, callback) {
     });
   });
 });
+/**
+ * Auth method for authorizing users to resources
+ */
 UserSchema.static('auth', function(username, token, callback) {
-  this.findOne({username: username, token: token}, callback);
+  var self = this;
+  self.findOne({username: username, token: token}, function(err, result) {
+    if (result) {
+      callback(null, result);
+      return;
+    }
+    self.login({username: username, password: token}, function(err, match, user) {
+      console.log(user);
+      callback(err, user);
+    });
+  });
 });
 module.exports = mongoose.model("User", UserSchema);

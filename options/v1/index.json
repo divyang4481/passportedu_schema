@@ -17,20 +17,20 @@
         "$ref": "/api/v1/public"
       }
     },
-    "student": {
-      "rel": "student",
-      "href": "/api/v1/student",
+    "students": {
+      "rel": "students",
+      "href": "/api/v1/students/[id]",
       "method": "GET",
       "schema": {
-        "$ref": "/api/v1/student"
+        "$ref": "/api/v1/students"
       }
     },
-    "school": {
-      "rel": "cards",
-      "href": "/api/v1/school",
+    "schools": {
+      "rel": "schools",
+      "href": "/api/v1/schools/[id]",
       "method": "GET",
       "schema": {
-        "$ref": "/api/v1/school"
+        "$ref": "/api/v1/schools"
       }
     },
     "authenticate": {
@@ -42,6 +42,11 @@
           "token": {
             "title": "Session Token",
             "description": "Unique token for your user session",
+            "type": "string"
+          },
+          "id": {
+            "title": "User Id",
+            "description": "User Id of Logged in User",
             "type": "string"
           },
           "username": {

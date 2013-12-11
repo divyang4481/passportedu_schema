@@ -6,6 +6,10 @@
   "type": "object",
   "description": "Login to the PassportEDU API.",
   "links": {
+    "root": {
+      "href": "/api/v1",
+      "method": "GET"
+    },
     "login": {
       "href": "/api/v1/public/authenticate",
       "method": "POST",
