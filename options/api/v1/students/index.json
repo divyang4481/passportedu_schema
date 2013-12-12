@@ -6,7 +6,7 @@
   "name": "student",
   "description": "A Student's entry point or home page.",
   "properties": {
-    "_id": {
+    "studentId": {
       "title": "Unique ID of a Student",
       "readonly": true,
       "identity": true,
@@ -33,19 +33,20 @@
     "self": {
       "title": "Student Portal",
       "rel": "self",
-      "href": "/api/v1/students/[_id]"
+      "href": "/api/v1/students/{{studentId}}"
     },
     "createApplication": {
       "title": "Create an Application",
       "rel": "createApplication",
       "method": "POST",
-      "href": "/api/v1/students/[_id]/applications",
+      "href": "/api/v1/students/{{studentId}}/applications",
       "properties": {
         "mediaType": {
           "title": "mediaType",
           "description": "media type",
           "identity": false,
           "readonly": false,
+          "type": "enum",
           "enum": [
             "/api/v1/applications/universal.json"
           ]
@@ -69,10 +70,7 @@
     "applications": {
       "title": "My Applications",
       "rel": "applications",
-      "href": "/api/v1/students/[_id]/applications"
-    },
-    "application": {
-
+      "href": "/api/v1/students/{{studentId}}/applications"
     }
   }
 }

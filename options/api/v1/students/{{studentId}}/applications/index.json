@@ -33,7 +33,7 @@
   "links": {
     "cards": {
       "rel": "cards",
-      "href": "/api/v1/student/[studentId]/application/[applicationId]/cards",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}",
       "properties": {
         "offset": {
           "title": "offset",
@@ -81,7 +81,7 @@
       "title": "Create a Card",
       "rel": "newCard",
       "method": "POST",
-      "href": "/api/v1/student/[studentId]/application/[applicationId]/cards",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
       "properties": {
         "data": {
           "title": "data",
@@ -91,6 +91,7 @@
         "mediaType": {
           "title": "mediaType",
           "description": "mediaType of the data",
+          "type": "enum",
           "enum": [
             "/api/v1/card/form/small.json",
             "/api/v1/card/form/medium.json",

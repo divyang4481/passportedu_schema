@@ -1,7 +1,5 @@
 angular.module('schema', ['ngResource'])
   .config(function($interpolateProvider) {
-    $interpolateProvider.startSymbol("[");
-    $interpolateProvider.endSymbol("]");
   })
   .factory('jsonSchema', function($resource, $interpolate, $q, $http) {
     return function(url) {

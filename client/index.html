@@ -7,20 +7,30 @@
 
 <div id="schema">
   <div ng-controller="ClientArea">
-    <h2 ng-bind="client.schema.title"></h2>
-    <h3 ng-bind="client.schema.description"></h3>
+    <pre ng-bind="client.data | json"></pre>
+    <pre ng-bind="client.forms | json"></pre>
     <ul>
       <li ng-repeat="rel in client.schema.links">
-        <form ng-show="{{rel.method == 'POST'}}">
+        <form>
           <h4 ng-bind="rel.title"></h4>
+
           <div ng-repeat="property in rel.properties">
-            <input type="text">
             <label ng-bind="property.title"></label>
+            <div ng-switch="property.type">
+              <input ng-switch-when="string" type="text" ng-model="property.value">
+              <input ng-switch-when="number" type="number" ng-model="property.value">
+              <input ng-switch-when="password" type="password" ng-model="property.value">
+              <input ng-switch-when="date-time" type="date" ng-model="property.value">
+              <textarea ng-switch-when="any" ng-model="property.value"></textarea>
+              <select ng-switch-when="enum" ng-options="v as v for (k,v) in property.enum" ng-model="property.value"></select>
+            </div>
+            <pre ng-bind="property.value"></pre>
           </div>
         </form>
         <button ng-click="link()" ng-bind="rel.rel"></button>
       </li>
     </ul>
+    <pre ng-bind="client.schema | json"></pre>
   </div>
 </div>
 <script src="/libs/underscore-1.4.4.js"></script>

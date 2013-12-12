@@ -1,7 +1,7 @@
 {
   "id": "/api/v1/student/card.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Student Cards",
+  "title": "cards",
   "type": "object",
   "name": "cards",
   "description": "A card is a simple way to display content types across the site, they can be read, written. Cards break up into mobile format easily and can pile vertically or horizontally.",
@@ -9,6 +9,18 @@
     "data": {
       "type": "object",
       "oneOf": [
+        {
+          "$ref": "/api/v1/card/map/small.json"
+        },
+        {
+          "$ref": "/api/v1/card/media/medium.json"
+        },
+        {
+          "$ref": "/api/v1/card/media/small.json"
+        },
+        {
+          "$ref": "/api/v1/card/media/media.json"
+        },
         {
           "$ref": "/api/v1/card/form/small.json"
         },
@@ -19,7 +31,25 @@
           "$ref": "/api/v1/card/form/large.json"
         },
         {
+          "$ref": "/api/v1/card/range/small.json"
+        },
+        {
           "$ref": "/api/v1/card/dial/small.json"
+        },
+        {
+          "$ref": "/api/v1/card/image/small.json"
+        },
+        {
+          "$ref": "/api/v1/card/image/medium.json"
+        },
+        {
+          "$ref": "/api/v1/card/video/medium.json"
+        },
+        {
+          "$ref": "/api/v1/card/qrcode/medium.json"
+        },
+        {
+          "$ref": "/api/v1/card/weather/medium.json"
         }
       ]
     },
@@ -28,10 +58,20 @@
       "description": "mediaType of the data",
       "identity": false,
       "enum": [
+        "/api/v1/card/map/small.json",
+        "/api/v1/card/media/medium.json",
+        "/api/v1/card/media/small.json",
+        "/api/v1/card/media/media.json",
         "/api/v1/card/form/small.json",
         "/api/v1/card/form/medium.json",
         "/api/v1/card/form/large.json",
-        "/api/v1/card/dial/small.json"
+        "/api/v1/card/range/small.json",
+        "/api/v1/card/dial/small.json",
+        "/api/v1/card/image/small.json",
+        "/api/v1/card/image/medium.json",
+        "/api/v1/card/video/medium.json",
+        "/api/v1/card/qrcode/medium.json",
+        "/api/v1/card/weather/medium.json"
       ]
     },
     "updated": {
@@ -52,17 +92,17 @@
   "links": {
     "self": {
       "rel": "self",
-      "href": "/api/v1/cards/{_id}"
+      "href": "/api/v1/cards/{{_id}}"
     },
     "destroy": {
       "rel": "destroy",
-      "href": "/api/v1/cards/{_id}",
+      "href": "/api/v1/cards/{{_id}}",
       "method": "DELETE"
     },
     "update": {
       "title": "Update a Card",
       "rel": "update",
-      "href": "/api/v1/cards/{_id}",
+      "href": "/api/v1/cards/{{_id}}",
       "properties": {
         "data": {
           "title": "data",

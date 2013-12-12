@@ -6,7 +6,12 @@
   "type": "object",
   "description": "The root resource for the PassportEDU API.",
   "properties": {
-
+    "id": {
+      "title": "Unique ID of a User",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    }
   },
   "links": {
     "public": {
@@ -19,7 +24,7 @@
     },
     "students": {
       "rel": "students",
-      "href": "/api/v1/students/[id]",
+      "href": "/api/v1/students/{{id}}",
       "method": "GET",
       "schema": {
         "$ref": "/api/v1/students"
@@ -27,7 +32,7 @@
     },
     "schools": {
       "rel": "schools",
-      "href": "/api/v1/schools/[id]",
+      "href": "/api/v1/schools/{{id}}",
       "method": "GET",
       "schema": {
         "$ref": "/api/v1/schools"
