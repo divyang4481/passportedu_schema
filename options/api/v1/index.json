@@ -13,8 +13,8 @@
       "type": "string"
     }
   },
-  "links": {
-    "public": {
+  "links": [
+    {
       "rel": "public",
       "href": "/api/v1/public",
       "method": "GET",
@@ -22,7 +22,7 @@
         "$ref": "/api/v1/public"
       }
     },
-    "students": {
+    {
       "rel": "students",
       "href": "/api/v1/students/{{id}}",
       "method": "GET",
@@ -30,7 +30,7 @@
         "$ref": "/api/v1/students"
       }
     },
-    "schools": {
+    {
       "rel": "schools",
       "href": "/api/v1/schools/{{id}}",
       "method": "GET",
@@ -38,7 +38,7 @@
         "$ref": "/api/v1/schools"
       }
     },
-    "authenticate": {
+    {
       "rel": "authenticate",
       "href": "/api/v1/public/authenticate",
       "method": "POST",
@@ -80,5 +80,5 @@
       },
       "required": ["username", "password"]
     }
-  }
+  ]
 }

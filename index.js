@@ -29,57 +29,51 @@ var application = require('./server/models/application');
  */
 app.use(express.json());
 app.use(express.urlencoded());
-//app.options('/api/v1/students/:studentId', function(req, res) {
-//  var response = require(path.join(__dirname, 'options/v1/students'));
-//  res.send(response);
-//});
-//app.options('/api/v1/students/:studentId/applications', function(req, res) {
-//  var response = require(path.join(__dirname, 'options/v1/students/applications'));
-//  res.send(response);
-//});
-//app.options('/api/v1/students/:studentId/applications/:applicationId', function(req, res) {
-//  var response = require(path.join(__dirname, 'options/v1/students/applications'));
-//  res.send(response);
-//});
-app.options('/api*', function(req, res) {
-  var schemaLoc = path.join(__dirname, 'options', 'v1', req.url.replace('/api/v1', ''));
-  var schema = require(schemaLoc);
-  res.json(schema);
-});
 
-function findPath(startPath, remaining) {
-  if(remaining.length == 0)
-  {
-    return startPath;
+function loadVariPath(startPath, remaining, callback) {
+  fs.readdir(startPath, function(err, files) {
+    for (i in files) {
+     if(files[i].match(/{{.*}}/)) {
+       var match = files[i].match(/{{(.*)}}/)[1];
+       loadPath(path.join(startPath, files[i]), remaining, callback);
+       return;
+     }
+    }
+    callback(require(startPath));
+  });
+}
+function loadPath(startPath, remaining, callback) {
+  if (remaining.length == 0) {
+    callback(require(startPath));
+    return;
   }
-  fs.exists(path.join(startPath, remaining.shift()), function(exists) {
+  var test_path = path.join(startPath, remaining.shift());
+  fs.exists(test_path, function(exists) {
     if (exists) {
-      return findPath(path.join(startPath, remaining.shift()), remaining);
+      loadPath(test_path, remaining, callback);
     } else {
-
+      loadVariPath(startPath, remaining, callback);
     }
   });
 }
-
 app.options('/api*', function(req, res) {
   var optionPath = req.originalUrl.split('/');
-  var realOptionPath = findPath(path.join(__dirname, 'options'), optionPath);
+  loadPath(path.join(__dirname, 'options'), optionPath, function(options) {
+    res.json(options);
+  });
 });
-
 app.get('/api/v1', require('./server/api/v1'));
 app.get('/api/v1/public/authenticate', require('./server/api/v1/public/authenticate'));
 app.post('/api/v1/public/authenticate', require('./server/api/v1/public/authenticate'));
 app.use('/api/v1/students', rest(user));
 app.get('/api/v1/students/:studentId/applications', function(req, res) {
   var studentId = req.params.studentId;
-  application.find({studentId: studentId}, function(err, applications) {
+  application.rest({studentId: studentId}, function(err, applications) {
     res.json({
-      studentId: studentId,
       applications: applications
     });
   });
 });
-
 app.get('/api/v1/students/:studentId', function(req, res) {
   var studentId = req.params.studentId;
   res.json({

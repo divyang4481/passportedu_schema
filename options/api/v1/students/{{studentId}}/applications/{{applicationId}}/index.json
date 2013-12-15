@@ -1,0 +1,111 @@
+{
+  "id": "/api/v1/student/application.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "application",
+  "type": "object",
+  "name": "application",
+  "description": "An application to attend a college or a university as a student.",
+  "properties": {
+    "applicationId": {
+      "title": "Unique ID of an Application",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "studentId": {
+      "title": "Unique ID of an Student",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "cards": {
+      "title": "cards",
+      "description": "cards",
+      "identity": false,
+      "readonly": false,
+      "type": "array",
+      "items": {
+        "description": "A card within an application.",
+        "$ref": "/api/v1/student/application/card.json"
+      }
+    }
+  },
+  "links": [
+    {
+      "rel": "cards",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}",
+      "properties": {
+        "offset": {
+          "title": "offset",
+          "description": "Offset to start with",
+          "required": false,
+          "type": "number"
+        },
+        "limit": {
+          "title": "limit",
+          "description": "Number of items to return",
+          "required": false,
+          "type": "number"
+        },
+        "data": {
+          "title": "data",
+          "description": "data is equal to",
+          "identity": false,
+          "readonly": false,
+          "type": "any"
+        },
+        "updated": {
+          "title": "updated",
+          "description": "updated is equal to",
+          "identity": false,
+          "readonly": false,
+          "type": "date-time"
+        },
+        "updated>": {
+          "title": "updated",
+          "description": "updated is greater than",
+          "identity": false,
+          "readonly": false,
+          "type": "date-time"
+        },
+        "updated<": {
+          "title": "updated",
+          "description": "updated is less than",
+          "identity": false,
+          "readonly": false,
+          "type": "date-time"
+        }
+      }
+    },
+    {
+      "title": "Add a Card",
+      "rel": "newCard",
+      "method": "POST",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
+      "properties": {
+        "data": {
+          "title": "data",
+          "description": "data",
+          "type": "any"
+        },
+        "mediaType": {
+          "title": "mediaType",
+          "description": "mediaType of the data",
+          "type": "enum",
+          "enum": [
+            "/api/v1/card/form/small.json",
+            "/api/v1/card/form/medium.json",
+            "/api/v1/card/form/large.json",
+            "/api/v1/card/dial/small.json"
+          ]
+        },
+        "updated": {
+          "title": "updated",
+          "description": "updated",
+          "type": "date-time"
+        }
+      }
+    }
+  ]
+}
+

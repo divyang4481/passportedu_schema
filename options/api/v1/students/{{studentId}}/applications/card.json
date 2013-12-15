@@ -49,17 +49,17 @@
       "type": "string"
     }
   },
-  "links": {
-    "self": {
+  "links": [
+    {
       "rel": "self",
       "href": "/api/v1/cards/{{_id}}"
     },
-    "destroy": {
+    {
       "rel": "destroy",
       "href": "/api/v1/cards/{{_id}}",
       "method": "DELETE"
     },
-    "update": {
+    {
       "title": "Update a Card",
       "rel": "update",
       "href": "/api/v1/cards/{{_id}}",
@@ -81,9 +81,9 @@
       },
       "method": "PUT"
     },
-    "root": {
+    {
       "rel": "root",
       "href": "#/result"
     }
-  }
+  ]
 }

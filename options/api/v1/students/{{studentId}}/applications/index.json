@@ -18,94 +18,58 @@
       "identity": true,
       "type": "string"
     },
-    "cards": {
-      "title": "cards",
-      "description": "cards",
-      "identity": false,
-      "readonly": false,
+    "applications": {
+      "title": "Student applications",
       "type": "array",
       "items": {
-        "description": "A card within an application.",
-        "$ref": "/api/v1/student/application/card.json"
+        "type": "object",
+        "properties": {
+          "applicationId": {
+            "type": "string"
+          },
+          "student": {
+            "type": "object",
+            "properties": {
+              "studentId": {
+                "type": "string"
+              }
+            },
+            "links": [
+              {
+                "rel": "full",
+                "href": "/api/v1/students/{{studentId}}"
+              }
+            ]
+          },
+          "schools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "schoolId": {
+                  "type": "string"
+                }
+              },
+              "links": [
+                {
+                  "rel": "full",
+                  "href": "/api/v1/schools/{{schoolId}}"
+                }
+              ]
+            }
+          }
+        },
+        "links": [
+          {
+            "rel": "full",
+            "href": "/api/v1/students/{{student.studentId}}/applications/{{applicationId}}"
+          }
+        ]
       }
     }
   },
-  "links": {
-    "cards": {
-      "rel": "cards",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}",
-      "properties": {
-        "offset": {
-          "title": "offset",
-          "description": "Offset to start with",
-          "required": false,
-          "type": "number"
-        },
-        "limit": {
-          "title": "limit",
-          "description": "Number of items to return",
-          "required": false,
-          "type": "number"
-        },
-        "data": {
-          "title": "data",
-          "description": "data is equal to",
-          "identity": false,
-          "readonly": false,
-          "type": "any"
-        },
-        "updated": {
-          "title": "updated",
-          "description": "updated is equal to",
-          "identity": false,
-          "readonly": false,
-          "type": "date-time"
-        },
-        "updated>": {
-          "title": "updated",
-          "description": "updated is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "date-time"
-        },
-        "updated<": {
-          "title": "updated",
-          "description": "updated is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "date-time"
-        }
-      }
-    },
-    "newCard": {
-      "title": "Create a Card",
-      "rel": "newCard",
-      "method": "POST",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
-      "properties": {
-        "data": {
-          "title": "data",
-          "description": "data",
-          "type": "any"
-        },
-        "mediaType": {
-          "title": "mediaType",
-          "description": "mediaType of the data",
-          "type": "enum",
-          "enum": [
-            "/api/v1/card/form/small.json",
-            "/api/v1/card/form/medium.json",
-            "/api/v1/card/form/large.json",
-            "/api/v1/card/dial/small.json"
-          ]
-        },
-        "updated": {
-          "title": "updated",
-          "description": "updated",
-          "type": "date-time"
-        }
-      }
-    }
-  }
+  "links": [
+
+  ]
 }
 
