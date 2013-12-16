@@ -1,1 +1,27 @@
-{}
+{
+  "id": "/api/v1/students",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Students Area",
+  "type": "object",
+  "description": "The root resource for students at PassportEDU",
+  "properties": {
+    "id": {
+      "title": "Unique ID of a User",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    }
+  },
+  "links": [
+    {
+      "title": "Root Portal",
+      "rel": "root",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Student Portal",
+      "rel": "me",
+      "href": "/api/v1/students/{{studentId}}"
+    }
+  ]
+}

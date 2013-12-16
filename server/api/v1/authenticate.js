@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var authenticate = require('../../../helpers/authenticate');
+var authenticate = require('../../helpers/authenticate');
 module.exports = function(req, res) {
   authenticate.login(req, function(err, response) {
     response = _.extend({}, response);

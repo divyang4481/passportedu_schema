@@ -40,7 +40,7 @@
     },
     {
       "rel": "authenticate",
-      "href": "/api/v1/public/authenticate",
+      "href": "/api/v1/authenticate",
       "method": "POST",
       "targetSchema": {
         "properties": {

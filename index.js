@@ -13,6 +13,10 @@ mongoose.connect('mongodb://localhost/psprt');
  */
 var app = express();
 app.set('port', 8080);
+
+//var cors = require('cors');
+//app.use(cors());
+
 /**
  * Static resources
  */
@@ -63,8 +67,8 @@ app.options('/api*', function(req, res) {
   });
 });
 app.get('/api/v1', require('./server/api/v1'));
-app.get('/api/v1/public/authenticate', require('./server/api/v1/public/authenticate'));
-app.post('/api/v1/public/authenticate', require('./server/api/v1/public/authenticate'));
+app.get('/api/v1/authenticate', require('./server/api/v1/authenticate'));
+app.post('/api/v1/authenticate', require('./server/api/v1/authenticate'));
 app.use('/api/v1/students', rest(user));
 app.get('/api/v1/students/:studentId/applications', function(req, res) {
   var studentId = req.params.studentId;
