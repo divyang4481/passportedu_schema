@@ -11,10 +11,10 @@ module.exports = function(req, res) {
       return;
     }
     var response = {
-      message: "welcome to PassportEDU"
+      studentId: auth.id
     };
     response = _.extend(response, auth);
-    card.find({ownerId: auth.studentId}, function(cards) {
+    cards.find({ownerId: auth.studentId}, function(cards) {
       response.cards = cards;
       res.json(response);
     });

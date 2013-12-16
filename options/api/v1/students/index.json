@@ -5,8 +5,8 @@
   "type": "object",
   "description": "The root resource for students at PassportEDU",
   "properties": {
-    "id": {
-      "title": "Unique ID of a User",
+    "meta": {
+      "title": "Student ID",
       "readonly": true,
       "identity": true,
       "type": "string"
