@@ -1,9 +1,9 @@
 {
-  "id": "/api/v1/student/application.json",
+  "id": "/api/v1/student/application/cards.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "application",
+  "title": "cards",
   "type": "object",
-  "name": "application",
+  "name": "cards",
   "description": "An application to attend a college or a university as a student.",
   "properties": {
     "applicationId": {
@@ -43,7 +43,7 @@
     },
     {
       "rel": "cards",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}",
       "properties": {
         "offset": {
           "title": "offset",
@@ -72,14 +72,14 @@
           "type": "date-time"
         },
         "updated>": {
-          "title": "updated>",
+          "title": "updated",
           "description": "updated is greater than",
           "identity": false,
           "readonly": false,
           "type": "date-time"
         },
         "updated<": {
-          "title": "updated<",
+          "title": "updated",
           "description": "updated is less than",
           "identity": false,
           "readonly": false,

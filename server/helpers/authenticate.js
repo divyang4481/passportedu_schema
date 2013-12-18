@@ -1,8 +1,14 @@
+/**
+ *
+ */
 var _ = require('underscore')
   , UserModel = require('../models/user')
   , uuid = require('node-uuid');
 // Secret code word :)
 var secret = 'Passport is your ticket to better colleges and students.';
+/**
+ *
+ */
 var login = function(req, callback) {
   if (_.isUndefined(req.body.username)) {
     callback({
@@ -26,14 +32,20 @@ var login = function(req, callback) {
     User.token = token;
     User.save(function(err, savedUser) {
       callback(null, {
-        id: savedUser._id,
-        token: token,
-        fullName: savedUser.fullName,
-        username: savedUser.username
+        user: {
+          userId: User._id,
+          userType: User.userPerms[0],
+          token: token,
+          fullName: User.fullName,
+          username: User.username
+        }
       });
     });
   });
 };
+/**
+ *
+ */
 var auth = function(req, callback) {
   var authToken = req.get('Authorization');
   if (_.isUndefined(authToken)) {
@@ -42,22 +54,26 @@ var auth = function(req, callback) {
     });
     return;
   }
-  console.log(authToken);
   authToken = new Buffer(authToken.replace(/Basic /, ''), 'base64').toString();
   var credentials = authToken.split(':');
-  console.log(credentials);
   UserModel.auth(credentials[0], credentials[1], function(err, User) {
     if (err || !User) {
       callback({error: 'User not found'});
       return;
     }
     callback(null, {
-      id: User._id,
-      permission: User.userPerms,
-      username: credentials[0]
+      user: {
+        userId: User._id,
+        userType: User.userPerms[0],
+        fullName: User.fullName,
+        username: User.username
+      }
     });
   });
 };
+/**
+ *
+ */
 module.exports = {
   login: login,
   auth: auth

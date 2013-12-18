@@ -36,12 +36,12 @@ module.exports = function(model) {
           , meta = {};
         if (nextOffset <= (count - 1)) {
           nextPage.offset = nextOffset;
-          meta.nextPageURL = parentRoute + '/' + model.modelName + '?' + querystring.stringify(nextPage);
+          meta.nextPageURL = parentRoute + '?' + querystring.stringify(nextPage);
           meta.nextPageQuery = nextPage;
         }
         if (prevOffset > 0) {
           prevPage.offset = prevOffset;
-          meta.prevPageURL = parentRoute + '/' + model.modelName + '?' + querystring.stringify(prevPage);
+          meta.prevPageURL = parentRoute + '?' + querystring.stringify(prevPage);
           meta.prevPageQuery = prevPage;
         }
         meta.count = count;

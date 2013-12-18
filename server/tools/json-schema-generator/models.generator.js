@@ -84,30 +84,44 @@ var getProperties = function(model, types, postFix, description) {
  * @returns {Array}
  */
 var getLinks = function(resource_path, model) {
-  var links = [];
-  links.push({
+  var data = [];
+  data.push({
     rel: "self",
-    href: path.join(resource_path, resourceName(model), "{{_id}}")
-  });
-  links.push({
-    title: "Instances of this model type",
-    rel: "instances",
     href: path.join(resource_path, resourceName(model))
   });
-  links.push({
-    title: 'Delete this ' + model.modelName,
-    rel: "destroy",
-    method: "DELETE",
-    href: path.join(resourceName(model), "{{_id}}")
+  var equalTo = getProperties(model, ['Number', 'Date', 'String', 'Boolean', 'Mixed'], '', 'is equal to');
+  var lookAhead = getProperties(model, ['String'], '*', 'contains');
+  var greaterThan = getProperties(model, ['Number', 'Date', 'String'], '>', 'is greater than');
+  var lessThan = getProperties(model, ['Number', 'Date', 'String'], '<', 'is less than');
+  var notEqual = getProperties(model, ['Number', 'Boolean', 'String'], '!', 'is not equal to');
+  var paging = {
+    offset: {
+      title: "offset",
+      description: 'Offset to start with',
+      required: false,
+      type: "number"
+    },
+    limit: {
+      title: "limit",
+      description: 'Number of items to return',
+      required: false,
+      type: "number"
+    }
+  }
+  var properties = _.extend({}, paging, equalTo, lookAhead, greaterThan, lessThan, notEqual);
+  data.push({
+    rel: "instances",
+    href: path.join(resource_path, resourceName(model)),
+    properties: properties
   });
-  links.push({
-    title: 'Update this ' + model.modelName,
-    rel: "update",
-    method: "PUT",
-    href: path.join(resource_path, resourceName(model), "{{_id}}"),
+  data.push({
+    title: 'Create a ' + model.modelName,
+    rel: "create",
+    method: "POST",
+    href: path.join(resource_path, resourceName(model)),
     properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
   });
-  return links;
+  return data;
 };
 /**
  *
@@ -121,8 +135,32 @@ var generateSchema = function(model_path, model) {
     "type": "object",
     "title": resourceName(model),
     "name": resourceName(model),
-    "description": "A single " + model.modelName + " instance",
-    "properties": getProperties(model, []),
+    "description": "",
+    "properties": {
+      "instances": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": getProperties(model, []),
+          "links": [
+            {
+              title: 'Delete a ' + model.modelName,
+              rel: "destroy",
+              method: "DELETE",
+              href: path.join(resourceName(model), "{{_id}}")
+            },
+            {
+              title: 'Update a ' + model.modelName,
+              rel: "update",
+              method: "PUT",
+              href: path.join(model_path, resourceName(model), "{{_id}}"),
+              properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
+            }
+          ]
+        }
+      }
+
+    },
     "links": links
   };
 };

@@ -77,7 +77,7 @@ angular.module('schema', ['ngResource'])
       return deferred.promise;
     }
 
-    return function(url) {
+    function buildClient(url) {
       var def = $q.defer()
         , self = this
         , staticHeaders = {};
@@ -117,50 +117,61 @@ angular.module('schema', ['ngResource'])
         return deferred.promise;
       };
       this.link = function(path, params, addHeaders) {
-        var deferred = $q.defer()
-          , payload = {};
-        angular.extend(payload, params, self.data);
+        var deferred = $q.defer();
         findRelLink(path, self.links).then(function(link) {
           var href = $interpolate(link.href)
             , url = href(payload)
             , method = link.method ? link.method : 'GET'
             , methods = {}
-            , parameters = {}
-            , targetSchema = link.targetSchema
+            , defaults = {}
             , headers = {
               "Content-Type": "application/json"
             }
             , httpConfig;
-          methods[method.toLowerCase()] = {
-            method: method
+          var payload = {};
+          for(var p in link.properties) {
+            payload[p] = link.properties[p].value;
+          }
+          angular.extend(payload, params);
+          methods[method] = {
+            method: method,
+            headers: headers
           };
           angular.forEach(link.properties, function(config, prop) {
-            parameters[prop] = config.default ? config.default : null;
+            defaults[prop] = angular.isDefined(config.default) ? config.default : null;
           });
           angular.extend(headers, staticHeaders, addHeaders);
-          httpConfig = {
-            headers: headers,
-            method: method,
-            url: url,
-            data: params,
-            responseType: 'json'
-          };
-          $http(httpConfig)
-            .success(function(data, status, headers, config) {
-              angular.extend(self.data, data);
-              deferred.resolve(data);
-            }).error(function(data, status, headers, config) {
-              if (status === 300) {
-                self.traverse(headers().location).then(function(client) {
-                  deferred.resolve(client);
-                });
-              }
-            });
+          $resource(url, defaults, methods)[method](payload, function(response) {
+            angular.extend(self.data, response);
+            deferred.resolve(response);
+          });
+
+//          httpConfig = {
+//            headers: headers,
+//            method: method,
+//            url: url,
+//            data: payload,
+//            responseType: 'json'
+//          };
+//
+//          $http(httpConfig)
+//            .success(function(data, status, headers, config) {
+//              angular.extend(self.data, data);
+//              deferred.resolve(data);
+//            }).error(function(data, status, headers, config) {
+//              if (status >= 300 && status < 400) {
+//                buildClient(headers().location).then(function(client) {
+//                  deferred.resolve(client);
+//                });
+//              }
+//            });
         });
         return deferred.promise;
       }
       return def.promise;
     }
+
+    return buildClient;
   })
   .factory('base64', function() {
     var Base64 = {
