@@ -43,7 +43,7 @@ var getProperties = function(model, types, postFix, description) {
       continue;
     }
     var d = {
-      title: mpath,
+      title: mpath + ' ' + postFix,
       description: mpath + ' ' + description,
       identity: mpath == '_id' ? true : false,
       readonly: mpath == '_id' ? true : false
@@ -84,11 +84,6 @@ var getProperties = function(model, types, postFix, description) {
  * @returns {Array}
  */
 var getLinks = function(resource_path, model) {
-  var data = [];
-  data.push({
-    rel: "self",
-    href: path.join(resource_path, resourceName(model))
-  });
   var equalTo = getProperties(model, ['Number', 'Date', 'String', 'Boolean', 'Mixed'], '', 'is equal to');
   var lookAhead = getProperties(model, ['String'], '*', 'contains');
   var greaterThan = getProperties(model, ['Number', 'Date', 'String'], '>', 'is greater than');
@@ -109,16 +104,21 @@ var getLinks = function(resource_path, model) {
     }
   }
   var properties = _.extend({}, paging, equalTo, lookAhead, greaterThan, lessThan, notEqual);
+  var data = [];
+  data.push({
+    rel: "self",
+    href: path.join('/api/v1/resources', resourceName(model))
+  });
   data.push({
     rel: "instances",
-    href: path.join(resource_path, resourceName(model)),
+    href: path.join('/api/v1/resources', resourceName(model)),
     properties: properties
   });
   data.push({
     title: 'Create a ' + model.modelName,
     rel: "create",
     method: "POST",
-    href: path.join(resource_path, resourceName(model)),
+    href: path.join('/api/v1/resources', resourceName(model)),
     properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
   });
   return data;
@@ -137,24 +137,16 @@ var generateSchema = function(model_path, model) {
     "name": resourceName(model),
     "description": "",
     "properties": {
-      "instances": {
+      "result": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": getProperties(model, []),
           "links": [
             {
-              title: 'Delete a ' + model.modelName,
-              rel: "destroy",
-              method: "DELETE",
-              href: path.join(resourceName(model), "{{_id}}")
-            },
-            {
-              title: 'Update a ' + model.modelName,
-              rel: "update",
-              method: "PUT",
-              href: path.join(model_path, resourceName(model), "{{_id}}"),
-              properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
+              title: 'Full ' + model.modelName,
+              rel: "full",
+              href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
             }
           ]
         }

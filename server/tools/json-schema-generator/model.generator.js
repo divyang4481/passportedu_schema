@@ -87,24 +87,24 @@ var getLinks = function(resource_path, model) {
   var links = [];
   links.push({
     rel: "self",
-    href: path.join(resource_path, resourceName(model), "{{_id}}")
+    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
   });
   links.push({
     title: "Instances of this model type",
     rel: "instances",
-    href: path.join(resource_path, resourceName(model))
+    href: path.join('/api/v1/resources', resourceName(model))
   });
   links.push({
     title: 'Delete this ' + model.modelName,
     rel: "destroy",
     method: "DELETE",
-    href: path.join(resourceName(model), "{{_id}}")
+    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
   });
   links.push({
     title: 'Update this ' + model.modelName,
     rel: "update",
     method: "PUT",
-    href: path.join(resource_path, resourceName(model), "{{_id}}"),
+    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}"),
     properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
   });
   return links;
