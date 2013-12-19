@@ -1,4 +1,4 @@
-var client = angular.module('client', ['schema'])
+var client = angular.module('client', ['schema', 'clientUtilities'])
   .config(function($interpolateProvider) {
   })
   .controller('ClientArea',function($resource, $scope, jsonSchema, base64) {

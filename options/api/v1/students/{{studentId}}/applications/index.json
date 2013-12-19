@@ -6,12 +6,6 @@
   "name": "application",
   "description": "An application to attend a college or a university as a student.",
   "properties": {
-    "applicationId": {
-      "title": "Unique ID of an Application",
-      "readonly": true,
-      "identity": true,
-      "type": "string"
-    },
     "studentId": {
       "title": "Unique ID of an Student",
       "readonly": true,
@@ -50,7 +44,7 @@
         "links": [
           {
             "rel": "full",
-            "href": "/api/v1/resources/applications/{{applicationId}}"
+            "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
           }
         ]
       }
@@ -64,7 +58,7 @@
     },
     {
       "title": "Student Portal",
-      "rel": "self",
+      "rel": "students/me",
       "href": "/api/v1/students/{{studentId}}"
     }
   ]

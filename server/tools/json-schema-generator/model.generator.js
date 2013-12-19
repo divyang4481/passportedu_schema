@@ -67,7 +67,7 @@ var getProperties = function(model, types, postFix, description) {
         type = 'boolean';
         break;
       default:
-        type = type.toLowerCase()
+        type = 'array';
     }
     d.type = type;
     if (!_.isEmpty(schema.enumValues)) {
@@ -88,11 +88,6 @@ var getLinks = function(resource_path, model) {
   links.push({
     rel: "self",
     href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
-  });
-  links.push({
-    title: "Instances of this model type",
-    rel: "instances",
-    href: path.join('/api/v1/resources', resourceName(model))
   });
   links.push({
     title: 'Delete this ' + model.modelName,

@@ -19,6 +19,9 @@
               <input ng-switch-when="number" type="number" ng-model="property.value">
               <input ng-switch-when="password" type="password" ng-model="property.value">
               <input ng-switch-when="date-time" type="date" ng-model="property.value">
+              <div ng-switch-when="array" ng-repeat="prop in client.data[property]">
+                <input name="{{property.title}}[{{$index}}]" type="text" ng-model="prop.value">
+              </div>
               <textarea ng-switch-when="any" ng-model="property.value"></textarea>
               <select ng-switch-when="enum" ng-options="v as v for (k,v) in property.enum" ng-model="property.value"></select>
             </div>
@@ -37,6 +40,7 @@
 <script src="/libs/angular-1.1.5.js"></script>
 <script src="/libs/angular/angular-resource.js"></script>
 <script src="/schema.js"></script>
+<script src="/base64.js"></script>
 <script src="/client.js"></script>
 </body>
 </html>

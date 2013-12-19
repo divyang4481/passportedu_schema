@@ -50,7 +50,9 @@ var auth = function(req, callback) {
   var authToken = req.get('Authorization');
   if (_.isUndefined(authToken)) {
     callback(null, {
-      permission: ['public']
+      user: {
+        userType: 'public'
+      }
     });
     return;
   }
