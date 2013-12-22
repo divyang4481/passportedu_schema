@@ -90,7 +90,7 @@
     {
       "title": "My Application Cards",
       "rel": "self",
-      "href": "/api/v1/students/{{studentId}}/applications"
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards"
     },
     {
       "title": "Search Cards",

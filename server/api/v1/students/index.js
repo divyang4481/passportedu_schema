@@ -7,6 +7,7 @@ var express = require('express')
   , authenticate = require('../../../helpers/authenticate')
   , card = require('../../../models/card')
   , application = require('../../../models/application')
+  , school = require('../../../models/school')
   , queryM = require('../../../verbs/query');
 /**
  *
@@ -47,7 +48,8 @@ api.get('/:studentId', function(req, res) {
  */
 api.get('/:studentId/applications', function(req, res) {
   var studentId = req.params.studentId;
-  application.rest({studentId: studentId}, function(err, applications) {
+  req.query.studentId = studentId;
+  queryM(application)(req, function(err, applications) {
     res.json({
       studentId: studentId,
       applications: applications
@@ -74,7 +76,7 @@ api.get('/:studentId/applications/:applicationId', function(req, res) {
   application.findById(applicationId).exec(function(err, App) {
     res.json({
       studentId: studentId,
-      applicationId: App._id,
+      applicationId: applicationId,
       application: _.omit(App, ['_id'])
     });
   });
@@ -100,6 +102,44 @@ api.delete('/:studentId/applications/:applicationId', function(req, res) {
   application.findOneAndRemove(applicationId, function(err, App) {
     res.set('Location', '/api/v1/students/' + studentId + '/applications');
     res.send(300);
+  });
+});
+/**
+ *
+ */
+api.get('/:studentId/applications/:applicationId/schools', function(req, res) {
+  var studentId = req.params.studentId
+    , applicationId = req.params.applicationId;
+  application.findById(applicationId).exec(function(err, App) {
+    school.find({_id: { $in: App.schoolIds}}).exec().then(function(schools) {
+      res.json({
+        studentId: studentId,
+        applicationId: applicationId,
+        schools: schools
+      });
+    });
+  });
+});
+/**
+ *
+ */
+api.put('/:studentId/applications/:applicationId/schools', function(req, res) {
+  var studentId = req.params.studentId
+    , applicationId = req.params.applicationId
+    , schoolIds = req.body;
+  application.findById(applicationId).exec(function(err, App) {
+    App.schoolIds = _.union(App.schoolIds, schoolIds);
+    App.save(function(err) {
+      res.set('Location', '/api/v1/students/' + studentId + '/applications/' + applicationId + '/schools/');
+      res.send(300);
+//      school.find({_id: { $in: App.schoolIds}}).exec().then(function(schools) {
+//        res.json({
+//          studentId: studentId,
+//          applicationId: applicationId,
+//          schools: schools
+//        });
+//      });
+    });
   });
 });
 /**

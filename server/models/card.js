@@ -21,7 +21,7 @@ var CardSchema = new mongoose.Schema({
     { type: Schema.Types.Mixed }
   ],
   data: Schema.Types.Mixed,
-  mediaType: [
+  mediaTypes: [
     { type: String, enum: mediaTypes }
   ],
   updated: { type: Date, default: Date.now }

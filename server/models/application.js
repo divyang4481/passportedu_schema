@@ -1,8 +1,15 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , _ = require('underscore');
+  , _ = require('underscore')
+  , mediaTypes = [
+    "/api/v1/applications/universal.json"
+  ]
 var ApplicationSchema = new mongoose.Schema({
   studentId: String,
+  data: Schema.Types.Mixed,
+  mediaType: [
+    { type: String, enum: mediaTypes }
+  ],
   cardIds: [
     { type: String }
   ],

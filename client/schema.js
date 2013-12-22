@@ -20,8 +20,12 @@ angular.module('schema', ['ngResource'])
             });
           });
         }
-        if (status == 401) {
-          return;
+        if (status == 415) {
+          apiClient.errors = [
+            {
+              message: "Please choose the correct mediaType and resubmit"
+            }
+          ];
         }
         // otherwise
         return $q.reject(response);
@@ -78,14 +82,17 @@ angular.module('schema', ['ngResource'])
       if (pathParts.length === 0) {
         var eLink = angular.copy(link)
           , href = $interpolate(eLink.href)
-          , title = eLink.title ? $interpolate(eLink.title): ''
+          , title = eLink.title ? $interpolate(eLink.title) : false
           , rel = $interpolate(eLink.rel)
+          , description = eLink.description ? $interpolate(eLink.description) : false
           , iHref = href(data)
-          , iTitle = title(data)
+          , iTitle = title ? title(data) : ''
           , iRel = rel(data)
+          , iDescription = description ? description(data) : '';
         eLink.href = iHref;
         eLink.rel = iRel;
         eLink.title = iTitle;
+        eLink.description = iDescription;
         if (!angular.isArray(root.links)) {
           root.links = [];
         }
@@ -104,9 +111,9 @@ angular.module('schema', ['ngResource'])
       }
       if (!angular.isArray(data[seg]) && angular.isObject(data[seg])) {
         var d = angular.copy(data)
-          , lLink = angular.copy(eLink);
+          , lLink = angular.copy(link);
         angular.extend(d, data[seg]);
-        lLink.rel = lLink.rel + '_' + seg;
+        lLink.rel = lLink.rel;
         apiClient.compileLink(root, d, angular.copy(pathParts), lLink);
       }
     }
@@ -163,14 +170,17 @@ angular.module('schema', ['ngResource'])
         apiClient.findRelLink(rel, apiClient.links).then(function(link) {
           var eLink = angular.copy(link)
             , href = $interpolate(eLink.href)
-            , title = $interpolate(eLink.title)
+            , title = eLink.title ? $interpolate(eLink.title) : false
             , rel = $interpolate(eLink.rel)
+            , description = eLink.description ? $interpolate(eLink.description) : false
             , iHref = href(payload)
-            , iTitle = title(params)
+            , iTitle = title ? title(params) : ''
             , iRel = rel(params)
+            , iDescription = description ? description(params): '';
           eLink.href = iHref;
           eLink.rel = iRel;
           eLink.title = iTitle;
+          eLink.description = iDescription;
           var method = eLink.method ? eLink.method : 'GET'
             , methods = {}
             , defaults = {}

@@ -5,30 +5,10 @@
   "name": "PassportEDU API",
   "type": "object",
   "description": "PassportEDU API",
-  "properties": {
-    "user": {
-      "title": "Unique ID of a User",
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string"
-        },
-        "userType": {
-          "type": "string"
-        }
-      },
-      "links": [
-        {
-          "title": "My Private Student Home",
-          "rel": "portal",
-          "href": "/api/v1/{{userType}}/{{userId}}"
-        }
-      ]
-    }
-  },
   "links": [
     {
       "title": "API Root",
+      "description": "The root resource for Passport EDU",
       "rel": "self",
       "href": "/api/v1"
     },

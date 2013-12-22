@@ -14,45 +14,55 @@
     },
     "applications": {
       "title": "Student applications",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "applicationId": {
-            "type": "string"
-          },
-          "student": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "array",
+          "items": {
             "type": "object",
             "properties": {
-              "studentId": {
+              "applicationId": {
                 "type": "string"
-              }
-            }
-          },
-          "schools": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "schoolId": {
-                  "type": "string"
+              },
+              "data": {
+                "type": "string"
+              },
+              "student": {
+                "type": "object",
+                "properties": {
+                  "studentId": {
+                    "type": "string"
+                  }
+                }
+              },
+              "schools": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "schoolId": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
-            }
+            },
+            "links": [
+              {
+                "title": "Full Application",
+                "description": "{{description}}",
+                "rel": "full_{{applicationId}}",
+                "href": "/api/v1/students/{{studentId}}/applications/{{_id}}"
+              },
+              {
+                "title": "Application Cards",
+                "description": "{{description}}",
+                "rel": "cards_{{applicationId}}",
+                "href": "/api/v1/students/{{studentId}}/applications/{{_id}}/cards"
+              }
+            ]
           }
-        },
-        "links": [
-          {
-            "title": "Full Application",
-            "rel": "full_{{applicationId}}",
-            "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
-          },
-          {
-            "title": "Application Cards",
-            "rel": "cards_{{applicationId}}",
-            "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards"
-          }
-        ]
+        }
       }
     }
   },
@@ -94,15 +104,15 @@
           ]
         },
         "data": {
-          "title": "Meta Data",
-          "description": "meta data",
+          "title": "Application Data",
+          "description": "Content of the Application",
           "identity": false,
           "readonly": false,
           "type": "any"
         },
         "updated": {
-          "title": "updated",
-          "description": "updated",
+          "title": "Date last updated",
+          "description": "The last date/time this applications was updated.",
           "identity": false,
           "readonly": false,
           "type": "date-time"

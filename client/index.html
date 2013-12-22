@@ -1,46 +1,86 @@
 <html>
 <head>
   <title>Schema Browser</title>
+  <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-responsive.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body ng-app="client">
-<h1>Schema Browser</h1>
-<div id="schema">
-  <div ng-controller="ClientArea">
-    <h2 ng-bind="client.schema.title"></h2>
-    <ul>
-      <li ng-repeat="rel in client.links">
-        <span ng-bind="rel.title"></span>
-        <a href="#" ng-show="rel.properties" ng-click="{{rel.rel}}.show = !{{rel.rel}}.show">show form</a>
-        <form ng-show="{{rel.rel}}.show">
-          <div ng-repeat="property in rel.properties">
-            <label ng-bind="property.title"></label>
-            <div ng-switch="property.type">
-              <input ng-switch-when="string" type="text" ng-model="property.value">
-              <input ng-switch-when="number" type="number" ng-model="property.value">
-              <input ng-switch-when="password" type="password" ng-model="property.value">
-              <input ng-switch-when="date-time" type="date" ng-model="property.value">
-              <div ng-switch-when="array" ng-repeat="prop in client.data[property]">
-                <input name="{{property.title}}[{{$index}}]" type="text" ng-model="prop.value">
-              </div>
-              <textarea ng-switch-when="any" ng-model="property.value"></textarea>
-              <select ng-switch-when="enum" ng-options="v as v for (k,v) in property.enum" ng-model="property.value"></select>
-            </div>
-            <pre ng-bind="property.value"></pre>
-          </div>
-        </form>
-        <button ng-click="link()" ng-bind="rel.rel"></button>
-      </li>
-    </ul>
-    <pre ng-bind="client.data | json"></pre>
-    <!--<pre ng-bind="client.links | json"></pre>-->
-    <!--<pre ng-bind="client.schema | json"></pre>-->
+<div class="container">
+  <div class="hero-unit">
+    <h1>Schema Browser</h1>
   </div>
-</div>
-<script src="/libs/underscore-1.4.4.js"></script>
-<script src="/libs/angular-1.1.5.js"></script>
-<script src="/libs/angular/angular-resource.js"></script>
-<script src="/schema.js"></script>
-<script src="/base64.js"></script>
-<script src="/client.js"></script>
+
+  <div id="schema">
+    <div ng-controller="ClientArea">
+      <h2 ng-bind="client.schema.title"></h2>
+
+      <div class="container-fluid">
+        <div class="row-fluid">
+          <div class="span4">
+            <ul class="unstyled">
+              <li ng-repeat="rel in client.links" class="well-small">
+                <a ng-show="rel.method == 'POST' || rel.method == 'PUT' || rel.properties" ng-bind="rel.title" href="#{{rel.title | fieldName}}" role="button" class="btn" data-toggle="modal"></a>
+
+                <div id="{{rel.title | fieldName}}" class="modal hide fade" tabindex="-1" role="dialog">
+                  <div class="modal-header">
+                    <h3 ng-bind="rel.title"></h3>
+                  </div>
+                  <div class="modal-body">
+                    <form class="form-horizontal">
+                      <div ng-repeat="property in rel.properties">
+                        <div class="control-group">
+                          <label ng-bind="property.title" class="control-label" for="{{property.title | fieldName}}"></label>
+
+                          <div ng-switch="property.type" class="controls">
+
+                            <input id="{{property.title | fieldName}}" ng-switch-when="string" type="text" ng-model="property.value">
+                            <input id="{{property.title | fieldName}}" ng-switch-when="number" type="number" ng-model="property.value">
+                            <input id="{{property.title | fieldName}}" ng-switch-when="password" type="password" ng-model="property.value">
+                            <input id="{{property.title | fieldName}}" ng-switch-when="date-time" type="date" ng-model="property.value">
+
+                            <div ng-switch-when="array">
+                              <input ng-repeat="prop in client.data[property]" name="{{property.title + $index | fieldName}}" name="{{property.title}}[{{$index}}]" type="text" ng-model="prop.value">
+                              <button ng-click="client.data[property] = ['']" class="btn btn-small btn-info"><i class="icon-white icon-plus-sign"></i> Add a School</button>
+                            </div>
+                            <textarea id="{{property.title | fieldName}}" ng-switch-when="any" ng-model="property.value"></textarea>
+                            <select id="{{property.title | fieldName}}" ng-switch-when="enum" ng-options="v as v for (k,v) in property.enum" ng-model="property.value"></select>
+
+                          </div>
+                        </div>
+                      </div>
+                      <button ng-click="link()" class="btn btn-small btn-primary">
+                        <i class="icon-white" ng-class="{'icon-plus-sign': rel.method == 'POST', 'icon-pencil': rel.method == 'PUT', 'icon-remove-sign': rel.method == 'DELETE', 'icon-file': !rel.method}"></i>
+                        <span ng-bind="rel.title"></span>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <button ng-show="rel.method != 'POST' && rel.method != 'PUT'" ng-click="link()" class="btn btn-small btn-primary">
+                  <i class="icon-white" ng-class="{'icon-plus-sign': rel.method == 'POST', 'icon-pencil': rel.method == 'PUT', 'icon-remove-sign': rel.method == 'DELETE', 'icon-file': !rel.method}"></i>
+                  <span ng-bind="rel.title"></span>
+                </button>
+                <span ng-bind="rel.description"></span>
+              </li>
+            </ul>
+          </div>
+          <div class="span8">
+            <div class="well">
+              <pre ng-bind="client.data | json"></pre>
+            </div>
+          </div>
+          <!--<pre ng-bind="client.links | json"></pre>-->
+          <!--<pre ng-bind="client.schema | json"></pre>-->
+        </div>
+      </div>
+    </div>
+    <script src="/libs/underscore-1.4.4.js"></script>
+    <script src="/libs/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/libs/angular-1.1.5.js"></script>
+    <script src="/libs/angular/angular-resource.js"></script>
+    <script src="/schema.js"></script>
+    <script src="/base64.js"></script>
+    <script src="/client.js"></script>
 </body>
 </html>

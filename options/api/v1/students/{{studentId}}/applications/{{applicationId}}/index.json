@@ -63,15 +63,19 @@
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
     },
     {
-      "title": "Add a School Application",
+      "title": "Add a School to Application",
       "rel": "add_school",
       "method": "PUT",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools",
       "properties": {
-        "school": {
-          "title": "School ID",
-          "description": "Unique ID of School",
-          "type": "string"
+        "schoolIds": {
+          "title": "School IDs",
+          "description": "Unique IDs of schools to be added",
+          "type": "array",
+          "items": {
+            "title": "school ID",
+            "type": "string"
+          }
         }
       },
       "required": ["school"]

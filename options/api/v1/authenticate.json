@@ -18,7 +18,7 @@
     },
     {
       "title": "Students Home",
-      "rel": "self",
+      "rel": "students",
       "href": "/api/v1/students"
     },
     {
@@ -27,15 +27,9 @@
       "href": "/api/v1/schools"
     },
     {
-      "title": "Student Portal",
-      "rel": "student",
-      "href": "/api/v1/students/{{studentId}}"
-    },
-    {
       "title": "Authentication",
       "rel": "self",
-      "href": "/api/v1/public/authenticate",
-      "method": "GET"
+      "href": "/api/v1/public/authenticate"
     },
     {
       "title": "Log in",

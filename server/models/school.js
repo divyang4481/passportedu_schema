@@ -1,14 +1,17 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , schemas = [
-    'psprt.v1.school'
+  , mediaTypes = [
+    '/api/v1/schools/university.json',
+    '/api/v1/schools/college.json'
   ];
 var SchoolSchema = new mongoose.Schema({
   id: String,
-  name: String,
-  description: String,
-  schoolSchema: [
-    { type: String, enum: schemas }
+  data: Schema.Types.Mixed,
+  mediaTypes: [
+    { type: String, enum: mediaTypes }
+  ],
+  cardIds: [
+    { type: String }
   ]
 });
 module.exports = mongoose.model("School", SchoolSchema);
