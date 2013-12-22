@@ -13,6 +13,7 @@ api.options('/*', options);
  *
  */
 api.get('/', function(req, res) {
+
   res.json({});
 });
 /**

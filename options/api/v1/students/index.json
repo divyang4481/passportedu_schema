@@ -14,14 +14,62 @@
   },
   "links": [
     {
-      "title": "Root Portal",
+      "title": "API Root",
       "rel": "root",
       "href": "/api/v1"
     },
     {
-      "title": "Student Portal",
-      "rel": "me",
-      "href": "/api/v1/students/{{studentId}}"
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Students Home",
+      "rel": "self",
+      "href": "/api/v1/students"
+    },
+    {
+      "title": "Log in",
+      "rel": "authenticate",
+      "href": "/api/v1/authenticate",
+      "method": "POST",
+      "targetSchema": {
+        "properties": {
+          "token": {
+            "title": "Session Token",
+            "description": "Unique token for your user session",
+            "type": "string"
+          },
+          "id": {
+            "title": "User Id",
+            "description": "User Id of Logged in User",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "description": "Your username",
+            "type": "string"
+          },
+          "fullName": {
+            "title": "Your full name",
+            "description": "Your first and last name.",
+            "type": "string"
+          }
+        }
+      },
+      "properties": {
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        }
+      },
+      "required": ["username", "password"]
     }
   ]
 }

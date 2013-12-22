@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/student/application.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "application",
+  "title": "Student Application",
   "type": "object",
-  "name": "application",
+  "name": "Student Applications",
   "description": "An application to attend a college or a university as a student.",
   "properties": {
     "studentId": {
@@ -43,8 +43,14 @@
         },
         "links": [
           {
-            "rel": "full",
+            "title": "Full Application",
+            "rel": "full_{{applicationId}}",
             "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
+          },
+          {
+            "title": "Application Cards",
+            "rel": "cards_{{applicationId}}",
+            "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards"
           }
         ]
       }
@@ -52,14 +58,56 @@
   },
   "links": [
     {
-      "title": "Root Portal",
+      "title": "API Root",
       "rel": "root",
       "href": "/api/v1"
     },
     {
-      "title": "Student Portal",
-      "rel": "students/me",
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Student Home",
+      "rel": "student",
       "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "My Applications",
+      "rel": "self",
+      "href": "/api/v1/students/{{studentId}}/applications"
+    },
+    {
+      "title": "Create an Application",
+      "rel": "createApplication",
+      "method": "POST",
+      "href": "/api/v1/students/{{studentId}}/applications",
+      "properties": {
+        "mediaType": {
+          "title": "mediaType",
+          "description": "media type",
+          "identity": false,
+          "readonly": false,
+          "type": "enum",
+          "enum": [
+            "/api/v1/applications/universal.json"
+          ]
+        },
+        "data": {
+          "title": "Meta Data",
+          "description": "meta data",
+          "identity": false,
+          "readonly": false,
+          "type": "any"
+        },
+        "updated": {
+          "title": "updated",
+          "description": "updated",
+          "identity": false,
+          "readonly": false,
+          "type": "date-time"
+        }
+      }
     }
   ]
 }

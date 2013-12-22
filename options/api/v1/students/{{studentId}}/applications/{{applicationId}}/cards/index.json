@@ -1,10 +1,10 @@
 {
   "id": "/api/v1/student/application/cards.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "cards",
+  "title": "Application Cards",
   "type": "object",
   "name": "cards",
-  "description": "An application to attend a college or a university as a student.",
+  "description": "Cards from an application",
   "properties": {
     "applicationId": {
       "title": "Unique ID of an Application",
@@ -19,31 +19,83 @@
       "type": "string"
     },
     "cards": {
-      "title": "cards",
-      "description": "cards",
-      "identity": false,
-      "readonly": false,
+      "title": "Application Cards",
+      "description": "Application Cards",
       "type": "array",
       "items": {
         "description": "A card within an application.",
         "$ref": "/api/v1/student/application/card.json"
       }
+    },
+    "count": {
+      "title": "Total count of cards",
+      "type": "number"
+    },
+    "pages": {
+      "title": "Total number of pages of cards",
+      "type": "number"
+    },
+    "page": {
+      "title": "Current page of results",
+      "type": "number"
+    },
+    "meta": {
+      "title": "Meta Data for this Search",
+      "description": "Meta Data for this Search",
+      "type": "array",
+      "items": {
+        "title": "Page",
+        "type": "object",
+        "properties": {
+          "query": {
+            "title": "Query String",
+            "type": "string"
+          },
+          "page": {
+            "title": "Page",
+            "type": "number"
+          }
+        },
+        "links": [
+          {
+            "title": "Go to Page {{page}}",
+            "rel": "goToPage_{{page}}",
+            "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/?{{query}}"
+          }
+        ]
+      }
     }
   },
   "links": [
     {
-      "title": "Root Portal",
+      "title": "API Root",
       "rel": "root",
       "href": "/api/v1"
     },
     {
-      "title": "Student Portal",
-      "rel": "self",
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Student Home",
+      "rel": "student",
       "href": "/api/v1/students/{{studentId}}"
     },
     {
+      "title": "My Applications",
+      "rel": "applications",
+      "href": "/api/v1/students/{{studentId}}/applications"
+    },
+    {
+      "title": "My Application Cards",
+      "rel": "self",
+      "href": "/api/v1/students/{{studentId}}/applications"
+    },
+    {
+      "title": "Search Cards",
       "rel": "cards",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
       "properties": {
         "offset": {
           "title": "offset",

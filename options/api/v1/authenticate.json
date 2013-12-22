@@ -5,12 +5,41 @@
   "name": "Login",
   "type": "object",
   "description": "Login to the PassportEDU API.",
-  "links": {
-    "root": {
-      "href": "/api/v1",
+  "links": [
+    {
+      "title": "API Root",
+      "rel": "root",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Students Home",
+      "rel": "self",
+      "href": "/api/v1/students"
+    },
+    {
+      "title": "Schools Home",
+      "rel": "schools",
+      "href": "/api/v1/schools"
+    },
+    {
+      "title": "Student Portal",
+      "rel": "student",
+      "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "Authentication",
+      "rel": "self",
+      "href": "/api/v1/public/authenticate",
       "method": "GET"
     },
-    "login": {
+    {
+      "title": "Log in",
+      "rel": "authenticate",
       "href": "/api/v1/public/authenticate",
       "method": "POST",
       "targetSchema": {
@@ -45,10 +74,6 @@
         }
       },
       "required": ["username", "password"]
-    },
-    "self": {
-      "href": "/api/v1/public/authenticate",
-      "method": "GET"
     }
-  }
+  ]
 }

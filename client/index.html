@@ -4,14 +4,14 @@
 </head>
 <body ng-app="client">
 <h1>Schema Browser</h1>
-
 <div id="schema">
   <div ng-controller="ClientArea">
+    <h2 ng-bind="client.schema.title"></h2>
     <ul>
       <li ng-repeat="rel in client.links">
-        <form>
-          <h4 ng-bind="rel.title"></h4>
-
+        <span ng-bind="rel.title"></span>
+        <a href="#" ng-show="rel.properties" ng-click="{{rel.rel}}.show = !{{rel.rel}}.show">show form</a>
+        <form ng-show="{{rel.rel}}.show">
           <div ng-repeat="property in rel.properties">
             <label ng-bind="property.title"></label>
             <div ng-switch="property.type">

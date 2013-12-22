@@ -4,7 +4,7 @@
   "title": "PassportEDU API",
   "name": "PassportEDU API",
   "type": "object",
-  "description": "The root resource for the PassportEDU API.",
+  "description": "PassportEDU API",
   "properties": {
     "user": {
       "title": "Unique ID of a User",
@@ -19,6 +19,7 @@
       },
       "links": [
         {
+          "title": "My Private Student Home",
           "rel": "portal",
           "href": "/api/v1/{{userType}}/{{userId}}"
         }
@@ -27,14 +28,27 @@
   },
   "links": [
     {
-      "rel": "public",
-      "href": "/api/v1/public",
-      "method": "GET",
-      "schema": {
-        "$ref": "/api/v1/public"
-      }
+      "title": "API Root",
+      "rel": "self",
+      "href": "/api/v1"
     },
     {
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Students Home",
+      "rel": "students",
+      "href": "/api/v1/students"
+    },
+    {
+      "title": "Schools Home",
+      "rel": "schools",
+      "href": "/api/v1/schools"
+    },
+    {
+      "title": "Log In",
       "rel": "authenticate",
       "href": "/api/v1/authenticate",
       "method": "POST",

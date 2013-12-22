@@ -25,7 +25,11 @@ var rest = function(model) {
     , model_path_id = "/:id";
   // Models
   api.options(models_path, optionsMs(models_path, model));
-  api.get(models_path, queryM(model));
+  api.get(models_path, function(req, res) {
+    queryM(model)(req, function(err, data) {
+      res.json(data);
+    });
+  });
   api.post(models_path, postM(model));
   // Individual model
   api.options(model_path_id, optionsM(model_path_id, model));

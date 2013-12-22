@@ -7,6 +7,7 @@ var express = require('express')
   , authenticate = require('../../../helpers/authenticate')
   , card = require('../../../models/card')
   , application = require('../../../models/application')
+  , queryM = require('../../../verbs/query');
 /**
  *
  */
@@ -18,7 +19,27 @@ api.use(function(req, res, next) {
       res.send(401);
       return;
     }
+    req.studentId = auth.user.userId;
     next();
+  });
+});
+/**
+ * Students Area
+ */
+api.get('/', function(req, res) {
+  res.set('Location', '/api/v1/students/' + req.studentId);
+  res.send(300);
+});
+/**
+ *
+ */
+api.get('/:studentId', function(req, res) {
+  var response = {
+    studentId: req.params.studentId
+  };
+  card.find({ownerId: req.params.studentId}, function(cards) {
+    response.cards = cards;
+    res.json(response);
   });
 });
 /**
@@ -41,7 +62,7 @@ api.post('/:studentId/applications', function(req, res) {
   var app = new application({studentId: studentId});
   app.save(function(err) {
     res.set('Location', '/api/v1/students/' + studentId + '/applications/' + app._id);
-    res.send(302);
+    res.send(300);
   });
 });
 /**
@@ -66,8 +87,19 @@ api.put('/:studentId/applications/:applicationId', function(req, res) {
     , applicationId = req.params.applicationId
     , appPost = req.body;
   application.findOneAndUpdate(applicationId, appPost, function(err, App) {
-    res.set('Location', '/api/v1/students/' + studentId + '/applications/' + app._id);
-    res.send(302);
+    res.set('Location', '/api/v1/students/' + studentId + '/applications/' + App._id);
+    res.send(300);
+  });
+});
+/**
+ *
+ */
+api.delete('/:studentId/applications/:applicationId', function(req, res) {
+  var studentId = req.params.studentId
+    , applicationId = req.params.applicationId;
+  application.findOneAndRemove(applicationId, function(err, App) {
+    res.set('Location', '/api/v1/students/' + studentId + '/applications');
+    res.send(300);
   });
 });
 /**
@@ -76,14 +108,19 @@ api.put('/:studentId/applications/:applicationId', function(req, res) {
 api.post('/:studentId/applications/:applicationId/cards', function(req, res) {
   var studentId = req.params.studentId
     , applicationId = req.params.applicationId
-    , appBody = req.body;
-  appBody.owners = [];
-  appBody.owners.push({application: applicationId});
-  appBody.owners.push({student: studentId});
-  var Card = new card(appBody);
+    , cardBody = req.body;
+  cardBody.owners = [];
+  cardBody.owners.push({application: applicationId});
+  cardBody.owners.push({student: studentId});
+  cardBody.mediaType = [req.body.mediaType];
+  var Card = new card(cardBody);
   Card.save(function(err) {
+    if (err) {
+      res.send(415);
+      return;
+    }
     res.set('Location', '/api/v1/students/' + studentId + '/applications/' + applicationId + '/cards/' + Card._id);
-    res.send(302);
+    res.send(300);
   });
 });
 /**
@@ -91,14 +128,19 @@ api.post('/:studentId/applications/:applicationId/cards', function(req, res) {
  */
 api.get('/:studentId/applications/:applicationId/cards', function(req, res) {
   var studentId = req.params.studentId
-    , applicationId = req.params.applicationId
-    , cardId = req.params.cardId;
-  card.find({owners: {application: applicationId}}).exec(function(err, Cards) {
-    res.json({
+    , applicationId = req.params.applicationId;
+  req.query.owners = {application: applicationId};
+  queryM(card)(req, function(err, data) {
+    var response = {
       studentId: studentId,
-      applicationId: applicationId._id,
-      cards: Cards
-    });
+      applicationId: applicationId,
+      meta: data.meta,
+      cards: data.result,
+      count: data.count,
+      pages: data.pages,
+      page: data.page
+    };
+    res.json(response);
   });
 });
 /**
@@ -111,8 +153,8 @@ api.get('/:studentId/applications/:applicationId/cards/:cardId', function(req, r
   card.findById(cardId).exec(function(err, Card) {
     res.json({
       studentId: studentId,
-      applicationId: applicationId._id,
-      cardId: Card._id,
+      applicationId: applicationId,
+      cardId: cardId,
       card: _.omit(Card, ['_id'])
     });
   });
@@ -128,18 +170,6 @@ api.put('/:studentId/applications/:applicationId/cards/:cardId', function(req, r
   card.findOneAndUpdate(cardId, cardPost, function(err, Card) {
     res.set('Location', '/api/v1/students/' + studentId + '/applications/' + applicationId + '/cards/' + Card._id);
     res.send(302);
-  });
-});
-/**
- *
- */
-api.get('/:studentId', function(req, res) {
-  var response = {
-    studentId: req.params.studentId
-  };
-  card.find({ownerId: req.params.studentId}, function(cards) {
-    response.cards = cards;
-    res.json(response);
   });
 });
 /**

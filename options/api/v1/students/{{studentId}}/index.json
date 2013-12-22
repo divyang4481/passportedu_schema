@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/student",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "student",
+  "title": "Student Home",
   "type": "object",
-  "name": "student",
+  "name": "Student Home",
   "description": "A Student's entry point or home page.",
   "properties": {
     "studentId": {
@@ -26,14 +26,24 @@
   },
   "links": [
     {
-      "title": "Root Portal",
+      "title": "API Root",
       "rel": "root",
       "href": "/api/v1"
     },
     {
-      "title": "Student Portal",
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Student Home",
       "rel": "self",
       "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "My Applications",
+      "rel": "applications",
+      "href": "/api/v1/students/{{studentId}}/applications"
     },
     {
       "title": "Create an Application",
@@ -66,11 +76,6 @@
           "type": "date-time"
         }
       }
-    },
-    {
-      "title": "My Applications",
-      "rel": "applications",
-      "href": "/api/v1/students/{{studentId}}/applications"
     }
   ]
 }

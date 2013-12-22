@@ -5,7 +5,7 @@ var client = angular.module('client', ['schema', 'clientUtilities'])
     $scope.link = function() {
       $scope.client.traverse(this.rel.rel, {});
     };
-    new jsonSchema('http://localhost:8080/api/v1').then(function(client) {
+    new jsonSchema('/api/v1').then(function(client) {
       var passport = client;
       $scope.client = passport;
       $scope.client.forms = {};

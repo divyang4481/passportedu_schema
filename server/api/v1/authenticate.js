@@ -6,7 +6,7 @@ var express = require('express')
   , _ = require('underscore')
   , authenticate = require('../../helpers/authenticate');
 /**
- * Receive a POSt and use body.username body.password to authenticate user
+ * Receive a POST and use body.username body.password to authenticate user
  */
 api.post('/', function(req, res) {
   authenticate.login(req, function(err, response) {
@@ -14,7 +14,7 @@ api.post('/', function(req, res) {
     if (_.isUndefined(response.token)) {
       response.instructions = "Authenticate with a username and password.";
     } else {
-      response.instructions = "base64 encode the username:token and send it in the Token: header with all requests for authentication.";
+      response.instructions = "base64 encode the username:token Basic Auth.";
     }
     res.json(response);
   });

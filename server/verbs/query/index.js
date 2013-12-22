@@ -1,10 +1,15 @@
 var _ = require('underscore')
   , querystring = require('querystring');
+/**
+ *
+ * @param model
+ * @returns {Function}
+ */
 module.exports = function(model) {
   /**
    * RESTful query
    */
-  var queryFunc = function(req, res) {
+  var queryFunc = function(req, callback) {
     var parentRoute = req.app.route
       , queryVars = _.extend(req.query, req.restrictQuery)
       , query = model.find();
@@ -23,7 +28,7 @@ module.exports = function(model) {
     query.skip(offset);
     query.exec(function(err, result) {
       if (err) {
-        res.json({error: err});
+        callback(err);
         return;
       }
       // Count total results
@@ -33,27 +38,34 @@ module.exports = function(model) {
           , prevPage = _.clone(queryVars)
           , nextOffset = Number(offset) + Number(limit)
           , prevOffset = Number(offset) - Number(limit)
-          , meta = {};
+          , meta = [];
         if (nextOffset <= (count - 1)) {
           nextPage.offset = nextOffset;
-          meta.nextPageURL = parentRoute + '?' + querystring.stringify(nextPage);
-          meta.nextPageQuery = nextPage;
+          meta.push({
+            query: querystring.stringify(nextPage),
+            page: Math.ceil(nextPage.offset / nextPage.limit) + 1
+          });
         }
-        if (prevOffset > 0) {
+        if (offset > 0) {
           prevPage.offset = prevOffset;
-          meta.prevPageURL = parentRoute + '?' + querystring.stringify(prevPage);
-          meta.prevPageQuery = prevPage;
+          meta.push({
+            query: querystring.stringify(prevPage),
+            page: Math.ceil(prevPage.offset / prevPage.limit) + 1
+          });
         }
-        meta.count = count;
-        meta.pages = Math.ceil(count / limit);
-        meta.page = Math.ceil(offset / limit) + 1;
-        res.json({
+        callback(err, {
           meta: meta,
-          result: result
+          result: result,
+          count: count,
+          pages: Math.ceil(count / limit),
+          page: Math.ceil(offset / limit) + 1
         });
       });
     });
   };
+  /**
+   * More advanced queries that match data in complex ways
+   */
   var advancedQueries = function(query, queryVars) {
     _.each(queryVars, function(value, key) {
       if (key.match(/>/)) {

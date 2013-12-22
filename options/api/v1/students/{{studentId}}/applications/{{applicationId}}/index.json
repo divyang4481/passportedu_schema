@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/student/application.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "application",
+  "title": "Student Application",
   "type": "object",
-  "name": "application",
+  "name": "Student Application",
   "description": "An application to attend a college or a university as a student.",
   "properties": {
     "applicationId": {
@@ -32,18 +32,54 @@
   },
   "links": [
     {
-      "title": "Root Portal",
+      "title": "API Root",
       "rel": "root",
       "href": "/api/v1"
     },
     {
-      "title": "Student Portal",
-      "rel": "self",
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Student Home",
+      "rel": "student",
       "href": "/api/v1/students/{{studentId}}"
     },
     {
+      "title": "My Applications",
+      "rel": "applications",
+      "href": "/api/v1/students/{{studentId}}/applications"
+    },
+    {
+      "title": "This Application",
+      "rel": "self",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
+    },
+    {
+      "title": "Delete this Application",
+      "rel": "delete_application",
+      "method": "DELETE",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
+    },
+    {
+      "title": "Add a School Application",
+      "rel": "add_school",
+      "method": "PUT",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}",
+      "properties": {
+        "school": {
+          "title": "School ID",
+          "description": "Unique ID of School",
+          "type": "string"
+        }
+      },
+      "required": ["school"]
+    },
+    {
+      "title": "Search Cards",
       "rel": "cards",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/",
       "properties": {
         "offset": {
           "title": "offset",
