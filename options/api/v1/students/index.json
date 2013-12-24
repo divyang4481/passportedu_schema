@@ -14,62 +14,20 @@
   },
   "links": [
     {
-      "title": "API Root",
-      "rel": "root",
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
       "href": "/api/v1"
     },
     {
-      "title": "Public Home",
+      "title": "Search and Explore Schools",
       "rel": "public",
-      "href": "/api/v1/public"
+      "href": "/api/v1/resources/schools"
     },
     {
-      "title": "Students Home",
-      "rel": "self",
+      "title": "Manage My Student Applications",
+      "rel": "students",
       "href": "/api/v1/students"
-    },
-    {
-      "title": "Log in",
-      "rel": "authenticate",
-      "href": "/api/v1/authenticate",
-      "method": "POST",
-      "targetSchema": {
-        "properties": {
-          "token": {
-            "title": "Session Token",
-            "description": "Unique token for your user session",
-            "type": "string"
-          },
-          "id": {
-            "title": "User Id",
-            "description": "User Id of Logged in User",
-            "type": "string"
-          },
-          "username": {
-            "title": "Username",
-            "description": "Your username",
-            "type": "string"
-          },
-          "fullName": {
-            "title": "Your full name",
-            "description": "Your first and last name.",
-            "type": "string"
-          }
-        }
-      },
-      "properties": {
-        "username": {
-          "title": "Your username",
-          "description": "Your email address or username",
-          "type": "string"
-        },
-        "password": {
-          "title": "Your password",
-          "description": "Your password",
-          "type": "password"
-        }
-      },
-      "required": ["username", "password"]
     }
   ]
 }

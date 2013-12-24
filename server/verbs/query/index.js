@@ -70,11 +70,11 @@ module.exports = function(model) {
     _.each(queryVars, function(value, key) {
       if (key.match(/>/)) {
         var cleanKey = key.replace(/>/, '');
-        query.gte(cleanKey, value);
+        query.gte(cleanKey, Number(value));
       }
       else if (key.match(/</)) {
         var cleanKey = key.replace(/</, '');
-        query.lte(cleanKey, value);
+        query.lte(cleanKey, Number(value));
       }
       else if (key.match(/\*/)) {
         var cleanKey = key.replace(/\*/, '');

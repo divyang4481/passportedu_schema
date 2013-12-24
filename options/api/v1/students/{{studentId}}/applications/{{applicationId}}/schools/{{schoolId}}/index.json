@@ -32,19 +32,20 @@
   },
   "links": [
     {
-      "title": "API Root",
-      "rel": "root",
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
       "href": "/api/v1"
     },
     {
-      "title": "Public Home",
+      "title": "Search and Explore Schools",
       "rel": "public",
-      "href": "/api/v1/public"
+      "href": "/api/v1/resources/schools"
     },
     {
-      "title": "Student Home",
-      "rel": "student",
-      "href": "/api/v1/students/{{studentId}}"
+      "title": "Manage My Student Applications",
+      "rel": "students",
+      "href": "/api/v1/students"
     },
     {
       "title": "My Applications",

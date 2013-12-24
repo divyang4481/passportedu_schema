@@ -13,9 +13,13 @@ api.options('/*', options);
  *
  */
 api.get('/', function(req, res) {
-
   res.json({});
 });
+/**
+ *
+ */
+var register = require('./register');
+api.use('/register', register);
 /**
  *
  */

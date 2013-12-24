@@ -33,8 +33,8 @@
                           ng-click="link()"
                           ng-class="{'btn-danger': rel.method == 'DELETE', 'btn-info': rel.method != 'DELETE'}"
                           class="btn btn-small">
-                    <i class="icon-white"
-                       ng-class="{'icon-remove-sign': rel.method == 'DELETE', 'icon-file': !rel.method}"></i>&nbsp;
+                    <i class="glyphicon glyphicon-white"
+                       ng-class="{'glyphicon-remove-sign': rel.method == 'DELETE', 'glyphicon-file': !rel.method}"></i>&nbsp;
                     <span ng-bind="rel.title"></span>
                   </button>
                   <a ng-show="rel.method == 'POST' || rel.method == 'PUT' || rel.properties"
@@ -42,7 +42,8 @@
                      role="button"
                      class="btn btn-primary"
                      data-toggle="modal">
-                    <i ng-class="{'icon-plus-sign': rel.method == 'POST' || rel.method == 'PUT', 'icon-tags': rel.properties}"></i>&nbsp;
+                    <i class="glyphicon"
+                       ng-class="{'glyphicon-plus-sign': rel.method == 'POST' || rel.method == 'PUT', 'glyphicon-tags': rel.properties}"></i>&nbsp;
                     <span ng-bind="rel.title"></span>
                   </a>
                 </div>
@@ -118,7 +119,21 @@
                            type="date"
                            class="form-control"
                            ng-model="property.value">
+                    <input id="{{propName}}"
+                           ng-switch-when="email"
+                           type="email"
+                           class="form-control"
+                           ng-model="property.value">
 
+                    <div ng-switch-when="range" class="input-group">
+                      <span ng-bind="property.value" class="input-group-addon"></span>
+                      <input id="{{propName}}"
+                             type="range"
+                             min="{{property.min}}"
+                             max="{{property.max}}"
+                             class="form-control"
+                             ng-model="property.value">
+                    </div>
                     <div ng-switch-when="array"
                          ng-switch="property.items.type">
                       <input id="{{propName}}"
@@ -170,8 +185,8 @@
                             class="btn bt-default"
                             data-dismiss="modal"
                             aria-hidden="true">
-                      <i class="icon-white"
-                         ng-class="{'icon-plus-sign': rel.method == 'POST', 'icon-pencil': rel.method == 'PUT', 'icon-tags': rel.properties}"></i>&nbsp;
+                      <i class="glyphicon glyphicon-white"
+                         ng-class="{'glyphicon-plus-sign': rel.method == 'POST', 'glyphicon-pencil': rel.method == 'PUT', 'glyphicon-tags': rel.properties}"></i>&nbsp;
                       <span ng-bind="rel.title"></span>
                     </button>
                   </div>

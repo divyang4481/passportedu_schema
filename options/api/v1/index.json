@@ -7,25 +7,20 @@
   "description": "Bringing global students together with global schools.",
   "links": [
     {
-      "title": "API Root",
+      "title": "Home",
       "description": "The root resource for Passport EDU",
       "rel": "self",
       "href": "/api/v1"
     },
     {
-      "title": "Public Home",
+      "title": "Search and Explore Schools",
       "rel": "public",
-      "href": "/api/v1/public"
+      "href": "/api/v1/resources/schools"
     },
     {
-      "title": "Students Home",
+      "title": "Manage My Student Applications",
       "rel": "students",
       "href": "/api/v1/students"
-    },
-    {
-      "title": "Schools Home",
-      "rel": "schools",
-      "href": "/api/v1/schools"
     },
     {
       "title": "Log In",
@@ -66,6 +61,35 @@
           "title": "Your password",
           "description": "Your password",
           "type": "password"
+        }
+      },
+      "required": ["username", "password"]
+    },
+    {
+      "title": "Register",
+      "rel": "register",
+      "href": "/api/v1/register",
+      "method": "POST",
+      "properties": {
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        },
+        "fullName": {
+          "title": "Your Full Name",
+          "description": "Your first name and last name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Your Email Address",
+          "description": "A valid email address where we can contact you.",
+          "type": "email"
         }
       },
       "required": ["username", "password"]

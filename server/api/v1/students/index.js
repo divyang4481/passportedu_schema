@@ -27,8 +27,13 @@ api.use(function(req, res, next) {
  * Students Area
  */
 api.get('/', function(req, res) {
-  res.set('Location', '/api/v1/students/' + req.studentId);
-  res.send(300);
+  if (res.statusCode === 401) {
+    res.set('Location', '/api/v1/students/register');
+    res.send(300);
+  } else {
+    res.set('Location', '/api/v1/students/' + req.studentId);
+    res.send(300);
+  }
 });
 /**
  *
@@ -116,6 +121,20 @@ api.get('/:studentId/applications/:applicationId/schools', function(req, res) {
         applicationId: applicationId,
         schools: schools
       });
+    });
+  });
+});
+/**
+ *
+ */
+api.get('/:studentId/applications/:applicationId/searchSchools', function(req, res) {
+  var studentId = req.params.studentId
+    , applicationId = req.params.applicationId;
+  queryM(school)(req, function(err, Schools) {
+    res.json({
+      studentId: studentId,
+      applicationId: applicationId,
+      schools: Schools
     });
   });
 });
