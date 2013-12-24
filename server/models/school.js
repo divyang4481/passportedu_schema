@@ -34,7 +34,19 @@ var SchoolSchema = new mongoose.Schema({
     financesRequired: Number,
     diplomaRequired: String,
     referencesRequired: String,
-    essaysRequired: String
+    essaysRequired: String,
+    tags: [
+      { type: String }
+    ],
+    deadlines: [
+      { type: Date }
+    ],
+    requiredHealthTests: [
+      { type: String }
+    ],
+    categories: [
+      { type: String }
+    ]
   },
   mediaTypes: [
     { type: String, enum: mediaTypes }

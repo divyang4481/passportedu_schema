@@ -1,10 +1,10 @@
-var SchoolModel = require ('../../../server/models/School')
+var SchoolModel = require ('../../server/models/school')
 	, fs = require ('fs')
 	, lazy = require ('lazy')
 	, _ = require ('underscore')
 	, mongoose = require ('mongoose');
 
-mongoose.connect ('mongodb://localhost/tiro');
+mongoose.connect ('mongodb://localhost/psprt');
 
 console.log ('Starting...');
 
@@ -27,12 +27,12 @@ new lazy (fs.createReadStream (__dirname + '/mechTurkURLS.csv')).lines.map (Stri
 }).join (function (transformedSchools) {
 	_.each (transformedSchools, function (school) {
 			console.log (school.unitId);
-			SchoolModel.findOne ({unitId: Number (school.unitId)}, function (err, School) {
+			SchoolModel.findOne ({"data.unitId": Number (school.unitId)}, function (err, School) {
 					console.log (School);
-					School.state = school.state;
-					School.city = school.city;
-					School.zip = school.zip;
-					School.schoolURL = school.schoolURL;
+					School.data.state = school.state;
+					School.data.city = school.city;
+					School.data.zip = school.zip;
+					School.data.schoolURL = school.schoolURL;
 					School.save (function (err, savedSchool) {
 						console.log (err, savedSchool);
 					});

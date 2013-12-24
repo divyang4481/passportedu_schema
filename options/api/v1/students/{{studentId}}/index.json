@@ -38,7 +38,7 @@
     },
     {
       "title": "Manage My Student Applications",
-      "rel": "students",
+      "rel": "self",
       "href": "/api/v1/students"
     },
     {

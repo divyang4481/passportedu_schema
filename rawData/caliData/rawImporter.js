@@ -1,10 +1,10 @@
-var SchoolModel = require ('../../../server/models/School')
+var SchoolModel = require ('../../server/models/school')
 	, fs = require ('fs')
 	, lazy = require ('lazy')
 	, _ = require ('underscore')
 	, mongoose = require ('mongoose');
 
-mongoose.connect ('mongodb://localhost/tiro');
+mongoose.connect ('mongodb://localhost/psprt');
 
 var stream = fs.createReadStream (__dirname + '/CaliDataTabs.txt');
 
@@ -65,47 +65,47 @@ require ('fs').readFileSync (__dirname + '/CaliDataTabs.txt').toString ().split 
 	if (Diploma == 'NR') {
 		school.diplomaRequired = 'N';
 	}
-	SchoolModel.findOne ({unitId: Number (school.unitId)}, function (err, School) {
+	SchoolModel.findOne ({"data.unitId": Number (school.unitId)}, function (err, School) {
 		var tags = [];
-		School.schoolURL = school.schoolURL;
-		School.applicationFee = school.applicationFee;
+		School.data.schoolURL = school.schoolURL;
+		School.data.applicationFee = school.applicationFee;
 		if (school.applicationFee === 0) {
-			School.tags.push ('noApplicationFee');
+			School.data.tags.push ('noApplicationFee');
 		}
-		School.financesRequired = school.financesRequired;
-		School.state = school.state;
+		School.data.financesRequired = school.financesRequired;
+		School.data.state = school.state;
 		if (school.GPA) {
-			School.GPA = school.GPA;
+			School.data.GPA = school.GPA;
 		}
 		if (school.TOEFLScore) {
-			School.TOEFLScore = school.TOEFLScore;
+			School.data.TOEFLScore = school.TOEFLScore;
 		}
 		if (school.IELTSScore) {
-			School.IELTSScore = school.IELTSScore;
+			School.data.IELTSScore = school.IELTSScore;
 		}
 		if (school.SAT) {
-			School.SAT = school.SAT;
+			School.data.SAT = school.SAT;
 		}
 		if (school.deadline) {
-			School.deadlines.push (new Date (school.deadlines));
+			School.data.deadlines.push (new Date (school.deadlines));
 		}
 		if (school.essaysRequired) {
-			School.essaysRequired = school.essaysRequired;
+			School.data.essaysRequired = school.essaysRequired;
 		}
 		if (school.essaysRequired === 'N') {
-			School.tags.push ('noEssays');
+			School.data.tags.push ('noEssays');
 		}
 		if (school.referencesRequired) {
-			School.referencesRequired = school.referencesRequired;
+			School.data.referencesRequired = school.referencesRequired;
 		}
 		if (school.referencesRequired === 'N') {
-			School.tags.push ('noReferences');
+			School.data.tags.push ('noReferences');
 		}
 		if (school.diplomaRequired) {
-			School.diplomaRequired = school.diplomaRequired;
+			School.data.diplomaRequired = school.diplomaRequired;
 		}
 		if (school.diplomaRequired === 'N') {
-			School.tags.push ('noDiploma');
+			School.data.tags.push ('noDiploma');
 		}
 		console.log (School);
 		School.save (function (err, savedSchool) {

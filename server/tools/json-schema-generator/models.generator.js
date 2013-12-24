@@ -104,21 +104,27 @@ var getLinks = function(resource_path, model) {
     }
   }
   var properties = _.extend({}, paging, equalTo, lookAhead, greaterThan, lessThan, notEqual);
-  var data = [];
-  data.push({
-    title: model.modelName + "s",
+  var links = [];
+  links.push({
+    "title": "Home",
+    "description": "The root resource for Passport EDU",
+    "rel": "home",
+    "href": "/api/v1"
+  });
+  links.push({
+    title: "Search " +model.modelName + "s",
     rel: "self",
     href: path.join('/api/v1/resources', resourceName(model)),
     properties: properties
   });
-  data.push({
-    title: 'Create a ' + model.modelName,
-    rel: "create",
-    method: "POST",
-    href: path.join('/api/v1/resources', resourceName(model)),
-    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
-  });
-  return data;
+//  links.push({
+//    title: 'Create a ' + model.modelName,
+//    rel: "create",
+//    method: "POST",
+//    href: path.join('/api/v1/resources', resourceName(model)),
+//    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
+//  });
+  return links;
 };
 /**
  *
@@ -141,12 +147,21 @@ var generateSchema = function(model_path, model) {
           "properties": getProperties(model, []),
           "links": [
             {
-              title: 'Full ' + model.modelName,
+              title: 'Full ' + model.modelName + ' id: {{_id}}',
               rel: "full",
               href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
             }
           ]
         }
+      },
+      "meta": {
+        "links":[
+          {
+            "rel": "page_{{page}}",
+            "title": "Page {{page}}",
+            "href": "/api/v1/resources/" + resourceName(model) + "/?{{query}}"
+          }
+        ]
       }
 
     },

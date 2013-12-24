@@ -43,7 +43,7 @@ var getProperties = function(model, types, postFix, description) {
       continue;
     }
     var d = {
-      title: mpath,
+      title: mpath + ' ' + postFix,
       description: mpath + ' ' + description,
       identity: mpath == '_id' ? true : false,
       readonly: mpath == '_id' ? true : false
@@ -67,7 +67,7 @@ var getProperties = function(model, types, postFix, description) {
         type = 'boolean';
         break;
       default:
-        type = 'array';
+        type = type.toLowerCase()
     }
     d.type = type;
     if (!_.isEmpty(schema.enumValues)) {
@@ -86,8 +86,14 @@ var getProperties = function(model, types, postFix, description) {
 var getLinks = function(resource_path, model) {
   var links = [];
   links.push({
-    title: model.modelName + "s",
-    rel: "self",
+    "title": "Home",
+    "description": "The root resource for Passport EDU",
+    "rel": "home",
+    "href": "/api/v1"
+  });
+  links.push({
+    title: "Search " + model.modelName + "s",
+    rel: model.modelName + "s",
     href: path.join('/api/v1/resources', resourceName(model))
   });
   links.push({
@@ -95,19 +101,19 @@ var getLinks = function(resource_path, model) {
     rel: "self",
     href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
   });
-  links.push({
-    title: 'Delete this ' + model.modelName,
-    rel: "destroy",
-    method: "DELETE",
-    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
-  });
-  links.push({
-    title: 'Update this ' + model.modelName,
-    rel: "update",
-    method: "PUT",
-    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}"),
-    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
-  });
+//  links.push({
+//    title: 'Delete this ' + model.modelName,
+//    rel: "destroy",
+//    method: "DELETE",
+//    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
+//  });
+//  links.push({
+//    title: 'Update this ' + model.modelName,
+//    rel: "update",
+//    method: "PUT",
+//    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}"),
+//    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
+//  });
   return links;
 };
 /**

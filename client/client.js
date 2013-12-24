@@ -3,18 +3,17 @@ var client = angular.module('client', ['schema', 'clientUtilities'])
   })
   .filter('fieldName', function() {
     return function(input) {
-      return input.replace(/[^a-zA-Z]/g, '_');
+      return input.replace(/[^a-zA-Z0-9]/g, '_');
     };
   })
   .controller('ClientArea',function($resource, $scope, jsonSchema, base64) {
     $scope.link = function() {
-      if ($scope.modal) {
-        $scope.modal.modal('hide');
-      }
+      angular.element('.modal').modal('hide');
+      $('.modal-backdrop').remove();
       $scope.client.traverse(this.rel.rel, {});
     };
     $scope.modalForm = function() {
-      $scpe.modal = $(event.target).next().modal('show');
+      $scope.modal = $(event.target).next().modal('show');
     };
     $scope.pushEmptyArray = function() {
       if (angular.isArray(this.property.value)) {

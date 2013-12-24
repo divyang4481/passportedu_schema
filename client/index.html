@@ -73,6 +73,7 @@
       </div>
     </div>
     <div ng-repeat="rel in client.links">
+      <!-- ng-if="rel.properties || (rel.method !== 'GET' && rel.method !== 'DELETE')" -->
       <div id="{{rel.title | fieldName}}"
            class="modal fade"
            tabindex="-1"
@@ -93,11 +94,11 @@
                 <div ng-repeat="(propName, property) in rel.properties"
                      class="form-group">
                   <label ng-bind="property.title"
-                         class="col-sm-2 control-label"
+                         class="col-sm-6 control-label"
                          for="{{propName}}"></label>
 
                   <div ng-switch="property.type"
-                       class="col-sm-10">
+                       class="col-sm-6">
 
                     <input id="{{propName}}"
                            ng-switch-when="string"

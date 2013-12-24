@@ -3,9 +3,9 @@ var request = require ('request');
 var _ = require ('underscore');
 
 var mongoose = require ('mongoose');
-mongoose.connect ('mongodb://localhost/tiro');
+mongoose.connect ('mongodb://localhost/psprt');
 
-var SchoolIPEDSModel = require ('../models/School');
+var SchoolIPEDSModel = require ('../models/school');
 
 var SocialLinkModel = require ('../models/SocialLink');
 
