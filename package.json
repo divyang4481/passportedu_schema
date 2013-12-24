@@ -1,0 +1,33 @@
+{
+  "name": "passportedu_schema",
+  "version": "0.1.0",
+  "description": "An JSON-Schema for the PassportEDU API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bpanahij/passportedu_schema.git"
+  },
+  "author": "Brian P Johnson",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/bpanahij/passportedu_schema/issues"
+  },
+  "dependencies": {
+    "underscore": "~1.5.2",
+    "express": "~3.4.7",
+    "natural": "~0.1.25",
+    "optimist": "~0.6.0",
+    "q": "~0.9.7",
+    "bcrypt": "~0.7.7",
+    "node-uuid": "~1.4.1",
+    "cors": "~2.1.1",
+    "lazy": "~1.0.11",
+    "mongoose": "~3.8.3"
+  },
+  "devDependencies": {
+    "vows": "~0.7.0"
+  }
+}
