@@ -1,10 +1,10 @@
 {
-  "id": "/api/v1/student/application.json",
+  "id": "/api/v1/student/application/schools.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Student Application",
+  "title": "Application School",
   "type": "object",
-  "name": "Student Application",
-  "description": "An application to attend a college or a university as a student.",
+  "name": "school",
+  "description": "School from an application",
   "properties": {
     "applicationId": {
       "title": "Unique ID of an Application",
@@ -18,16 +18,16 @@
       "identity": true,
       "type": "string"
     },
-    "cards": {
-      "title": "cards",
-      "description": "cards",
-      "identity": false,
-      "readonly": false,
-      "type": "array",
-      "items": {
-        "description": "A card within an application.",
-        "$ref": "/api/v1/student/application/card.json"
-      }
+    "schoolId": {
+      "title": "Unique ID of an School",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "school": {
+      "title": "Application School",
+      "description": "Application School",
+      "type": "object"
     }
   },
   "links": [
@@ -52,25 +52,25 @@
       "href": "/api/v1/students/{{studentId}}/applications"
     },
     {
-      "title": "Application {{applicationId}}",
-      "rel": "self",
+      "title": "This Application {{applicationId}}",
+      "rel": "application",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
     },
     {
-      "title": "Delete this Application",
-      "rel": "delete_application",
-      "method": "DELETE",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
-    },
-    {
-      "title": "This Application Schools",
+      "title": "This Application's Schools",
       "rel": "schools",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools"
     },
     {
-      "title": "This Application Cards",
-      "rel": "cards",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards"
+      "title": "{{school.data.institutionName}}",
+      "rel": "self",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools/{{schoolId}}"
+    },
+    {
+      "title": "Remove [{{school.data.institutionName}}] from Application",
+      "rel": "delete",
+      "method": "DELETE",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools/{{schoolId}}"
     }
   ]
 }

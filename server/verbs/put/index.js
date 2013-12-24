@@ -6,8 +6,6 @@ module.exports = function(model) {
    * @param res
    */
   var putFunc = function(req, res) {
-    console.log(req.headers);
-    console.log(req.body);
     var body = _.extend(req.body, req.restrictQuery);
     var savedModel = new model(body);
     var upsertData = savedModel.toObject();

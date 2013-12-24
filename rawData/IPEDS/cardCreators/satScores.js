@@ -43,4 +43,4 @@ rawImporter().then(function(schools) {
       });
     }
   });
-})
+});

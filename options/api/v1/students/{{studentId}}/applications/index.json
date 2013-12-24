@@ -49,16 +49,10 @@
             },
             "links": [
               {
-                "title": "Full Application",
+                "title": "Full Application {{_id}}",
                 "description": "{{description}}",
                 "rel": "full_{{applicationId}}",
                 "href": "/api/v1/students/{{studentId}}/applications/{{_id}}"
-              },
-              {
-                "title": "Application Cards",
-                "description": "{{description}}",
-                "rel": "cards_{{applicationId}}",
-                "href": "/api/v1/students/{{studentId}}/applications/{{_id}}/cards"
               }
             ]
           }

@@ -106,11 +106,8 @@ var getLinks = function(resource_path, model) {
   var properties = _.extend({}, paging, equalTo, lookAhead, greaterThan, lessThan, notEqual);
   var data = [];
   data.push({
+    title: model.modelName + "s",
     rel: "self",
-    href: path.join('/api/v1/resources', resourceName(model))
-  });
-  data.push({
-    rel: "instances",
     href: path.join('/api/v1/resources', resourceName(model)),
     properties: properties
   });

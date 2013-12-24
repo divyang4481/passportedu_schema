@@ -13,7 +13,7 @@ mongoose.connect('mongodb://localhost/psprt');
  */
 var app = express();
 app.set('port', 8080);
-app.use(express.logger());
+//app.use(express.logger());
 /**
  * Static resources
  */

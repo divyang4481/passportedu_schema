@@ -1,0 +1,83 @@
+{
+  "id": "/api/v1/student/application/cards.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Application Card",
+  "type": "object",
+  "name": "card",
+  "description": "Card from an application",
+  "properties": {
+    "applicationId": {
+      "title": "Unique ID of an Application",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "studentId": {
+      "title": "Unique ID of an Student",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "cardId": {
+      "title": "Unique ID of an Card",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "card": {
+      "title": "Application Card",
+      "description": "Application Card",
+      "type": "object"
+    }
+  },
+  "links": [
+    {
+      "title": "API Root",
+      "rel": "root",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Student Home",
+      "rel": "student",
+      "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "My Applications",
+      "rel": "applications",
+      "href": "/api/v1/students/{{studentId}}/applications"
+    },
+    {
+      "title": "This Application {{applicationId}}",
+      "rel": "application",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
+    },
+    {
+      "title": "This Application's Cards",
+      "rel": "cards",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards"
+    },
+    {
+      "title": "Application Card {{cardId}}",
+      "rel": "self",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+    },
+    {
+      "title": "Delete this Application Card",
+      "rel": "delete",
+      "method": "DELETE",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+    },
+    {
+      "title": "Update this Application Card",
+      "rel": "update",
+      "method": "PUT",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+    }
+  ]
+}
+

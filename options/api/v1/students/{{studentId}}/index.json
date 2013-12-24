@@ -44,38 +44,6 @@
       "title": "My Applications",
       "rel": "applications",
       "href": "/api/v1/students/{{studentId}}/applications"
-    },
-    {
-      "title": "Create an Application",
-      "rel": "createApplication",
-      "method": "POST",
-      "href": "/api/v1/students/{{studentId}}/applications",
-      "properties": {
-        "mediaType": {
-          "title": "mediaType",
-          "description": "media type",
-          "identity": false,
-          "readonly": false,
-          "type": "enum",
-          "enum": [
-            "/api/v1/applications/universal.json"
-          ]
-        },
-        "data": {
-          "title": "Meta Data",
-          "description": "meta data",
-          "identity": false,
-          "readonly": false,
-          "type": "any"
-        },
-        "updated": {
-          "title": "updated",
-          "description": "updated",
-          "identity": false,
-          "readonly": false,
-          "type": "date-time"
-        }
-      }
     }
   ]
 }

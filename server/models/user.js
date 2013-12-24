@@ -74,7 +74,6 @@ UserSchema.static('auth', function(username, token, callback) {
       return;
     }
     self.login({username: username, password: token}, function(err, match, user) {
-      console.log(user);
       callback(err, user);
     });
   });

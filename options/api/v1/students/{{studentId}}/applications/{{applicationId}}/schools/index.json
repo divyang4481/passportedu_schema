@@ -1,0 +1,109 @@
+{
+  "id": "/api/v1/student/application/schools.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Application Cards",
+  "type": "object",
+  "name": "school",
+  "description": "Schools from an application",
+  "properties": {
+    "applicationId": {
+      "title": "Unique ID of an Application",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "studentId": {
+      "title": "Unique ID of an Student",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "schools": {
+      "title": "Application Schools",
+      "description": "Application Schools",
+      "type": "array",
+      "items": {
+        "description": "A School within an Application.",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "cardIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mediaTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "links": [
+          {
+            "title": "School {{data.institutionName}}",
+            "rel": "School{{data.unitId}}",
+            "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools/{{_id}}"
+          }
+        ]
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "API Root",
+      "rel": "root",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Public Home",
+      "rel": "public",
+      "href": "/api/v1/public"
+    },
+    {
+      "title": "Student Home",
+      "rel": "student",
+      "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "My Applications",
+      "rel": "applications",
+      "href": "/api/v1/students/{{studentId}}/applications"
+    },
+    {
+      "title": "This Application {{applicationId}}",
+      "rel": "application",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
+    },
+    {
+      "title": "This Application's Schools",
+      "rel": "self",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools"
+    },
+    {
+      "title": "Add a School to this Application",
+      "rel": "add_school",
+      "method": "PUT",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools",
+      "properties": {
+        "schoolIds": {
+          "title": "School IDs",
+          "description": "Unique IDs of schools to be added",
+          "type": "array",
+          "items": {
+            "title": "school ID",
+            "type": "string"
+          }
+        }
+      },
+      "required": ["schoolIds"]
+    }
+  ]
+}
+

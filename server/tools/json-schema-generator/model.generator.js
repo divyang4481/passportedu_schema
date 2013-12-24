@@ -86,6 +86,12 @@ var getProperties = function(model, types, postFix, description) {
 var getLinks = function(resource_path, model) {
   var links = [];
   links.push({
+    title: model.modelName + "s",
+    rel: "self",
+    href: path.join('/api/v1/resources', resourceName(model))
+  });
+  links.push({
+    title: "This " + model.modelName,
     rel: "self",
     href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
   });

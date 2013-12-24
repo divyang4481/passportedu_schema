@@ -8,12 +8,22 @@ var client = angular.module('client', ['schema', 'clientUtilities'])
   })
   .controller('ClientArea',function($resource, $scope, jsonSchema, base64) {
     $scope.link = function() {
+      if ($scope.modal) {
+        $scope.modal.modal('hide');
+      }
       $scope.client.traverse(this.rel.rel, {});
     };
     $scope.modalForm = function() {
-      $(event.target).next().modal('show');
+      $scpe.modal = $(event.target).next().modal('show');
     };
-    new jsonSchema('/api/v1/').then(function(client) {
+    $scope.pushEmptyArray = function() {
+      if (angular.isArray(this.property.value)) {
+        this.property.value.push('');
+      } else {
+        this.property.value = [];
+      }
+    };
+    new jsonSchema('/api/v1').then(function(client) {
       var passport = client;
       $scope.client = passport;
       $scope.client.forms = {};

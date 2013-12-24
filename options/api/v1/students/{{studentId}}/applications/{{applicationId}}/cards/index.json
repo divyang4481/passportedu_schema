@@ -24,7 +24,34 @@
       "type": "array",
       "items": {
         "description": "A card within an application.",
-        "$ref": "/api/v1/student/application/card.json"
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          },
+          "mediaTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "owners": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "links": [
+          {
+            "title": "Card {{_id}}",
+            "rel": "full_{{_id}}",
+            "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{_id}}"
+          }
+        ]
       }
     },
     "count": {
@@ -88,12 +115,17 @@
       "href": "/api/v1/students/{{studentId}}/applications"
     },
     {
-      "title": "My Application Cards",
+      "title": "This Application {{applicationId}}",
+      "rel": "application",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
+    },
+    {
+      "title": "This Application's Cards",
       "rel": "self",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards"
     },
     {
-      "title": "Search Cards",
+      "title": "Search Cards in this Application",
       "rel": "cards",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
       "properties": {
@@ -122,25 +154,11 @@
           "identity": false,
           "readonly": false,
           "type": "date-time"
-        },
-        "updated>": {
-          "title": "updated",
-          "description": "updated is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "date-time"
-        },
-        "updated<": {
-          "title": "updated",
-          "description": "updated is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "date-time"
         }
       }
     },
     {
-      "title": "Add a Card",
+      "title": "Add a Card to this Application",
       "rel": "newCard",
       "method": "POST",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards",
@@ -150,16 +168,19 @@
           "description": "data",
           "type": "any"
         },
-        "mediaType": {
-          "title": "mediaType",
-          "description": "mediaType of the data",
-          "type": "enum",
-          "enum": [
-            "/api/v1/card/form/small.json",
-            "/api/v1/card/form/medium.json",
-            "/api/v1/card/form/large.json",
-            "/api/v1/card/dial/small.json"
-          ]
+        "mediaTypes": {
+          "title": "mediaTypes",
+          "description": "mediaTypes of the data",
+          "type": "array",
+          "items": {
+            "type": "enum",
+            "enum": [
+              "/api/v1/card/form/small.json",
+              "/api/v1/card/form/medium.json",
+              "/api/v1/card/form/large.json",
+              "/api/v1/card/dial/small.json"
+            ]
+          }
         },
         "updated": {
           "title": "updated",

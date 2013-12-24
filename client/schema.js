@@ -58,7 +58,14 @@ angular.module('schema', ['ngResource'])
       if (angular.isUndefined(pathParts)) {
         pathParts = [];
       }
-      var addPath
+      var addPath;
+      if (angular.isDefined(schema.links)) {
+        for(var l in schema.links) {
+          var pathPartsCopy = angular.copy(pathParts)
+            , rootDataCopy = angular.copy(root.data);
+          apiClient.compileLink(root, rootDataCopy, pathPartsCopy, schema.links[l]);
+        }
+      }
       if (angular.isDefined(schema.properties)) {
         for(var p in schema.properties) {
           addPath = angular.copy(pathParts);
@@ -70,13 +77,7 @@ angular.module('schema', ['ngResource'])
         addPath = angular.copy(pathParts);
         apiClient.resolveEmbeddedLinks(root, schema.items, addPath);
       }
-      if (angular.isDefined(schema.links)) {
-        for(var l in schema.links) {
-          var pathPartsCopy = angular.copy(pathParts)
-            , rootDataCopy = angular.copy(root.data);
-          apiClient.compileLink(root, rootDataCopy, pathPartsCopy, schema.links[l]);
-        }
-      }
+
     }
     apiClient.compileLink = function(root, data, pathParts, link) {
       if (pathParts.length === 0) {

@@ -4,7 +4,7 @@
   "title": "PassportEDU API",
   "name": "PassportEDU API",
   "type": "object",
-  "description": "PassportEDU API",
+  "description": "Bringing global students together with global schools.",
   "links": [
     {
       "title": "API Root",
