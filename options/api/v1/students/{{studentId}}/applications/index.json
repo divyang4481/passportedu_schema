@@ -68,11 +68,6 @@
       "href": "/api/v1"
     },
     {
-      "title": "Search and Explore Schools",
-      "rel": "public",
-      "href": "/api/v1/resources/schools"
-    },
-    {
       "title": "Manage My Student Applications",
       "rel": "students",
       "href": "/api/v1/students"

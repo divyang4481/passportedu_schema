@@ -41,7 +41,7 @@ function loadPath(startPath, remaining, callback) {
   });
 }
 module.exports = function(req, res) {
-  var optionPath = req.originalUrl.split('/');
+  var optionPath = req.originalUrl.replace(/\?.*$/,'').split('/');
   loadPath(__dirname, optionPath, function(options) {
     res.json(options);
   });

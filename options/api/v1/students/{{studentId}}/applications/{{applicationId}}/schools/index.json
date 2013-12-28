@@ -1,10 +1,10 @@
 {
-  "id": "/api/v1/student/application/schools.json",
+  "id": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools/search.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Application Cards",
+  "title": "Search Schools",
   "type": "object",
   "name": "school",
-  "description": "Schools from an application",
+  "description": "Search Schools to add to an application",
   "properties": {
     "applicationId": {
       "title": "Unique ID of an Application",
@@ -47,8 +47,8 @@
         },
         "links": [
           {
-            "title": "School {{data.institutionName}}",
-            "rel": "School{{data.unitId}}",
+            "title": "Add School to Application",
+            "rel": "School_{{data.unitId}}",
             "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools/{{_id}}"
           }
         ]
@@ -61,11 +61,6 @@
       "description": "The root resource for Passport EDU",
       "rel": "home",
       "href": "/api/v1"
-    },
-    {
-      "title": "Search and Explore Schools",
-      "rel": "public",
-      "href": "/api/v1/resources/schools"
     },
     {
       "title": "Manage My Student Applications",

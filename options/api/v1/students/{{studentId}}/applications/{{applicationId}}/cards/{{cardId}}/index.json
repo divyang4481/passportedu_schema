@@ -40,7 +40,7 @@
     {
       "title": "Search and Explore Schools",
       "rel": "public",
-      "href": "/api/v1/resources/schools"
+      "href": "/api/v1/students/{{studentId}}/search/schools"
     },
     {
       "title": "Manage My Student Applications",
@@ -77,7 +77,46 @@
       "title": "Update this Application Card",
       "rel": "update",
       "method": "PUT",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}",
+      "properties": {
+        "data": {
+          "title": "Data",
+          "type": "object",
+          "oneOf": [
+            {
+              "$ref": "/api/v1/card/form/small.json"
+            },
+            {
+              "$ref": "/api/v1/card/form/medium.json"
+            },
+            {
+              "$ref": "/api/v1/card/form/large.json"
+            },
+            {
+              "$ref": "/api/v1/card/dial/small.json"
+            }
+          ]
+        },
+        "mediaType": {
+          "title": "mediaType",
+          "description": "mediaType of the data",
+          "identity": false,
+          "type": "enum",
+          "enum": [
+            "/api/v1/card/form/small.json",
+            "/api/v1/card/form/medium.json",
+            "/api/v1/card/form/large.json",
+            "/api/v1/card/dial/small.json"
+          ]
+        },
+        "updated": {
+          "title": "updated",
+          "description": "updated",
+          "identity": false,
+          "readonly": false,
+          "type": "date-time"
+        }
+      }
     }
   ]
 }

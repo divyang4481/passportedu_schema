@@ -40,7 +40,7 @@
     {
       "title": "Search and Explore Schools",
       "rel": "public",
-      "href": "/api/v1/resources/schools"
+      "href": "/api/v1/students/{{studentId}}/search/schools"
     },
     {
       "title": "Manage My Student Applications",
@@ -65,6 +65,12 @@
     {
       "title": "{{school.data.institutionName}}",
       "rel": "self",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools/{{schoolId}}"
+    },
+    {
+      "title": "Add [{{school.data.institutionName}}] to Application",
+      "rel": "delete",
+      "method": "PUT",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools/{{schoolId}}"
     },
     {

@@ -38,11 +38,6 @@
       "href": "/api/v1"
     },
     {
-      "title": "Search and Explore Schools",
-      "rel": "public",
-      "href": "/api/v1/resources/schools"
-    },
-    {
       "title": "Manage My Student Applications",
       "rel": "students",
       "href": "/api/v1/students"
@@ -62,32 +57,6 @@
       "rel": "delete_application",
       "method": "DELETE",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
-    },
-    {
-      "title": "Search Schools",
-      "rel": "searchSchools",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/searchSchools",
-      "properties": {
-        "data.institutionName*": {
-          "title": "School Name",
-          "type": "string"
-        },
-        "data.city": {
-          "title": "City",
-          "type": "string"
-        },
-        "data.state": {
-          "title": "State",
-          "type": "string"
-        },
-        "data.percentInternationalStudents>":  {
-          "title": "Minimum Percent International Students",
-          "type": "range",
-          "min": 0,
-          "max": 100,
-          "default": 1
-        }
-      }
     },
     {
       "title": "This Application Schools",

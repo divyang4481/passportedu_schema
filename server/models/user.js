@@ -6,12 +6,14 @@ var userPerms = 'school, admin, student'.split(', ');
 var UserSchema = new mongoose.Schema({
   username: {type: String, required: true, index: { unique: true }},
   password: {type: String, required: true},
-  unitId: Number,
   fullName: String,
   email: String,
   token: String,
   userPerms: [
     { type: String, enum: userPerms }
+  ],
+  schoolIds: [
+    { type: String }
   ]
 });
 UserSchema.pre('save', function(next) {
