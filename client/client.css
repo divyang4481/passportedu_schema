@@ -1,0 +1,8 @@
+body {
+    overflow-y: scroll;
+}
+
+.modal .modal-body {
+    max-height: 420px;
+    overflow-y: auto;
+}

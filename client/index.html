@@ -7,6 +7,9 @@
   <link rel="stylesheet"
         type="text/css"
         href="/bootstrap/css/bootstrap-theme.min.css">
+  <link rel="stylesheet"
+        type="text/css"
+        href="/client.css">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 </head>
@@ -29,15 +32,15 @@
                class="list-group-item"
                ng-class="{'active' : rel.rel == 'self'}">
             <div class="list-group-item-heading">
-              <button ng-show="rel.method != 'POST' && rel.method != 'PUT' && !rel.properties"
+              <button ng-show="!rel.properties"
                       ng-click="link()"
-                      ng-class="{'btn-danger': rel.method == 'DELETE', 'btn-info': rel.method != 'DELETE'}"
+                      ng-class="{'btn-danger': rel.method == 'DELETE', 'btn-info': !rel.method, 'btn-success': rel.method }"
                       class="btn btn-small">
                 <i class="glyphicon glyphicon-white"
-                   ng-class="{'glyphicon-remove-sign': rel.method == 'DELETE', 'glyphicon-file': !rel.method}"></i>&nbsp;
+                   ng-class="{'glyphicon-remove-sign': rel.method == 'DELETE', 'glyphicon-plus-sign': rel.method, 'glyphicon-file': !rel.method}"></i>&nbsp;
                 <span ng-bind="rel.title"></span>
               </button>
-              <a ng-show="rel.method == 'POST' || rel.method == 'PUT' || rel.properties"
+              <a ng-show="rel.properties"
                  href="#{{rel.title | fieldName}}"
                  role="button"
                  class="btn btn-primary"
@@ -199,7 +202,7 @@
               <div class="col-sm-offset-2 col-sm-10">
                 <button ng-click="link()"
                         type="submit"
-                        class="btn bt-default"
+                        class="btn btn-primary"
                         data-dismiss="modal"
                         aria-hidden="true">
                   <i class="glyphicon glyphicon-white"

@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/student/card.json",
+  "id": "/api/v1/students/{{studentId}}/applications/card",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Student Cards",
   "type": "object",
@@ -28,10 +28,10 @@
       "description": "mediaType of the data",
       "identity": false,
       "enum": [
-        "/api/v1/card/form/small.json",
-        "/api/v1/card/form/medium.json",
-        "/api/v1/card/form/large.json",
-        "/api/v1/card/dial/small.json"
+        "form/small",
+        "form/medium",
+        "form/large",
+        "dial/small"
       ]
     },
     "updated": {
@@ -80,6 +80,10 @@
         }
       },
       "method": "PUT"
+    },
+    {
+      "rel": "describedBy",
+      "href": "/api/v1/card/{{mediaType}}.json"
     },
     {
       "rel": "root",

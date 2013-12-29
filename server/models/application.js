@@ -2,18 +2,13 @@ var mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , _ = require('underscore')
   , mediaTypes = [
-    "/api/v1/applications/universal.json"
+    "universal"
   ]
 var ApplicationSchema = new mongoose.Schema({
   studentId: String,
   data: Schema.Types.Mixed,
-  mediaType: [
-    { type: String, enum: mediaTypes }
-  ],
+  mediaType: { type: String, enum: mediaTypes },
   cardIds: [
-    { type: String }
-  ],
-  schoolIds: [
     { type: String }
   ]
 });

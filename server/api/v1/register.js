@@ -17,6 +17,7 @@ api.get('/', function(req, res) {
 api.post('/', function(req, res) {
   var student = req.body;
   var Student = new user(student);
+  Student.userPerms = ['students'];
   Student.save(function(err) {
     if (err) {
       res.json({

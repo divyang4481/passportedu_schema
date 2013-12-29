@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/student/application.json",
+  "id": "/api/v1/students/{{studentId}}/applications/{applicationId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Student Application",
   "type": "object",
@@ -57,11 +57,6 @@
       "rel": "delete_application",
       "method": "DELETE",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
-    },
-    {
-      "title": "This Application Schools",
-      "rel": "schools",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/schools"
     },
     {
       "title": "This Application Cards",

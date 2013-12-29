@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/student",
+  "id": "/api/v1/students/{{studentId}}/search/schools",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Search for Schools",
   "type": "object",
@@ -260,7 +260,7 @@
         "links": [
           {
             "title": "Details: {{data.institutionName}}",
-            "rel": "full",
+            "rel": "full_{{_id}}",
             "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
           }
         ]

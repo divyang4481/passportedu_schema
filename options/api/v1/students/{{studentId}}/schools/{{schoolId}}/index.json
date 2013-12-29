@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/students/{{studentId}}/search/schools/{{schoolId}}",
+  "id": "/api/v1/students/{{studentId}}/schools/{{schoolId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Apply to a School",
   "type": "object",
@@ -264,16 +264,10 @@
       },
       "links": [
         {
-          "title": "Apply to {{school.data.institutionName}}",
-          "rel": "addSchool",
-          "method": "PUT",
-          "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}/apply"
-        },
-        {
-          "title": "Save {{school.data.institutionName}} for Later...",
-          "rel": "saveSchool",
-          "method": "PUT",
-          "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}/save"
+          "title": "Remove: {{school.data.institutionName}}",
+          "rel": "remove_{{_id}}",
+          "method": "DELETE",
+          "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
         }
       ]
     }
@@ -302,4 +296,3 @@
     }
   ]
 }
-

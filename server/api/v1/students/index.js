@@ -60,6 +60,21 @@ api.get('/:studentId', function(req, res) {
 /**
  *
  */
+api.get('/:studentId/schools/:schoolId', function(req, res) {
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId).exec().then(function(School) {
+    var response = {
+      studentId: studentId,
+      schoolId: schoolId,
+      school: School
+    }
+    res.json(response);
+  });
+});
+/**
+ *
+ */
 api.delete('/:studentId/schools/:schoolId', function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
@@ -196,7 +211,7 @@ api.post('/:studentId/applications/:applicationId/cards', function(req, res) {
   cardBody.owners = [];
   cardBody.owners.push({application: applicationId});
   cardBody.owners.push({student: studentId});
-  cardBody.mediaTypes = [req.body.mediaTypes];
+  cardBody.mediaType = req.body.mediaType;
   cardBody.data = JSON.parse(req.body.data);
   var Card = new card(cardBody);
   Card.save(function(err) {

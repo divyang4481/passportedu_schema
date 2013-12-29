@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/student/application.json",
+  "id": "/api/v1/students/{{studentId}}/applications",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Student Application",
   "type": "object",

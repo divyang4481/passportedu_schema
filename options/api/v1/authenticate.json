@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/public/authenticate",
+  "id": "/api/v1/authenticate",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Login to Access Private Content",
   "name": "Login",

@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/student",
+  "id": "/api/v1/students/{{studentId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Student Home",
   "type": "object",
@@ -280,13 +280,7 @@
         "links": [
           {
             "title": "Details: {{data.institutionName}}",
-            "rel": "full",
-            "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
-          },
-          {
-            "title": "Remove: {{data.institutionName}}",
-            "rel": "remove",
-            "method": "DELETE",
+            "rel": "full_{{_id}}",
             "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
           }
         ]

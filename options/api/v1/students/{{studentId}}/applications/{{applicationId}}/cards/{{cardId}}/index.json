@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/student/application/cards.json",
+  "id": "/api/v1/students/{{studentId}}/applications/{applicationId}}/cards/{{cardId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Application Card",
   "type": "object",
@@ -103,10 +103,10 @@
           "identity": false,
           "type": "enum",
           "enum": [
-            "/api/v1/card/form/small.json",
-            "/api/v1/card/form/medium.json",
-            "/api/v1/card/form/large.json",
-            "/api/v1/card/dial/small.json"
+            "form/small",
+            "form/medium",
+            "form/large",
+            "dial/small"
           ]
         },
         "updated": {
@@ -117,6 +117,11 @@
           "type": "date-time"
         }
       }
+    },
+    {
+      "title": "Described By",
+      "rel": "describedBy",
+      "href": "/api/v1/card/{{card.mediaType}}.json"
     }
   ]
 }

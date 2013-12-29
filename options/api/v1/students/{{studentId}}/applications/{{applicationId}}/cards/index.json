@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/student/application/cards.json",
+  "id": "/api/v1/students/{{studentId}}/applications/{applicationId}}/cards",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Application Cards",
   "type": "object",
@@ -32,11 +32,17 @@
           "data": {
             "type": "object"
           },
-          "mediaTypes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "mediaType": {
+            "title": "mediaType",
+            "description": "mediaType of the data",
+            "identity": false,
+            "type": "enum",
+            "enum": [
+              "form/small",
+              "form/medium",
+              "form/large",
+              "dial/small"
+            ]
           },
           "owners": {
             "type": "array",
@@ -50,6 +56,10 @@
             "title": "Card {{_id}}",
             "rel": "full_{{_id}}",
             "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{_id}}"
+          },
+          {
+            "rel": "describedBy",
+            "href": "/api/v1/card/{{mediaType}}.json"
           }
         ]
       }
@@ -162,21 +172,18 @@
         "data": {
           "title": "data",
           "description": "data",
-          "type": "any"
+          "type": "object"
         },
-        "mediaTypes": {
-          "title": "mediaTypes",
-          "description": "mediaTypes of the data",
-          "type": "array",
-          "items": {
-            "type": "enum",
-            "enum": [
-              "/api/v1/card/form/small.json",
-              "/api/v1/card/form/medium.json",
-              "/api/v1/card/form/large.json",
-              "/api/v1/card/dial/small.json"
-            ]
-          }
+        "mediaType": {
+          "title": "Media Type",
+          "description": "Type of the data",
+          "type": "enum",
+          "enum": [
+            "form/small",
+            "form/medium",
+            "form/large",
+            "dial/small"
+          ]
         },
         "updated": {
           "title": "updated",

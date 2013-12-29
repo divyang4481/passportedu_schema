@@ -1,8 +1,8 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , mediaTypes = [
-    '/api/v1/schools/university.json',
-    '/api/v1/schools/college.json'
+    "university",
+    "college"
   ];
 var SchoolSchema = new mongoose.Schema({
   id: String,
@@ -48,9 +48,7 @@ var SchoolSchema = new mongoose.Schema({
       { type: String }
     ]
   },
-  mediaTypes: [
-    { type: String, enum: mediaTypes }
-  ],
+  mediaTypes: { type: String, enum: mediaTypes },
   cardIds: [
     { type: String }
   ]
