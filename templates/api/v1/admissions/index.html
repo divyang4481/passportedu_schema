@@ -2,6 +2,7 @@
   <h1 ng-bind="client.schema.title"></h1>
   <p ng-bind="client.schema.description"></p>
   <div ng-include="'/templates/common/navMenu.html'"></div>
+  <div class="clearfix"></div>
   <div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default">
     <div class="panel-body">
       <magic-form-content click="traverse" link="link"></magic-form-content>

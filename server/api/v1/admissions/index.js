@@ -10,7 +10,6 @@ var express = require('express')
   , application = require('../../../models/application')
   , school = require('../../../models/school')
   , queryM = require('../../../verbs/query');
-
 /**
  *
  */
@@ -206,7 +205,7 @@ api.post('/:admissionsId/applications/:applicationId/cards', function(req, res) 
     , cardBody = req.body;
   cardBody.owners = [];
   cardBody.owners.push({application: applicationId});
-  cardBody.owners.push({student: admissionsId});
+  cardBody.owners.push({admissions: admissionsId});
   cardBody.mediaType = req.body.mediaType;
   cardBody.data = JSON.parse(req.body.data);
   var Card = new card(cardBody);
@@ -225,18 +224,21 @@ api.post('/:admissionsId/applications/:applicationId/cards', function(req, res) 
 api.get('/:admissionsId/applications/:applicationId/cards', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
-  req.query.owners = {application: applicationId};
-  queryM(card)(req, function(err, data) {
-    var response = {
-      admissionsId: admissionsId,
-      applicationId: applicationId,
-      meta: data.meta,
-      cards: data.result,
-      count: data.count,
-      pages: data.pages,
-      page: data.page
-    };
-    res.json(response);
+  application.findById(applicationId).exec(function(err, App) {
+    req.query.owners = {admissions: admissionsId};
+    queryM(card)(req, function(err, data) {
+      var response = {
+        admissionsId: admissionsId,
+        applicationId: applicationId,
+        application: _.omit(App, ['_id']),
+        meta: data.meta,
+        cards: data.result,
+        count: data.count,
+        pages: data.pages,
+        page: data.page
+      };
+      res.json(response);
+    });
   });
 });
 /**
@@ -246,12 +248,15 @@ api.get('/:admissionsId/applications/:applicationId/cards/:cardId', function(req
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
-  card.findById(cardId).exec(function(err, Card) {
-    res.json({
-      admissionsId: admissionsId,
-      applicationId: applicationId,
-      cardId: cardId,
-      card: Card
+  application.findById(applicationId).exec(function(err, App) {
+    card.findById(cardId).exec(function(err, Card) {
+      res.json({
+        admissionsId: admissionsId,
+        applicationId: applicationId,
+        application: _.omit(App, ['_id']),
+        cardId: cardId,
+        card: Card
+      });
     });
   });
 });

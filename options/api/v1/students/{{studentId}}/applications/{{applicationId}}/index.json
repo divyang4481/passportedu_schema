@@ -12,6 +12,37 @@
       "identity": true,
       "type": "string"
     },
+    "application": {
+      "title": "This {{application.name}} Application",
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "student": {
+          "type": "object",
+          "properties": {
+            "studentId": {
+              "type": "string"
+            }
+          }
+        },
+        "schools": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schoolId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "studentId": {
       "title": "Unique ID of an Student",
       "readonly": true,

@@ -111,12 +111,13 @@
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <button ng-click="click()"
+            ng-class="{'btn-danger': link.method == 'DELETE', 'btn-info': !link.method, 'btn-success': link.method}"
             type="submit"
             class="btn btn-primary"
             data-dismiss="modal"
             aria-hidden="true">
             <i class="glyphicon glyphicon-white"
-              ng-class="{'glyphicon-plus-sign': link.method == 'POST', 'glyphicon-pencil': link.method == 'PUT', 'glyphicon-tags': link.properties}"></i>
+              ng-class="{'glyphicon-minus-sign': link.method == 'DELETE', 'glyphicon-plus-sign': link.method == 'POST', 'glyphicon-pencil': link.method == 'PUT', 'glyphicon-tags': link.properties}"></i>
             &nbsp;
             <span ng-bind="link.title"></span>
           </button>
