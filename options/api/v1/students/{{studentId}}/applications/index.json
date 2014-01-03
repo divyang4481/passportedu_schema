@@ -1,10 +1,10 @@
 {
   "id": "/api/v1/students/{{studentId}}/applications",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Student Application",
+  "title": "Student Applications",
   "type": "object",
   "name": "Student Applications",
-  "description": "An application to attend a college or a university as a student.",
+  "description": "Applications to attend a college or a university as a student.",
   "properties": {
     "studentId": {
       "title": "Unique ID of an Student",
@@ -65,21 +65,32 @@
       "title": "Home",
       "description": "The root resource for Passport EDU",
       "rel": "home",
+      "importance": "navigation",
       "href": "/api/v1"
     },
     {
-      "title": "Manage My Student Applications",
+      "title": "Students",
       "rel": "students",
+      "importance": "navigation",
       "href": "/api/v1/students"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "dashboard",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}"
     },
     {
       "title": "My Applications",
       "rel": "self",
+      "importance": "navigation",
       "href": "/api/v1/students/{{studentId}}/applications"
     },
     {
       "title": "Create an Application",
       "rel": "createApplication",
+      "importance": "content",
       "method": "POST",
       "href": "/api/v1/students/{{studentId}}/applications",
       "properties": {

@@ -1,15 +1,18 @@
+<div ng-include="'/templates/common/navMenu.html'"></div>
 <div class="jumbotron">
   <h1 ng-bind="client.schema.title"></h1>
+
   <p ng-bind="client.schema.description"></p>
-  <div ng-include="'/templates/common/navMenu.html'"></div>
+
   <div class="clearfix"></div>
-  <div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default">
-    <div class="panel-body">
-      <magic-form-content click="traverse" link="link"></magic-form-content>
-    </div>
+</div>
+<div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default">
+  <div class="panel-body">
+    <magic-form-content click="traverse" link="link"></magic-form-content>
   </div>
-  <div ng-repeat='application in client.data.applications.result | filter: {importance:"content"}' class="panel panel-default">
-    <h3 ng-bind="application.type"></h3>
-    <p ng-bind="application.description"></p>
-  </div>
+</div>
+<div ng-repeat='application in client.data.applications.result | filter: {importance:"content"}' class="panel panel-default">
+  <h3 ng-bind="application.type"></h3>
+
+  <p ng-bind="application.description"></p>
 </div>

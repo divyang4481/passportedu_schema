@@ -14,9 +14,11 @@ var express = require('express')
  *
  */
 api.use(function(req, res, next) {
+  // All deeper URL's require authentication
   authenticate.auth(req, function(err, auth) {
+    // Allowing unauthenticated users to remain in public students area...landing page
     if (req.originalUrl === '/api/v1/students') {
-      req.studentId = auth.user.userId;
+      req.studentsId = auth.user.userId;
       next();
       return;
     }
@@ -25,7 +27,7 @@ api.use(function(req, res, next) {
       res.send(401);
       return;
     }
-    req.studentId = auth.user.userId;
+    req.studentsId = auth.user.userId;
     next();
   });
 });
@@ -33,10 +35,22 @@ api.use(function(req, res, next) {
  * Students Area
  */
 api.get('/', function(req, res) {
-  if (_.isUndefined(req.studentId)) {
+  if (_.isUndefined(req.studentsId)) {
     res.json({});
   } else {
-    res.set('Location', '/api/v1/students/' + req.studentId);
+    res.set('Location', '/api/v1/students/' + req.studentsId);
+    res.send(300);
+  }
+});
+/**
+ * Students Area
+ */
+api.get('/login', function(req, res) {
+  if (_.isUndefined(req.studentsId)) {
+    res.set('Location', '/api/v1/students');
+    res.send(300);
+  } else {
+    res.set('Location', '/api/v1/students/' + req.studentsId);
     res.send(300);
   }
 });

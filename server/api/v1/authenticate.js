@@ -22,4 +22,10 @@ api.post('/', function(req, res) {
 /**
  *
  */
+api.get('/', function(req, res) {
+  res.json({});
+});
+/**
+ *
+ */
 module.exports = api;

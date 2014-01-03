@@ -32,7 +32,7 @@ api.use(function(req, res, next) {
   });
 });
 /**
- * Students Area
+ * Admissions Area
  */
 api.get('/', function(req, res) {
   if (_.isUndefined(req.admissionsId)) {
@@ -43,7 +43,7 @@ api.get('/', function(req, res) {
   }
 });
 /**
- * Students Area
+ * Admissions Area
  */
 api.get('/login', function(req, res) {
   if (_.isUndefined(req.admissionsId)) {

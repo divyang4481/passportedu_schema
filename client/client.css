@@ -6,3 +6,7 @@ body {
     max-height: 750px;
     overflow-y: auto;
 }
+
+.nav, .pagination li {
+    cursor: pointer
+}

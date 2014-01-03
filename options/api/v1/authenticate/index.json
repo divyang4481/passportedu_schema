@@ -9,28 +9,21 @@
     {
       "title": "Home",
       "description": "The root resource for Passport EDU",
-      "rel": "self",
+      "rel": "home",
+      "importance": "navigation",
       "href": "/api/v1"
-    },
-    {
-      "title": "Manage My Student Applications",
-      "rel": "students",
-      "href": "/api/v1/students"
-    },
-    {
-      "title": "Schools Home",
-      "rel": "schools",
-      "href": "/api/v1/schools"
     },
     {
       "title": "Authentication",
       "rel": "self",
-      "href": "/api/v1/public/authenticate"
+      "importance": "navigation",
+      "href": "/api/v1/authenticate"
     },
     {
       "title": "Log in",
       "rel": "authenticate",
-      "href": "/api/v1/public/authenticate",
+      "importance": "content",
+      "href": "/api/v1/authenticate",
       "method": "POST",
       "targetSchema": {
         "properties": {

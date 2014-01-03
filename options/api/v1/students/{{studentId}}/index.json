@@ -281,6 +281,7 @@
           {
             "title": "Details: {{data.institutionName}}",
             "rel": "full_{{_id}}",
+            "importance": "content",
             "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
           }
         ]
@@ -292,21 +293,32 @@
       "title": "Home",
       "description": "The root resource for Passport EDU",
       "rel": "home",
+      "importance": "navigation",
       "href": "/api/v1"
     },
     {
-      "title": "Manage My Student Applications",
-      "rel": "self",
+      "title": "Students",
+      "rel": "students",
+      "importance": "navigation",
       "href": "/api/v1/students"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}"
     },
     {
       "title": "My Applications",
       "rel": "applications",
+      "importance": "navigation",
       "href": "/api/v1/students/{{studentId}}/applications"
     },
     {
       "title": "Search Schools",
       "rel": "search",
+      "importance": "navigation",
       "href": "/api/v1/students/{{studentId}}/search/schools"
     }
   ]

@@ -36,23 +36,48 @@ module.exports = function(model) {
         queryVars.limit = Number(limit);
         var nextPage = _.clone(queryVars)
           , prevPage = _.clone(queryVars)
-          , nextOffset = Number(offset) + Number(limit)
-          , prevOffset = Number(offset) - Number(limit)
-          , meta = [];
-        if (nextOffset <= (count - 1)) {
-          nextPage.offset = nextOffset;
+          , lastPage = _.clone(queryVars)
+          , firstPage = _.clone(queryVars)
+          , nextOffset = Math.max(0, Number(offset) + Number(limit))
+          , prevOffset = Math.min(count - limit, Number(offset) - Number(limit))
+          , meta = []
+          , currentPage = (Math.ceil(queryVars.offset / queryVars.limit))
+          , minBound = Math.max(1, (currentPage - 10))
+          , maxBound = Math.min((count / limit), currentPage + 10);
+        firstPage.offset = 0;
+        meta.push({
+          query: querystring.stringify(firstPage),
+          page: "<<",
+          rel: "first"
+        });
+        prevPage.offset = prevOffset;
+        meta.push({
+          query: querystring.stringify(prevPage),
+          page: "prev <",
+          rel: "prev"
+        });
+        var pages = _.range(minBound, maxBound, 1);
+        _.each(pages, function(page) {
+          var pageQuery = _.clone(queryVars);
+          pageQuery.offset = (page * limit) + 1;
           meta.push({
-            query: querystring.stringify(nextPage),
-            page: Math.ceil(nextPage.offset / nextPage.limit) + 1
+            query: querystring.stringify(pageQuery),
+            page: Math.ceil(pageQuery.offset / pageQuery.limit),
+            rel: pageQuery.offset == queryVars.offset ? 'self' : 'page_' + (Math.ceil(pageQuery.offset / pageQuery.limit))
           });
-        }
-        if (offset > 0) {
-          prevPage.offset = prevOffset;
-          meta.push({
-            query: querystring.stringify(prevPage),
-            page: Math.ceil(prevPage.offset / prevPage.limit) + 1
-          });
-        }
+        });
+        nextPage.offset = nextOffset;
+        meta.push({
+          query: querystring.stringify(nextPage),
+          page: "next >",
+          rel: "next"
+        });
+        lastPage.offset = (Math.ceil(count / queryVars.limit) - 1) * queryVars.limit + 1;
+        meta.push({
+          query: querystring.stringify(lastPage),
+          page: ">>",
+          rel: "last"
+        });
         callback(err, {
           meta: meta,
           result: result,
