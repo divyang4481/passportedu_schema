@@ -1,24 +1,24 @@
 angular.module('schema', ['ngResource'])
   .config(function($httpProvider) {
-    var interceptor = ['$rootScope', '$q', 'jsonClient', function(rootScope, $q, jsonClient) {
+    var interceptor = ['$rootScope', '$q', '$location', 'jsonClient', function(rootScope, $q, $location, jsonClient) {
       var apiClient = jsonClient();
+      rootScope.$on('$locationChangeSuccess', function() {
+        rootScope.actualLocation = $location.path();
+      });
 
-      function success(response) {
+      rootScope.$watch(function () {return $location.path()}, function (newLocation, oldLocation) {
+        if(rootScope.actualLocation === newLocation) {
+          apiClient.buildClient(newLocation);
+        }
+      });
+      var success = function(response) {
         return response;
-      }
-
-      function error(response) {
+      };
+      var error = function(response) {
         var status = response.status;
         if (status == 300) {
           var url = response.headers().location;
-          apiClient.resolveSchema(url).then(function(schema) {
-            apiClient.schema = schema;
-            apiClient.resourceURLTraverse(url, {}, {'GET': {method: 'GET'}}, 'GET', {}).then(function(data) {
-              apiClient.data = data;
-              apiClient.links = [];
-              apiClient.resolveEmbeddedLinks(apiClient, apiClient.schema);
-            });
-          });
+          apiClient.buildClient(url);
         }
         if (status == 415) {
           apiClient.errors = [
@@ -29,8 +29,7 @@ angular.module('schema', ['ngResource'])
         }
         // otherwise
         return $q.reject(response);
-      }
-
+      };
       return function(promise) {
         return promise.then(success, error);
       }
@@ -43,7 +42,7 @@ angular.module('schema', ['ngResource'])
       return apiClient;
     }
   })
-  .factory('jsonSchema', function($resource, $interpolate, $q, $http, jsonClient) {
+  .factory('jsonSchema', function($resource, $interpolate, $q, $http, $location, jsonClient) {
     var apiClient = jsonClient();
     /**
      * Finding the link object identified by the rel from an array of link objects
@@ -101,18 +100,10 @@ angular.module('schema', ['ngResource'])
     apiClient.compileLink = function(root, data, pathParts, link) {
       if (pathParts.length === 0) {
         var eLink = angular.copy(link)
-          , href = $interpolate(eLink.href)
-          , title = eLink.title ? $interpolate(eLink.title) : false
-          , rel = $interpolate(eLink.rel)
-          , description = eLink.description ? $interpolate(eLink.description) : false
-          , iHref = href(data)
-          , iTitle = title ? title(data) : ''
-          , iRel = rel(data)
-          , iDescription = description ? description(data) : '';
-        eLink.href = iHref;
-        eLink.rel = iRel;
-        eLink.title = iTitle;
-        eLink.description = iDescription;
+          , flatLink = JSON.stringify(eLink)
+          , flatLinkInterpolater = $interpolate(flatLink);
+        flatLink = flatLinkInterpolater(data);
+        eLink = JSON.parse(flatLink);
         if (!angular.isArray(root.links)) {
           root.links = [];
         }
@@ -166,7 +157,14 @@ angular.module('schema', ['ngResource'])
       apiClient.resolveSchema(url).then(function(schema) {
         apiClient.schema = schema;
         apiClient.links = schema.links;
-        apiClient.traverse('self', {}).then(function() {
+        apiClient.resourceURLTraverse(url, {}, {'GET': {method: 'GET'}}, 'GET', {}).then(function(data) {
+          apiClient.data = data;
+          apiClient.links = [];
+          apiClient.resolveEmbeddedLinks(apiClient, apiClient.schema);
+          flatSchema = JSON.stringify(schema);
+          flatSchemaInterpolator = $interpolate(flatSchema);
+          flatSchema = flatSchemaInterpolator(data);
+          apiClient.schema = JSON.parse(flatSchema);
           def.resolve(apiClient);
         });
       });
@@ -212,6 +210,10 @@ angular.module('schema', ['ngResource'])
           apiClient.schema = schema;
           apiClient.links = [];
           apiClient.resolveEmbeddedLinks(apiClient, apiClient.schema);
+          flatSchema = JSON.stringify(schema);
+          flatSchemaInterpolator = $interpolate(flatSchema);
+          flatSchema = flatSchemaInterpolator(data);
+          apiClient.schema = JSON.parse(flatSchema);
           deferred.resolve(apiClient);
         });
       });
@@ -229,18 +231,10 @@ angular.module('schema', ['ngResource'])
       var deferred = $q.defer();
       apiClient.findRelLink(rel, apiClient.links).then(function(link) {
         var eLink = angular.copy(link)
-          , href = $interpolate(eLink.href)
-          , title = eLink.title ? $interpolate(eLink.title) : false
-          , rel = $interpolate(eLink.rel)
-          , description = eLink.description ? $interpolate(eLink.description) : false
-          , iHref = href(payload)
-          , iTitle = title ? title(params) : ''
-          , iRel = rel(params)
-          , iDescription = description ? description(params) : '';
-        eLink.href = iHref;
-        eLink.rel = iRel;
-        eLink.title = iTitle;
-        eLink.description = iDescription;
+          , flatLink = JSON.stringify(eLink)
+          , flatLinkInterpolater = $interpolate(flatLink);
+        flatLink = flatLinkInterpolater(params);
+        eLink = JSON.parse(flatLink);
         var method = eLink.method ? eLink.method : 'GET'
           , methods = {}
           , defaults = {}
@@ -276,6 +270,8 @@ angular.module('schema', ['ngResource'])
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
     apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload) {
+      $location.path(url);
+      apiClient.url = url;
       var deferred = $q.defer();
       var resource = $resource(url, defaults, methods);
       resource[method](payload, function(response) {
@@ -285,5 +281,9 @@ angular.module('schema', ['ngResource'])
       return deferred.promise;
     }
     return apiClient.buildClient;
+  })
+  .filter('navLinks', function() {
+    return function(links) {
+    }
   });
 

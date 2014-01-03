@@ -1,0 +1,85 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}/applications",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Application Types",
+  "type": "object",
+  "description": "A list of application types",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "applications": {
+      "title": "Application Types",
+      "readonly": true,
+      "identity": false,
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "links": [
+              {
+                "title": "{{type}}",
+                "rel": "full_{{_id}}",
+                "importance": "content",
+                "description": "View and Edit {{type}} Application",
+                "method": "GET",
+                "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "admissions",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "myHome",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Application Types",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Create a New Application Type",
+      "rel": "create",
+      "importance": "administrative",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/new"
+    }
+  ]
+}

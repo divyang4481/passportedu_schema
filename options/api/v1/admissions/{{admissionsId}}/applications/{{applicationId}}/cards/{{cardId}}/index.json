@@ -1,0 +1,167 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{cardId}}",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Application Card",
+  "type": "object",
+  "name": "card",
+  "description": "Card from an application",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "applicationId": {
+      "title": "Unique ID of an Application",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "cardId": {
+      "title": "Unique ID of an Card",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "card": {
+      "title": "Application Card",
+      "description": "Application Card",
+      "type": "object"
+    }
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "self",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "myHome",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Application Types",
+      "rel": "self",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "{{application.name}}",
+      "rel": "myApplication",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+    },
+    {
+      "title": "Application Cards",
+      "rel": "myApplicationCards",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/cards"
+    },
+    {
+      "title": "This Application Card {{cardId}}",
+      "rel": "self",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+    },
+    {
+      "title": "Delete this Application Card",
+      "rel": "delete",
+      "method": "DELETE",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+    },
+    {
+      "title": "Update this Application Card",
+      "rel": "update",
+      "method": "PUT",
+      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}",
+      "properties": {
+        "data": {
+          "title": "Data",
+          "type": "object",
+          "oneOf": [
+            {
+              "$ref": "/api/v1/card/map/small.json"
+            },
+            {
+              "$ref": "/api/v1/card/media/medium.json"
+            },
+            {
+              "$ref": "/api/v1/card/media/small.json"
+            },
+            {
+              "$ref": "/api/v1/card/media/media.json"
+            },
+            {
+              "$ref": "/api/v1/card/form/small.json"
+            },
+            {
+              "$ref": "/api/v1/card/form/medium.json"
+            },
+            {
+              "$ref": "/api/v1/card/form/large.json"
+            },
+            {
+              "$ref": "/api/v1/card/range/small.json"
+            },
+            {
+              "$ref": "/api/v1/card/dial/small.json"
+            },
+            {
+              "$ref": "/api/v1/card/image/small.json"
+            },
+            {
+              "$ref": "/api/v1/card/image/medium.json"
+            },
+            {
+              "$ref": "/api/v1/card/video/medium.json"
+            },
+            {
+              "$ref": "/api/v1/card/qrcode/medium.json"
+            },
+            {
+              "$ref": "/api/v1/card/weather/medium.json"
+            }
+          ]
+        },
+        "mediaType": {
+          "title": "mediaType",
+          "description": "mediaType of the data",
+          "identity": false,
+          "type": "enum",
+          "enum": [
+            "map/small",
+            "media/medium",
+            "media/small",
+            "media/media",
+            "form/small",
+            "form/medium",
+            "form/large",
+            "range/small",
+            "dial/small",
+            "image/small",
+            "image/medium",
+            "video/medium",
+            "qrcode/medium",
+            "weather/medium"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Described By",
+      "rel": "describedBy",
+      "href": "/api/v1/card/{{card.mediaType}}.json"
+    }
+  ]
+}

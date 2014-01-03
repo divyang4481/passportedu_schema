@@ -7,24 +7,9 @@ var express = require('express')
 /**
  *
  */
-var options = require('../../../options')
-api.options('/*', options);
-/**
- *
- */
 api.get('/', function(req, res) {
   res.json({});
 });
-/**
- *
- */
-var register = require('./register');
-api.use('/register', register);
-/**
- *
- */
-var authenticate = require('./authenticate');
-api.use('/authenticate', authenticate);
 /**
  *
  */

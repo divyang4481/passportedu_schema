@@ -1,0 +1,46 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "My Dashboard",
+  "type": "object",
+  "description": "Dashboard for Your Admissions Team",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    }
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "admissions",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Application Types",
+      "rel": "applications",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    }
+  ]
+}

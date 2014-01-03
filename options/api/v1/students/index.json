@@ -20,9 +20,81 @@
       "href": "/api/v1"
     },
     {
-      "title": "Manage My Student Applications",
+      "title": "Students Home",
       "rel": "self",
       "href": "/api/v1/students"
+    },
+    {
+      "title": "Log In",
+      "rel": "authenticate",
+      "href": "/api/v1/authenticate",
+      "method": "POST",
+      "targetSchema": {
+        "properties": {
+          "token": {
+            "title": "Session Token",
+            "description": "Unique token for your user session",
+            "type": "string"
+          },
+          "id": {
+            "title": "User Id",
+            "description": "User Id of Logged in User",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "description": "Your username",
+            "type": "string"
+          },
+          "fullName": {
+            "title": "Your full name",
+            "description": "Your first and last name.",
+            "type": "string"
+          }
+        }
+      },
+      "properties": {
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        }
+      },
+      "required": ["username", "password"]
+    },
+    {
+      "title": "Register",
+      "rel": "register",
+      "href": "/api/v1/register/student",
+      "method": "POST",
+      "properties": {
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        },
+        "fullName": {
+          "title": "Your Full Name",
+          "description": "Your first name and last name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Your Email Address",
+          "description": "A valid email address where we can contact you.",
+          "type": "email"
+        }
+      },
+      "required": ["username", "password", "email", "fullName"]
     }
   ]
 }

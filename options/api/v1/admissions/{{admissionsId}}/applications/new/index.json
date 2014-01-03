@@ -1,0 +1,73 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}/applications",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Create a New Application Type",
+  "type": "object",
+  "description": "The root resource for my admissions office",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    }
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "Home Page",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "admissions",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "myHome",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Application Types",
+      "rel": "types",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Create a New Application Type",
+      "rel": "self",
+      "importance": "administrative",
+      "method": "POST",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Create a New Application Type",
+      "rel": "create",
+      "importance": "content",
+      "method": "POST",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications",
+      "properties": {
+        "type": {
+          "title": "Application Type",
+          "type": "string"
+        }
+      }
+    },
+    {
+      "title": "Create a Undergraduate Application Type",
+      "rel": "create",
+      "importance": "administrative",
+      "method": "POST",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    }
+  ]
+}

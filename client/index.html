@@ -16,230 +16,54 @@
 <body ng-app="client">
 <div class="container"
      ng-controller="ClientArea">
-<div class="hero-unit">
-  <h1>Schema Browser</h1>
-  <h4 ng-bind="client.schema.title"></h4>
-  <h5 ng-bind="client.schema.description"></h5>
-</div>
+  <div id="schema">
+    <div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div ng-include="getTemplate()">
 
-<div id="schema">
-<div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="list-group">
-          <div ng-repeat="rel in client.links"
-               class="list-group-item"
-               ng-class="{'active' : rel.rel == 'self'}">
-            <div class="list-group-item-heading">
-              <button ng-show="!rel.properties"
-                      ng-click="link()"
-                      ng-class="{'btn-danger': rel.method == 'DELETE', 'btn-info': !rel.method, 'btn-success': rel.method }"
-                      class="btn btn-small">
-                <i class="glyphicon glyphicon-white"
-                   ng-class="{'glyphicon-remove-sign': rel.method == 'DELETE', 'glyphicon-plus-sign': rel.method, 'glyphicon-file': !rel.method}"></i>&nbsp;
-                <span ng-bind="rel.title"></span>
-              </button>
-              <a ng-show="rel.properties"
-                 href="#{{rel.title | fieldName}}"
-                 role="button"
-                 class="btn btn-primary"
-                 data-toggle="modal">
-                <i class="glyphicon"
-                   ng-class="{'glyphicon-plus-sign': rel.method == 'POST' || rel.method == 'PUT', 'glyphicon-tags': rel.properties}"></i>&nbsp;
-                <span ng-bind="rel.title"></span>
-              </a>
             </div>
-
-                <span class="list-group-item-text"
-                      ng-bind="rel.description"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="well">
+              <h2>Data</h2>
+              <pre ng-bind="client.data | json"></pre>
+            </div>
+            <div class="well">
+              <h2>Schema</h2>
+              <pre ng-bind="client.schema | json"></pre>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="well">
-          <h2>Data</h2>
-          <pre ng-bind="client.data | json"></pre>
-        </div>
-      </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="well">
-          <h2>Schema</h2>
-          <pre ng-bind="client.schema | json"></pre>
-        </div>
-      </div>
-      <!--<pre ng-bind="client.links | json"></pre>-->
-      <!--<pre ng-bind="client.schema | json"></pre>-->
-    </div>
-  </div>
-</div>
-<div ng-repeat="rel in client.links">
-  <!-- ng-if="rel.properties || (rel.method !== 'GET' && rel.method !== 'DELETE')" -->
-  <div id="{{rel.title | fieldName}}"
-       class="modal fade"
-       tabindex="-1"
-       role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-hidden="true">&times;</button>
-          <h4 class="modal-title"
-              ng-bind="rel.title"></h4>
-        </div>
-        <div class="modal-body">
-          <form class="form-horizontal"
-                role="form">
-            <div ng-repeat="(propName, property) in rel.properties"
-                 class="form-group">
-              <label ng-bind="property.title"
-                     class="col-sm-6 control-label"
-                     for="{{propName}}"></label>
+    <script src="/libs/underscore-1.4.4.js"></script>
+    <script src="/libs/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/libs/angular-1.1.5.js"></script>
+    <script src="/libs/angular/angular-resource.js"></script>
+    <script src="/schema.js"></script>
+    <script src="/base64.js"></script>
+    <script src="/app/magicLink.js"></script>
+    <script src="/client.js"></script>
+    <script>
+      (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+      ga('create', 'UA-42349667-2', 'psprt.com');
+      ga('send', 'pageview');
 
-              <div ng-switch="property.type"
-                   class="col-sm-6">
-
-                <input id="{{propName}}"
-                       ng-switch-when="string"
-                       type="text"
-                       class="form-control"
-                       ng-model="property.value">
-                <input id="{{propName}}"
-                       ng-switch-when="number"
-                       type="number"
-                       class="form-control"
-                       ng-model="property.value">
-                <input id="{{propName}}"
-                       ng-switch-when="password"
-                       type="password"
-                       class="form-control"
-                       ng-model="property.value">
-                <input id="{{propName}}"
-                       ng-switch-when="date-time"
-                       type="date"
-                       class="form-control"
-                       ng-model="property.value">
-                <input id="{{propName}}"
-                       ng-switch-when="email"
-                       type="email"
-                       class="form-control"
-                       ng-model="property.value">
-
-                <div ng-switch-when="range"
-                     class="input-group">
-                    <span ng-bind="property.value"
-                          class="input-group-addon"></span>
-                  <input id="{{propName}}"
-                         type="range"
-                         min="{{property.min}}"
-                         max="{{property.max}}"
-                         class="form-control"
-                         ng-model="property.value">
-                </div>
-                <div ng-switch-when="array"
-                     ng-switch="property.items.type">
-                  <input id="{{propName}}"
-                         ng-switch-when="string"
-                         type="text"
-                         class="form-control"
-                         ng-model="property.value">
-                  <input id="{{propName}}"
-                         ng-switch-when="number"
-                         type="number"
-                         class="form-control"
-                         ng-model="property.value">
-                  <input id="{{propName}}"
-                         ng-switch-when="password"
-                         type="password"
-                         class="form-control"
-                         ng-model="property.value">
-                  <input id="{{propName}}"
-                         ng-switch-when="date-time"
-                         type="date"
-                         class="form-control"
-                         ng-model="property.value">
-                  <textarea id="{{propName}}"
-                            ng-switch-when="any"
-                            class="form-control"
-                            ng-model="property.value">
-                  </textarea>
-                  <select id="{{propName}}"
-                          ng-switch-when="enum"
-                          class="form-control"
-                          ng-options="v as v for (k,v) in property.items.enum"
-                          ng-model="property.value">
-                  </select>
-                </div>
-                <textarea id="{{propName}}"
-                          ng-switch-when="any"
-                          class="form-control"
-                          ng-model="property.value">
-                </textarea>
-
-                <div ng-switch-when="object">
-                  <textarea id="{{propName}}"
-                            class="form-control"
-                            ng-model="property.value">
-                  </textarea>
-                  <pre ng-bind="property.value"></pre>
-                </div>
-                <select id="{{propName}}"
-                        ng-switch-when="enum"
-                        class="form-control"
-                        ng-options="v as v for (k,v) in property.enum"
-                        ng-model="property.value">
-                </select>
-              </div>
-              <div class="col-sm-6 control-label"
-                   ng-bind="property.description">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <button ng-click="link()"
-                        type="submit"
-                        class="btn btn-primary"
-                        data-dismiss="modal"
-                        aria-hidden="true">
-                  <i class="glyphicon glyphicon-white"
-                     ng-class="{'glyphicon-plus-sign': rel.method == 'POST', 'glyphicon-pencil': rel.method == 'PUT', 'glyphicon-tags': rel.properties}"></i>&nbsp;
-                  <span ng-bind="rel.title"></span>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<script src="/libs/underscore-1.4.4.js"></script>
-<script src="/libs/jquery.min.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/libs/angular-1.1.5.js"></script>
-<script src="/libs/angular/angular-resource.js"></script>
-<script src="/schema.js"></script>
-<script src="/base64.js"></script>
-<script src="/client.js"></script>
-<script>
-  (function(i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function() {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-42349667-2', 'psprt.com');
-  ga('send', 'pageview');
-
-</script>
+    </script>
 </body>
 </html>

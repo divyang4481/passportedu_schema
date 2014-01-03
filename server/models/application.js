@@ -1,15 +1,16 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , _ = require('underscore')
-  , mediaTypes = [
-    "universal"
-  ]
+  , _ = require('underscore');
 var ApplicationSchema = new mongoose.Schema({
-  studentId: String,
+  type: String,
+  admissionsId: String,
   data: Schema.Types.Mixed,
-  mediaType: { type: String, enum: mediaTypes },
-  cardIds: [
-    { type: String }
+  mediaType: String,
+  schemaCards: [
+    {
+      group: String,
+      mediaType: String
+    }
   ]
 });
 var schoolMap = function(school) {

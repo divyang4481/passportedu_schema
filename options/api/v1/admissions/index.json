@@ -1,0 +1,63 @@
+{
+  "id": "/api/v1/admissions",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Welcome, Admissions Teams",
+  "type": "object",
+  "description": "",
+  "properties": {
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "apps",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/login"
+    },
+    {
+      "title": "Register",
+      "rel": "register",
+      "importance": "content",
+      "href": "/api/v1/register/admissions",
+      "method": "POST",
+      "properties": {
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        },
+        "fullName": {
+          "title": "Your Full Name",
+          "description": "Your first name and last name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Your Email Address",
+          "description": "A valid email address where we can contact you.",
+          "type": "email"
+        }
+      },
+      "required": ["username", "password", "email", "fullName"]
+    }
+  ]
+}

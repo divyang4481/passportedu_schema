@@ -32,6 +32,9 @@ var user = require('./server/models/user');
 var application = require('./server/models/application');
 var school = require('./server/models/school');
 var rest = require('./server/rest');
+/**
+ *
+ */
 app.use('/api/v1/resources/users', rest(user));
 app.use('/api/v1/resources/cards', rest(card));
 app.use('/api/v1/resources/schools', rest(school));
@@ -40,6 +43,11 @@ app.use('/api/v1/resources/applications', rest(application));
  * Hypermedia API
  */
 app.use('/api/v1', require('./server/api/v1'));
+/**
+ *
+ */
+var templates = require('./templates')
+app.get('/templates*', templates);
 /**
  * Start Server
  */

@@ -15,6 +15,11 @@ var express = require('express')
  */
 api.use(function(req, res, next) {
   authenticate.auth(req, function(err, auth) {
+    if (req.originalUrl === '/api/v1/students') {
+      req.studentId = auth.user.userId;
+      next();
+      return;
+    }
     if ((err) || (auth.user.userType !== 'students')) {
       res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
       res.send(401);
@@ -28,9 +33,8 @@ api.use(function(req, res, next) {
  * Students Area
  */
 api.get('/', function(req, res) {
-  if (res.statusCode === 401) {
-    res.set('Location', '/api/v1/students/register');
-    res.send(300);
+  if (_.isUndefined(req.studentId)) {
+    res.json({});
   } else {
     res.set('Location', '/api/v1/students/' + req.studentId);
     res.send(300);
@@ -79,14 +83,14 @@ api.delete('/:studentId/schools/:schoolId', function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   user.findById(studentId, function(err, Student) {
-      Student.schoolIds = _.reject(Student.schoolIds, function(Id) {
-        return Id === schoolId;
-      });
-      Student.save(function(err) {
-        res.set('Location', '/api/v1/students/' + studentId);
-        res.send(300);
-      });
+    Student.schoolIds = _.reject(Student.schoolIds, function(Id) {
+      return Id === schoolId;
     });
+    Student.save(function(err) {
+      res.set('Location', '/api/v1/students/' + studentId);
+      res.send(300);
+    });
+  });
 });
 /**
  *
