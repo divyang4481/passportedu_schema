@@ -289,21 +289,29 @@
       "href": "/api/v1"
     },
     {
-      "title": "Manage My Student Applications",
+      "title": "Students",
       "rel": "students",
       "importance": "navigation",
       "href": "/api/v1/students"
     },
     {
-      "title": "My Applications",
-      "rel": "applications",
+      "title": "My Dashboard",
+      "rel": "dashboard",
       "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/applications"
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}"
     },
     {
-      "title": "Search and Explore Schools",
+      "title": "My Application",
+      "rel": "applications",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/application"
+    },
+    {
+      "title": "Search Schools",
       "rel": "self",
       "importance": "navigation",
+      "method": "GET",
       "href": "/api/v1/students/{{studentId}}/search/schools"
     }
   ]

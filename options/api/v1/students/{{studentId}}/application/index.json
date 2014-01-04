@@ -82,43 +82,16 @@
       "href": "/api/v1/students/{{studentId}}"
     },
     {
-      "title": "My Applications",
+      "title": "My Application",
       "rel": "self",
       "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/applications"
+      "href": "/api/v1/students/{{studentId}}/application"
     },
     {
-      "title": "Create an Application",
-      "rel": "createApplication",
-      "importance": "content",
-      "method": "POST",
-      "href": "/api/v1/students/{{studentId}}/applications",
-      "properties": {
-        "mediaType": {
-          "title": "mediaType",
-          "description": "media type",
-          "identity": false,
-          "readonly": false,
-          "type": "enum",
-          "enum": [
-            "/api/v1/applications/universal.json"
-          ]
-        },
-        "data": {
-          "title": "Application Data",
-          "description": "Content of the Application",
-          "identity": false,
-          "readonly": false,
-          "type": "any"
-        },
-        "updated": {
-          "title": "Date last updated",
-          "description": "The last date/time this applications was updated.",
-          "identity": false,
-          "readonly": false,
-          "type": "date-time"
-        }
-      }
+      "title": "Cards",
+      "rel": "cards",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/application/cards"
     }
   ]
 }

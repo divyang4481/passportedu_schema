@@ -161,7 +161,7 @@ api.put('/:studentId/search/schools/:schoolId/save', function(req, res) {
 /**
  *
  */
-api.get('/:studentId/applications', function(req, res) {
+api.get('/:studentId/application', function(req, res) {
   var studentId = req.params.studentId;
   req.query.studentId = studentId;
   queryM(application)(req, function(err, applications) {
@@ -174,55 +174,7 @@ api.get('/:studentId/applications', function(req, res) {
 /**
  *
  */
-api.post('/:studentId/applications', function(req, res) {
-  var studentId = req.params.studentId;
-  var app = new application({studentId: studentId});
-  app.save(function(err) {
-    res.set('Location', '/api/v1/students/' + studentId + '/applications/' + app._id);
-    res.send(300);
-  });
-});
-/**
- *
- */
-api.get('/:studentId/applications/:applicationId', function(req, res) {
-  var studentId = req.params.studentId
-    , applicationId = req.params.applicationId;
-  application.findById(applicationId).exec(function(err, App) {
-    res.json({
-      studentId: studentId,
-      applicationId: applicationId,
-      application: _.omit(App, ['_id'])
-    });
-  });
-});
-/**
- *
- */
-api.put('/:studentId/applications/:applicationId', function(req, res) {
-  var studentId = req.params.studentId
-    , applicationId = req.params.applicationId
-    , appPost = req.body;
-  application.findOneAndUpdate(applicationId, appPost, function(err, App) {
-    res.set('Location', '/api/v1/students/' + studentId + '/applications/' + App._id);
-    res.send(300);
-  });
-});
-/**
- *
- */
-api.delete('/:studentId/applications/:applicationId', function(req, res) {
-  var studentId = req.params.studentId
-    , applicationId = req.params.applicationId;
-  application.findOneAndRemove(applicationId, function(err) {
-    res.set('Location', '/api/v1/students/' + studentId + '/applications');
-    res.send(300);
-  });
-});
-/**
- *
- */
-api.post('/:studentId/applications/:applicationId/cards', function(req, res) {
+api.post('/:studentId/application/cards', function(req, res) {
   var studentId = req.params.studentId
     , applicationId = req.params.applicationId
     , cardBody = req.body;
@@ -237,14 +189,14 @@ api.post('/:studentId/applications/:applicationId/cards', function(req, res) {
       res.send(415);
       return;
     }
-    res.set('Location', '/api/v1/students/' + studentId + '/applications/' + applicationId + '/cards/' + Card._id);
+    res.set('Location', '/api/v1/students/' + studentId + '/application/cards/' + Card._id);
     res.send(300);
   });
 });
 /**
  *
  */
-api.get('/:studentId/applications/:applicationId/cards', function(req, res) {
+api.get('/:studentId/application/cards', function(req, res) {
   var studentId = req.params.studentId
     , applicationId = req.params.applicationId;
   req.query.owners = {application: applicationId};
@@ -264,7 +216,7 @@ api.get('/:studentId/applications/:applicationId/cards', function(req, res) {
 /**
  *
  */
-api.get('/:studentId/applications/:applicationId/cards/:cardId', function(req, res) {
+api.get('/:studentId/application/cards/:cardId', function(req, res) {
   var studentId = req.params.studentId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
@@ -280,25 +232,25 @@ api.get('/:studentId/applications/:applicationId/cards/:cardId', function(req, r
 /**
  *
  */
-api.put('/:studentId/applications/:applicationId/cards/:cardId', function(req, res) {
+api.put('/:studentId/application/cards/:cardId', function(req, res) {
   var studentId = req.params.studentId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId
     , cardPost = req.body;
   card.findOneAndUpdate(cardId, cardPost, function(err, Card) {
-    res.set('Location', '/api/v1/students/' + studentId + '/applications/' + applicationId + '/cards/' + Card._id);
+    res.set('Location', '/api/v1/students/' + studentId + '/application/cards/' + Card._id);
     res.send(300);
   });
 });
 /**
  *
  */
-api.delete('/:studentId/applications/:applicationId/cards/:cardId', function(req, res) {
+api.delete('/:studentId/application/cards/:cardId', function(req, res) {
   var studentId = req.params.studentId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
   card.findOneAndRemove({_id: cardId}, function(err) {
-    res.set('Location', '/api/v1/students/' + studentId + '/applications/' + applicationId + '/cards');
+    res.set('Location', '/api/v1/students/' + studentId + '/application/cards');
     res.send(300);
   });
 });

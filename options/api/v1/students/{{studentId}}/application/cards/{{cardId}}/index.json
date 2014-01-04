@@ -35,47 +35,51 @@
       "title": "Home",
       "description": "The root resource for Passport EDU",
       "rel": "home",
+      "importance": "navigation",
       "href": "/api/v1"
     },
     {
-      "title": "Search and Explore Schools",
-      "rel": "public",
-      "href": "/api/v1/students/{{studentId}}/search/schools"
-    },
-    {
-      "title": "Manage My Student Applications",
+      "title": "Students",
       "rel": "students",
+      "importance": "navigation",
       "href": "/api/v1/students"
     },
     {
-      "title": "My Applications",
-      "rel": "applications",
-      "href": "/api/v1/students/{{studentId}}/applications"
+      "title": "My Dashboard",
+      "rel": "dashboard",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}"
     },
     {
-      "title": "This Application {{applicationId}}",
+      "title": "My Application",
       "rel": "application",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}"
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/application"
     },
     {
-      "title": "This Application's Cards",
+      "title": "Cards",
       "rel": "cards",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards"
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/application/cards"
     },
     {
-      "title": "Application Card {{cardId}}",
+      "title": "Card",
       "rel": "self",
+      "importance": "navigation",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
     },
     {
       "title": "Delete this Application Card",
       "rel": "delete",
+      "importance": "content",
       "method": "DELETE",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
     },
     {
       "title": "Update this Application Card",
       "rel": "update",
+      "importance": "content",
       "method": "PUT",
       "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}",
       "properties": {

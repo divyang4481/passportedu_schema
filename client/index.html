@@ -27,7 +27,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+            +/-
+          </a>
+          <div  id="collapseOne" class="panel-collapse collapse in col-md-12">
             <div class="well">
               <h2>Data</h2>
               <pre ng-bind="client.data | json"></pre>
