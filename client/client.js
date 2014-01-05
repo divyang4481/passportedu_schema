@@ -19,6 +19,9 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink']
     $scope.modalForm = function() {
       $scope.modal = $(event.target).next().modal('show');
     };
+    $scope.findLink = function(rel) {
+
+    };
     $scope.pushEmptyArray = function() {
       if (angular.isArray(this.property.value)) {
         this.property.value.push('');

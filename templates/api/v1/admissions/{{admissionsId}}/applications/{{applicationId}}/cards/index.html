@@ -1,0 +1,14 @@
+<div ng-include="'/templates/common/navMenu.html'"></div>
+<div class="jumbotron">
+  <h1 ng-bind="client.schema.title"></h1>
+
+  <p ng-bind="client.schema.description"></p>
+
+  <div class="clearfix"></div>
+</div>
+<div ng-repeat='link in client.links | filter: {rel:"create"}' class="center-block col-md-12 col-xs-12">
+  <div ng-repeat="card in link.properties.type.enum" class="pull-left">
+    <div ng-include="'/templates/api/v1/card/' + card">
+    </div>
+  </div>
+</div>

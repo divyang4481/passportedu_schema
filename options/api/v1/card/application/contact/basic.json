@@ -1,0 +1,32 @@
+{
+  "id": "/api/v1/card/application/contact/basic",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Basic Contact",
+  "type": "object",
+  "description": "Basic contact information",
+  "properties": {
+    "title": {
+      "title": "Your Basic Contact Information",
+      "description": "Information for school admissions to contact you.",
+      "type": "string"
+    },
+    "fullName": {
+      "title": "Your Full Name",
+      "type": "string"
+    },
+    "mobile": {
+      "title": "Your Mobile Number",
+      "type": "string"
+    },
+    "email": {
+      "title": "Your Email Address",
+      "type": "string"
+    }
+  },
+  "links": [
+    {
+      "rel": "describedBy",
+      "href": "/templates/api/v1/card/application/contact/basic.html"
+    }
+  ]
+}

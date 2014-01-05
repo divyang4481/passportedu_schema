@@ -10,3 +10,21 @@ body {
 .nav, .pagination li {
     cursor: pointer
 }
+
+.extraSmallCard {
+    width: 320px;
+    height: 200px;
+    margin: 15px;
+}
+
+.smallCard {
+    width: 320px;
+    height: 250px;
+    margin: 15px;
+}
+
+.mediumCard {
+    width: 320px;
+    height: 360px;
+    margin: 15px;
+}

@@ -1,0 +1,22 @@
+<div class="panel panel-default smallCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Language Information</h3>
+  </div>
+  <div class="panel-body">
+    <form class="form" role="form">
+      <div class="form-group">
+        <label for="inputLanguage" class="control-label">Native Language</label>
+        <input ng-model="language" id="inputLanguage" type="text" class="form-control" placeholder="Native Language">
+      </div>
+      <div class="form-group">
+        <label for="inputTest" class="control-label">English Language Proficiency</label>
+        <select ng-model="englishTest" id="inputTest" class="form-control">
+          <option value="">-- choose test --</option>
+          <option value="TOEFL iBT">TOEFL iBT</option>
+          <option value="IELTS">IELTS</option>
+        </select>
+        <input ng-model="testScore" type="text" id="inputScore" class="form-control" placeholder="Score">
+      </div>
+    </form>
+  </div>
+</div>
