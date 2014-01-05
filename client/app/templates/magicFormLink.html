@@ -5,6 +5,6 @@
   ng-class="{'btn-danger': link.method == 'DELETE', 'btn-info': !link.method, 'btn-success': link.method}"
   data-toggle="modal">
   <i class="glyphicon"
-    ng-class="{'glyphicon-plus-sign': link.method == 'POST' || link.method == 'PUT', 'glyphicon-tags': link.properties}"></i>&nbsp;
+    ng-class="{'glyphicon-plus-sign': link.method == 'POST' || link.method == 'PUT', 'glyphicon-tags': link.properties, 'glyphicon-tags': !link.properties}"></i>&nbsp;
   <span ng-bind="link.title"></span>
 </a>

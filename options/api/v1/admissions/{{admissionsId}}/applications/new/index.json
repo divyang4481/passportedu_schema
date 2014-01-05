@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/admissions/{{admissionsId}}/applications",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Create a New Application Type",
+  "title": "A New Application",
   "type": "object",
-  "description": "The root resource for my admissions office",
+  "description": "Students can apply to a program with this application.",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -57,7 +57,7 @@
       "href": "/api/v1/admissions/{{admissionsId}}/applications",
       "properties": {
         "type": {
-          "title": "Application Type",
+          "title": "Program Name",
           "type": "string"
         }
       }

@@ -10,20 +10,25 @@
   <div class="row">
     <div class="col-sm-12">
       <ul class="pagination">
-        <li><a ng-repeat='link in client.links | filter: {importance:"paging"}' ng-bind="link.title"></a></li>
+        <li ng-repeat='link in client.links | filter: {importance:"paging"}'
+          ng-click="traverse()" ng-class="{'active': link.rel == 'self'}">
+          <a ng-bind="link.title"></a>
+        </li>
       </ul>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4">
-      <div ng-repeat='link in client.links | filter: {importance:"tool"}' class="panel panel-default">
+    <div ng-show='(client.links | filter: {importance:"tool"}).length' class="col-md-4">
+      <div ng-repeat='link in client.links | filter: {importance:"tool"}'
+        class="panel panel-default largeCard">
         <div class="panel-body">
           <magic-form-content click="traverse" link="link"></magic-form-content>
         </div>
       </div>
     </div>
     <div class="col-md-8">
-      <div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default">
+      <div ng-repeat='link in client.links | filter: {importance:"content"}'
+        class="panel panel-default extraSmallCard">
         <div class="panel-body">
           <magic-form-content click="traverse" link="link"></magic-form-content>
         </div>

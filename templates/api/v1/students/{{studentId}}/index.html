@@ -16,14 +16,14 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-      <div ng-repeat='link in client.links | filter: {importance:"tool"}' class="panel panel-default">
+      <div ng-repeat='link in client.links | filter: {importance:"tool"}' class="panel panel-default smallCard">
         <div class="panel-body">
           <magic-form-content click="traverse" link="link"></magic-form-content>
         </div>
       </div>
     </div>
     <div class="col-md-8">
-      <div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default">
+      <div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default smallCard">
         <div class="panel-body">
           <magic-form-content click="traverse" link="link"></magic-form-content>
         </div>

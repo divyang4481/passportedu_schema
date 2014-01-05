@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "{{application.type}} Application",
   "type": "object",
-  "description": "Configuration for an {{application.type}} application type",
+  "description": "Configuration for {{application.type}} Application Type",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -13,8 +13,6 @@
     },
     "application": {
       "title": "Admissions Application",
-      "readonly": true,
-      "identity": false,
       "type": "object",
       "properties": {
         "_id": {
@@ -24,12 +22,32 @@
           "type": "string"
         }
       }
+    },
+    "errors": {
+      "title": "Errors",
+      "type":"array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "title": "Try Again",
+            "rel": "Try Again",
+            "importance": "content",
+            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+          }
+        ]
+      }
     }
   },
   "links": [
     {
       "title": "Home",
-      "description": "The root resource for Passport EDU",
+      "description": "Home Page",
       "rel": "home",
       "importance": "navigation",
       "method": "GET",
@@ -69,6 +87,14 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/cards"
+    },
+    {
+      "title": "Delete",
+      "description": "{{application.type}}",
+      "rel": "delete",
+      "importance": "content",
+      "method": "DELETE",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
     }
   ]
 }

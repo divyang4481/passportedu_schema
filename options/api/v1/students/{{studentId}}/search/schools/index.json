@@ -259,9 +259,10 @@
         },
         "links": [
           {
-            "title": "Details: {{data.institutionName}}",
-            "description": "",
+            "title": "View Details",
+            "description": "{{data.institutionName}}",
             "rel": "full_{{_id}}",
+            "method": "GET",
             "importance": "content",
             "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
           }
@@ -273,6 +274,7 @@
         {
           "title": "{{page}}",
           "rel": "{{rel}}",
+          "method": "GET",
           "importance": "paging",
           "href": "/api/v1/students/{{studentId}}/search/schools/?{{query}}"
         }
@@ -284,12 +286,14 @@
       "title": "Home",
       "description": "The root resource for Passport EDU",
       "rel": "home",
+      "method": "GET",
       "importance": "navigation",
       "href": "/api/v1"
     },
     {
       "title": "Students",
       "rel": "students",
+      "method": "GET",
       "importance": "navigation",
       "href": "/api/v1/students"
     },

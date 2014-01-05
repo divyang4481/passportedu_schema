@@ -1,23 +1,22 @@
 <div>
-  <h4 class="modal-title"
-    ng-bind="link.title"></h4>
+  <h4 class="modal-title" ng-bind="link.description"></h4>
 
-  <div class="modal-body">
-    <form class="form-horizontal"
-      role="form">
+  <div class="well-sm">
+    <form role="form">
       <div ng-repeat="(propName, property) in link.properties"
         class="form-group">
         <label ng-bind="property.title"
-          class="col-sm-6 control-label"
+          class="col-sm-12 control-label"
           for="{{propName}}"></label>
 
         <div ng-switch="property.type"
-          class="col-sm-6">
+          class="col-sm-12">
           <input id="{{propName}}"
             ng-switch-when="string"
             type="text"
             class="form-control"
-            ng-model="property.value">
+            ng-model="property.value"
+            placeholder="{{property.title}}">
           <input id="{{propName}}"
             ng-switch-when="number"
             type="number"
@@ -109,19 +108,15 @@
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button ng-click="click()"
-            ng-class="{'btn-danger': link.method == 'DELETE', 'btn-info': !link.method, 'btn-success': link.method}"
-            type="submit"
-            class="btn btn-primary"
-            data-dismiss="modal"
-            aria-hidden="true">
-            <i class="glyphicon glyphicon-white"
-              ng-class="{'glyphicon-minus-sign': link.method == 'DELETE', 'glyphicon-plus-sign': link.method == 'POST', 'glyphicon-pencil': link.method == 'PUT', 'glyphicon-tags': link.properties}"></i>
-            &nbsp;
-            <span ng-bind="link.title"></span>
-          </button>
-        </div>
+        <button ng-click="click()"
+          ng-class="{'btn-danger': link.method == 'DELETE', 'btn-info': !link.method, 'btn-success': link.method}"
+          type="submit"
+          class="btn btn-primary form-control">
+          <i class="glyphicon glyphicon-white"
+            ng-class="{'glyphicon-minus-sign': link.method == 'DELETE', 'glyphicon-plus-sign': link.method == 'POST', 'glyphicon-pencil': link.method == 'PUT', 'glyphicon-tags': link.properties, 'glyphicon-tags': !link.method, 'glyphicon-tags': link.method == 'GET'}"></i>
+          &nbsp;
+          <span ng-bind="link.title"></span>
+        </button>
       </div>
     </form>
   </div>

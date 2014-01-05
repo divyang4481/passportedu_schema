@@ -1,14 +1,14 @@
 {
   "id": "/api/v1",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "PassportEDU API",
-  "name": "PassportEDU API",
+  "title": "PassportEDU",
+  "name": "PassportEDU",
   "type": "object",
   "description": "Bringing global students together with global schools.",
   "links": [
     {
       "title": "Home",
-      "description": "The root resource for Passport EDU",
+      "description": "Where it starts",
       "rel": "self",
       "importance": "navigation",
       "method": "GET",

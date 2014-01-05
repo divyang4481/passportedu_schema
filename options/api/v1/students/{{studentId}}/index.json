@@ -279,8 +279,10 @@
         },
         "links": [
           {
-            "title": "Details: {{data.institutionName}}",
+            "title": "View Details",
+            "description": "You've decided to apply to {{data.institutionName}}",
             "rel": "full_{{_id}}",
+            "method": "GET",
             "importance": "content",
             "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
           }

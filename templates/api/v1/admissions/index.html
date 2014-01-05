@@ -6,13 +6,8 @@
 
   <div class="clearfix"></div>
 </div>
-<div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default">
+<div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default smallCard">
   <div class="panel-body">
     <magic-form-content click="traverse" link="link"></magic-form-content>
   </div>
-</div>
-<div ng-repeat='application in client.data.applications.result | filter: {importance:"content"}' class="panel panel-default">
-  <h3 ng-bind="application.type"></h3>
-
-  <p ng-bind="application.description"></p>
 </div>

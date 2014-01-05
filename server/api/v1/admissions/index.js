@@ -192,6 +192,14 @@ api.delete('/:admissionsId/applications/:applicationId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   application.findOneAndRemove(applicationId, function(err) {
+    if (err) {
+      res.json({
+        "errors": [
+          {message: "There was an error when trying to delete your application."}
+        ]
+      });
+      return;
+    }
     res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications');
     res.send(300);
   });

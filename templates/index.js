@@ -24,7 +24,7 @@ function loadVariPath(startPath, remaining, bestFile, callback) {
       });
       return;
     }
-    fs.readFile(startPath, function(err, data) {
+    fs.readFile(bestFile, function(err, data) {
       callback(data);
     });
   });

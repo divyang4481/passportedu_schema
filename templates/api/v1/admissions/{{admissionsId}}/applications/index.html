@@ -11,3 +11,8 @@
     <magic-form-content click="traverse" link="link"></magic-form-content>
   </div>
 </div>
+<div ng-repeat='application in client.data.applications.result | filter: {importance:"content"}' class="panel panel-default smallCard">
+  <h3 ng-bind="application.type"></h3>
+
+  <p ng-bind="application.description"></p>
+</div>
