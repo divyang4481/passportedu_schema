@@ -28,3 +28,9 @@ body {
     height: 360px;
     margin: 15px;
 }
+
+@media only screen and (max-device-width: 320px) {
+    .extraSmallCard, .smallCard, .mediumCard {
+        margin: 0px;
+    }
+}
