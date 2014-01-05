@@ -9,17 +9,20 @@ var express = require('express')
  * @param remaining
  * @param callback
  */
-function loadVariPath(startPath, remaining, callback) {
+function loadVariPath(startPath, remaining, bestFile, callback) {
   fs.readdir(startPath, function(err, files) {
     for(i in files) {
       if (files[i].match(/{{.*}}/)) {
         var match = files[i].match(/{{(.*)}}/)[1];
-        loadPath(path.join(startPath, files[i]), remaining, callback);
+        loadPath(path.join(startPath, files[i]), remaining, bestFile, callback);
         return;
       }
     }
-    if (fs.lstatSync(startPath).isDirectory()) {
-      startPath = startPath + '/index.html';
+    if (remaining.length == 0) {
+      fs.readFile(bestFile, function(err, data) {
+        callback(data);
+      });
+      return;
     }
     fs.readFile(startPath, function(err, data) {
       callback(data);
@@ -32,12 +35,9 @@ function loadVariPath(startPath, remaining, callback) {
  * @param remaining
  * @param callback
  */
-function loadPath(startPath, remaining, callback) {
+function loadPath(startPath, remaining, bestFile, callback) {
   if (remaining.length == 0) {
-    if (fs.lstatSync(startPath).isDirectory()) {
-      startPath = startPath + '/index.html';
-    }
-    fs.readFile(startPath, function(err, data) {
+    fs.readFile(bestFile, function(err, data) {
       callback(data);
     });
     return;
@@ -45,16 +45,38 @@ function loadPath(startPath, remaining, callback) {
   var test_path = path.join(startPath, remaining.shift());
   fs.exists(test_path, function(exists) {
     if (exists) {
-      loadPath(test_path, remaining, callback);
+      fs.exists(test_path + '/index.html', function(exists) {
+        if (exists) {
+          bestFile = test_path + '/index.html';
+          loadPath(test_path, remaining, bestFile, callback);
+        } else {
+          fs.exists(test_path + '.html', function(exists) {
+            if (exists) {
+              bestFile = test_path + '.html';
+            }
+            loadPath(test_path, remaining, bestFile, callback);
+          });
+        }
+      });
     } else {
-      loadVariPath(startPath, remaining, callback);
+      fs.exists(test_path + '.html', function(exists) {
+        if (exists) {
+          bestFile = test_path + '.html';
+          loadPath(test_path, remaining, bestFile, callback);
+        } else {
+          loadVariPath(startPath, remaining, bestFile, callback);
+        }
+      });
     }
   });
 }
 module.exports = function(req, res) {
-  var optionPath = req.originalUrl.replace('templates/','').replace(/\?.*$/, '').split('/');
-  optionPath = _.filter(optionPath, function(val) { return val !== ""; });
-  loadPath(__dirname, optionPath, function(options) {
+  var optionPath = req.originalUrl.replace('templates/', '').replace(/\?.*$/, '').split('/');
+  optionPath = _.filter(optionPath, function(val) {
+    return val !== "";
+  });
+  var bestFile = '/index.html';
+  loadPath(__dirname, optionPath, bestFile, function(options) {
     res.set('Content-Type', 'text/html');
     res.send(options);
   });
