@@ -36,6 +36,6 @@ and (min-device-width: 320px) {
     }
 
     .extraSmallCard, .smallCard, .mediumCard {
-        margin: 10px;
+        margin: 0px;
     }
 }
