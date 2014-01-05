@@ -6,7 +6,7 @@
 
   <div class="clearfix"></div>
 </div>
-<div ng-repeat='link in client.links | filter: {rel:"create"}' class="center-block col-md-12 col-xs-12">
+<div ng-repeat='link in client.links | filter: {rel:"create"}' class="">
   <div ng-repeat="card in link.properties.type.enum" class="pull-left">
     <div ng-include="'/templates/api/v1/card/' + card">
     </div>
