@@ -6,7 +6,7 @@
 
   <div class="clearfix"></div>
 </div>
-<div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default smallCard">
+<div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default {{link.size}}">
   <div class="panel-body">
     <magic-form-content click="traverse" link="link"></magic-form-content>
   </div>

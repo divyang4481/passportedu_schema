@@ -1,27 +1,27 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , mediaTypes = [
-    "map/small",
-    "media/medium",
-    "media/small",
-    "media/media",
-    "form/small",
-    "form/medium",
-    "form/large",
-    "range/small",
-    "dial/small",
-    "image/small",
-    "image/medium",
-    "video/medium",
-    "qrcode/medium",
-    "weather/medium"
+  , cardTypes = [
+    "application/attendance/term",
+    "application/documents/transcript",
+    "application/documents/passport",
+    "application/documents/government",
+    "application/contact/basic",
+    "application/contact/guardian",
+    "application/contact/address/home",
+    "application/contact/address/mailing",
+    "application/nationality",
+    "application/demographic",
+    "application/language",
+    "application/academic/exams/sat",
+    "application/academic/exams/gre",
+    "application/academic/exams/gmat",
+    "application/academic/schools/previous"
   ];
 var CardSchema = new mongoose.Schema({
   owners: [
     { type: Schema.Types.Mixed }
   ],
-  data: Schema.Types.Mixed,
-  mediaType: { type: String, enum: mediaTypes },
+  type: { type: String, enum: cardTypes },
   updated: { type: Date, default: Date.now }
 });
 module.exports = mongoose.model('Card', CardSchema);

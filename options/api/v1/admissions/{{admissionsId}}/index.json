@@ -41,6 +41,14 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Application Types",
+      "rel": "applications",
+      "importance": "content",
+      "size": "heroCard",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
     }
   ]
 }

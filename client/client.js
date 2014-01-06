@@ -1,4 +1,4 @@
-var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink'])
+var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink', 'dragAndDrop'])
   .config(function($interpolateProvider) {
   })
   .filter('fieldName', function() {
@@ -13,25 +13,6 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink']
       $('.modal-backdrop').remove();
       $scope.client.traverse(this.link.rel, {});
     };
-    $scope.adminLinks = function() {
-      return $filter('adminLinks')($scope.client.links);
-    };
-    $scope.modalForm = function() {
-      $scope.modal = $(event.target).next().modal('show');
-    };
-    $scope.findLink = function(rel) {
-
-    };
-    $scope.pushEmptyArray = function() {
-      if (angular.isArray(this.property.value)) {
-        this.property.value.push('');
-      } else {
-        this.property.value = [];
-      }
-    };
-    $scope.notGET = function(link) {
-      return link.method !== 'GET';
-    };
     $scope.getTemplate = function() {
       return '/templates/' + $scope.client.url;
     };
@@ -43,15 +24,10 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink']
       $scope.client.forms = {};
     });
   })
-  .filter('adminLinks', function() {
-    return function(links) {
-      var adminLinks = [];
-      angular.forEach(links, function(link) {
-        if(link.importance === "administrative") {
-          adminLinks.push(link);
-        }
-      });
-      return adminLinks;
+  .controller('CardSelection', function($scope) {
+    $scope.cards = [];
+    $scope.addCardToApplication = function(card, element){
+      $scope.client.traverse(card.rel, {type: card.rel});
     };
   })
   .run(function() {

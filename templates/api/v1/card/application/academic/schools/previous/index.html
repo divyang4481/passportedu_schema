@@ -1,0 +1,37 @@
+<div class="panel panel-default largeCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Previous School</h3>
+  </div>
+  <div class="panel-body">
+    <form class="form" role="form">
+      <div class="form-group">
+        <label for="inputName" class="control-label">School Name</label>
+        <input ng-model="name" id="inputName" type="text" class="form-control" placeholder="School Name">
+        <select ng-model="level" id="inputLevel" type="text" class="form-control">
+          <option value="">-- choose level --</option>
+          <option value="High School">High School</option>
+          <option value="College">College</option>
+          <option value="University">University</option>
+          <option value="Graduate">Graduate</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="inputDegree" class="control-label">Name of Degree Obtained</label>
+        <input ng-model="degree" id="inputDegree" type="text" class="form-control" placeholder="Degree Obtained">
+      </div>
+      <div class="form-group">
+        <input ng-model="city" type="text" class="form-control" placeholder="City">
+        <input ng-model="country" type="text" class="form-control" placeholder="Country">
+      </div>
+      <div class="form-group">
+        <label for="inputStartedDate" class="control-label">Date Started / Graduated</label>
+        <input ng-model="startedDate" id="inputStartedDate" type="date" class="form-control">
+        <input ng-model="graduatedDate" id="inputGraduatedDate" type="date" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="inputGPA" class="control-label">GPA</label>
+        <input ng-model="gpa" id="inputGPA" type="number" class="form-control" placeholder="GPA">
+      </div>
+    </form>
+  </div>
+</div>

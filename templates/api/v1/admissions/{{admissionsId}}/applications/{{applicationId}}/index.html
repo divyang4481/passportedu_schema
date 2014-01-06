@@ -6,9 +6,11 @@
 
   <div class="clearfix"></div>
 </div>
-<div ng-repeat='link in client.links | filter: {rel:"create"}' class="">
-  <div ng-repeat="card in link.properties.type.enum" class="pull-left">
-    <div ng-include="'/templates/api/v1/card/' + card">
-    </div>
+<div class="row">
+  <div ng-repeat='link in client.links | filter: {importance: "cards"}'
+    ng-model="link"
+    ng-include="link.template"
+    class="pull-left"
+    drag>
   </div>
 </div>

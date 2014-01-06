@@ -43,17 +43,14 @@
         },
         "password": {
           "title": "Your password",
-          "description": "Your password",
           "type": "password"
         },
         "fullName": {
           "title": "Your Full Name",
-          "description": "Your first name and last name",
           "type": "string"
         },
         "email": {
           "title": "Your Email Address",
-          "description": "A valid email address where we can contact you.",
           "type": "email"
         }
       },

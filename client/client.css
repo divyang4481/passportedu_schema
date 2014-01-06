@@ -29,6 +29,23 @@ body {
     margin: 15px;
 }
 
+.largeCard {
+    width: 320px;
+    height: 520px;
+    margin: 15px;
+}
+
+.heroCard {
+    margin: 15px;
+}
+
+.drop {
+    margin: 20px;
+    min-height: 100px;
+    padding: 25px;
+    border: 1px dashed #fff;
+}
+
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 568px)
@@ -37,7 +54,7 @@ and (orientation : portrait) {
         padding: 0px;
     }
 
-    .extraSmallCard, .smallCard, .mediumCard {
+    .extraSmallCard, .smallCard, .mediumCard, .largeCard, .heroCard {
         margin: 0px;
         margin-bottom: 10px;
     }

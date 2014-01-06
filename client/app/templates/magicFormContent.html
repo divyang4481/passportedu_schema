@@ -1,38 +1,35 @@
 <div>
-  <h4 class="modal-title" ng-bind="link.description"></h4>
+  <h4 ng-bind="link.description"></h4>
 
   <div class="well-sm">
     <form role="form">
-      <div ng-repeat="(propName, property) in link.properties"
-        class="form-group">
+      <div ng-repeat="(propName, property) in link.properties" class="form-group">
         <label ng-bind="property.title"
-          class="col-sm-12 control-label"
-          for="{{propName}}"></label>
+          class="col-sm-12 control-label"></label>
 
-        <div ng-switch="property.type"
-          class="col-sm-12">
-          <input id="{{propName}}"
+        <div data-trigger="hover" data-toggle="tooltip" title="{{property.description}}" ng-switch="property.type" class="col-sm-12">
+          <input 
             ng-switch-when="string"
             type="text"
             class="form-control"
             ng-model="property.value"
             placeholder="{{property.title}}">
-          <input id="{{propName}}"
+          <input 
             ng-switch-when="number"
             type="number"
             class="form-control"
             ng-model="property.value">
-          <input id="{{propName}}"
+          <input 
             ng-switch-when="password"
             type="password"
             class="form-control"
             ng-model="property.value">
-          <input id="{{propName}}"
+          <input 
             ng-switch-when="date-time"
             type="date"
             class="form-control"
             ng-model="property.value">
-          <input id="{{propName}}"
+          <input 
             ng-switch-when="email"
             type="email"
             class="form-control"
@@ -40,9 +37,9 @@
 
           <div ng-switch-when="range"
             class="input-group">
-                          <span ng-bind="property.value"
-                            class="input-group-addon"></span>
-            <input id="{{propName}}"
+            <span ng-bind="property.value"
+              class="input-group-addon"></span>
+            <input 
               type="range"
               min="{{property.min}}"
               max="{{property.max}}"
@@ -51,69 +48,77 @@
           </div>
           <div ng-switch-when="array"
             ng-switch="property.items.type">
-            <input id="{{propName}}"
+            <input 
               ng-switch-when="string"
               type="text"
               class="form-control"
               ng-model="property.value">
-            <input id="{{propName}}"
+            <input 
               ng-switch-when="number"
               type="number"
               class="form-control"
               ng-model="property.value">
-            <input id="{{propName}}"
+            <input 
               ng-switch-when="password"
               type="password"
               class="form-control"
               ng-model="property.value">
-            <input id="{{propName}}"
+            <input 
               ng-switch-when="date-time"
               type="date"
               class="form-control"
               ng-model="property.value">
-            <textarea id="{{propName}}"
+            <textarea 
               ng-switch-when="any"
               class="form-control"
               ng-model="property.value">
             </textarea>
-            <select id="{{propName}}"
+            <select 
               ng-switch-when="enum"
               class="form-control"
               ng-options="v as v for (k,v) in property.items.enum"
               ng-model="property.value">
             </select>
           </div>
-          <textarea id="{{propName}}"
+          <textarea 
             ng-switch-when="any"
             class="form-control"
             ng-model="property.value">
           </textarea>
 
           <div ng-switch-when="object">
-            <textarea id="{{propName}}"
+            <textarea 
               class="form-control"
               ng-model="property.value">
             </textarea>
             <pre ng-bind="property.value"></pre>
           </div>
-          <select id="{{propName}}"
+          <select 
             ng-switch-when="enum"
             class="form-control"
             ng-options="v as v for (k,v) in property.enum"
             ng-model="property.value">
           </select>
         </div>
-        <div class="col-sm-6 control-label"
-          ng-bind="property.description">
-        </div>
       </div>
-      <div class="form-group">
+      <div>
         <button ng-click="click()"
-          ng-class="{'btn-danger': link.method == 'DELETE', 'btn-info': !link.method, 'btn-success': link.method}"
+          ng-class="{
+          'btn-danger': link.method == 'DELETE',
+          'btn-info': !link.method,
+          'btn-success': link.method
+          }"
           type="submit"
           class="btn btn-primary form-control">
           <i class="glyphicon glyphicon-white"
-            ng-class="{'glyphicon-minus-sign': link.method == 'DELETE', 'glyphicon-plus-sign': link.method == 'POST', 'glyphicon-pencil': link.method == 'PUT', 'glyphicon-tags': link.properties, 'glyphicon-tags': !link.method, 'glyphicon-tags': link.method == 'GET'}"></i>
+            ng-class="{
+            'glyphicon-minus-sign': link.method == 'DELETE',
+            'glyphicon-plus-sign': link.method == 'POST',
+            'glyphicon-pencil': link.method == 'PUT',
+            'glyphicon-tags': link.properties,
+            'glyphicon-tags': !link.method,
+            'glyphicon-tags': link.method == 'GET'
+            }"></i>
           &nbsp;
           <span ng-bind="link.title"></span>
         </button>

@@ -127,7 +127,11 @@
                 data-dismiss="modal"
                 aria-hidden="true">
                 <i class="glyphicon glyphicon-white"
-                  ng-class="{'glyphicon-plus-sign': link.method == 'POST', 'glyphicon-pencil': link.method == 'PUT', 'glyphicon-tags': link.properties}"></i>
+                  ng-class="{
+                  'glyphicon-plus-sign': link.method == 'POST',
+                  'glyphicon-pencil': link.method == 'PUT',
+                  'glyphicon-tags': link.properties
+                  }"></i>
                 &nbsp;
                 <span ng-bind="link.title"></span>
               </button>

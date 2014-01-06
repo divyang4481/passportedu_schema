@@ -166,10 +166,13 @@ api.get('/:admissionsId/applications/:applicationId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   application.findById(applicationId).exec(function(err, App) {
-    res.json({
-      admissionsId: admissionsId,
-      applicationId: applicationId,
-      application: _.omit(App, ['_id'])
+    card.find({"owners.application": applicationId}, function(err, Cards) {
+      res.json({
+        admissionsId: admissionsId,
+        applicationId: applicationId,
+        application: _.omit(App, ['_id']),
+        cards: Cards
+      });
     });
   });
 });
@@ -207,29 +210,29 @@ api.delete('/:admissionsId/applications/:applicationId', function(req, res) {
 /**
  *
  */
-api.post('/:admissionsId/applications/:applicationId/cards', function(req, res) {
+api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardBody = req.body;
   cardBody.owners = [];
   cardBody.owners.push({application: applicationId});
   cardBody.owners.push({admissions: admissionsId});
-  cardBody.mediaType = req.body.mediaType;
-  cardBody.data = JSON.parse(req.body.data);
+  cardBody.type = req.params[0];
   var Card = new card(cardBody);
+  console.log(cardBody);
   Card.save(function(err) {
     if (err) {
       res.send(415);
       return;
     }
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/cards/' + Card._id);
+    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/addCards');
     res.send(300);
   });
 });
 /**
  *
  */
-api.get('/:admissionsId/applications/:applicationId/cards', function(req, res) {
+api.get('/:admissionsId/applications/:applicationId/addCards', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   application.findById(applicationId).exec(function(err, App) {
@@ -239,11 +242,23 @@ api.get('/:admissionsId/applications/:applicationId/cards', function(req, res) {
         admissionsId: admissionsId,
         applicationId: applicationId,
         application: _.omit(App, ['_id']),
-        meta: data.meta,
-        cards: data.result,
-        count: data.count,
-        pages: data.pages,
-        page: data.page
+        cards: [
+          {type: "application/attendance/term"},
+          {type: "application/documents/transcript"},
+          {type: "application/documents/passport"},
+          {type: "application/documents/government"},
+          {type: "application/contact/basic"},
+          {type: "application/contact/guardian"},
+          {type: "application/contact/address/home"},
+          {type: "application/contact/address/mailing"},
+          {type: "application/nationality"},
+          {type: "application/demographic"},
+          {type: "application/language"},
+          {type: "application/academic/exams/sat"},
+          {type: "application/academic/exams/gre"},
+          {type: "application/academic/exams/gmat"},
+          {type: "application/academic/schools/previous"}
+        ]
       };
       res.json(response);
     });

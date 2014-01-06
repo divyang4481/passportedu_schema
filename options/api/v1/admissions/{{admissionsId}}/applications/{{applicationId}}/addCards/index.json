@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "{{application.type}} Application",
+  "title": "Cards",
   "type": "object",
-  "description": "Configuration for {{application.type}} Application Type",
+  "description": "Cards Available for Applications",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -11,14 +11,22 @@
       "identity": true,
       "type": "string"
     },
+    "applicationId": {
+      "title": "Unique ID of an Application",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
     "application": {
       "title": "Admissions Application",
+      "readonly": true,
+      "identity": false,
       "type": "object",
       "properties": {
         "_id": {
           "type": "string"
         },
-        "type": {
+        "name": {
           "type": "string"
         }
       }
@@ -41,29 +49,8 @@
             "rel": "{{type}}",
             "importance": "cards",
             "template": "/templates/api/v1/card/{{type}}",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
-            "method": "GET"
-          }
-        ]
-      }
-    },
-    "errors": {
-      "title": "Errors",
-      "type":"array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        },
-        "links": [
-          {
-            "title": "Try Again",
-            "rel": "Try Again",
-            "method": "GET",
-            "importance": "content",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/addCards/{{type}}",
+            "method": "POST"
           }
         ]
       }
@@ -72,7 +59,7 @@
   "links": [
     {
       "title": "Home",
-      "description": "Home Page",
+      "description": "The root resource for Passport EDU",
       "rel": "home",
       "importance": "navigation",
       "method": "GET",
@@ -101,25 +88,17 @@
     },
     {
       "title": "{{application.type}}",
-      "rel": "self",
+      "rel": "type",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
     },
     {
       "title": "Add Application Cards",
-      "rel": "cards",
+      "rel": "self",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/addCards"
-    },
-    {
-      "title": "Delete",
-      "description": "{{application.type}}",
-      "rel": "delete",
-      "importance": "content",
-      "method": "DELETE",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
     }
   ]
 }
