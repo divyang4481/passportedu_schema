@@ -6,11 +6,11 @@
     <form class="form" role="form">
       <div class="form-group">
         <label for="inputLanguage" class="control-label">Native Language</label>
-        <input ng-model="language" id="inputLanguage" type="text" class="form-control" placeholder="Native Language">
+        <input ng-model="card.data.language" id="inputLanguage" type="text" class="form-control" placeholder="Native Language">
       </div>
       <div class="form-group">
         <label for="inputTest" class="control-label">English Language Proficiency</label>
-        <select ng-model="englishTest" id="inputTest" class="form-control">
+        <select ng-model="card.data.englishTest" id="inputTest" class="form-control">
           <option value="">-- choose test --</option>
           <option value="TOEFL iBT">TOEFL iBT</option>
           <option value="IELTS">IELTS</option>
@@ -18,11 +18,11 @@
       </div>
       <div class="form-group">
         <label for="inputScore" class="control-label">Score</label>
-        <input ng-model="testScore" type="text" id="inputScore" class="form-control" placeholder="Score">
+        <input ng-model="card.data.testScore" type="text" id="inputScore" class="form-control" placeholder="Score">
       </div>
       <div class="form-group">
         <label for="inputScoreDate" class="control-label">Latest Date Taken</label>
-        <input ng-model="testScoreDate" type="date" id="inputScoreDate" class="form-control">
+        <input ng-model="card.data.testScoreDate" type="date" id="inputScoreDate" class="form-control">
       </div>
   </div>
   </form>

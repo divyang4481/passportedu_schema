@@ -6,7 +6,7 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
       return input.replace(/[^a-zA-Z0-9]/g, '_');
     };
   })
-  .controller('ClientArea',function($resource, $location, $filter, $scope, jsonSchema, base64) {
+  .controller('ClientArea',function($rootScope, $resource, $location, $filter, $scope, jsonSchema, base64) {
     $scope.client = {};
     $scope.traverse = function() {
       angular.element('.modal').modal('hide');
@@ -28,6 +28,24 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
     $scope.cards = [];
     $scope.performLinkAction = function(card, element){
       $scope.client.traverse(card.rel, {type: card.rel});
+    };
+  })
+  .controller('AnonApplication', function($scope, $filter) {
+    $scope.cards = [];
+    $scope.student = {};
+    $scope.$watch('client.links', function() {
+      angular.forEach($scope.client.links, function(link) {
+        if (link.importance == 'cards') {
+          $scope.cards.push(link);
+        }
+      });
+    });
+    $scope.submitRegisterApp = function() {
+      $scope.client.traverse(this.link.rel,
+        {
+          student: $scope.student,
+          cards: $scope.cards
+        });
     };
   })
   .run(function() {

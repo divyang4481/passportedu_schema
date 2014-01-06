@@ -6,21 +6,21 @@
     <form class="form" role="form">
       <div class="form-group">
         <label for="inputStreet" class="control-label">Street Address</label>
-        <input ng-model="street" type="text" class="form-control" id="inputStreet" placeholder="Street Address">
+        <input ng-model="card.data.street" type="text" class="form-control" id="inputStreet" placeholder="Street Address">
       </div>
       <div class="form-group">
         <label for="unit" class="control-label">Unit Number/Letter</label>
-        <input ng-model="unit" type="text" class="form-control" id="unit" placeholder="Unit Number/Letter">
+        <input ng-model="card.data.unit" type="text" class="form-control" id="unit" placeholder="Unit Number/Letter">
       </div>
       <div class="form-group">
         <label for="inputCity" class="control-label sr-only">City</label>
-        <input ng-model="city" type="text" class="form-control" id="inputCity" placeholder="City">
+        <input ng-model="card.data.city" type="text" class="form-control" id="inputCity" placeholder="City">
         <label for="inputState" class="control-label sr-only">State/Province</label>
-        <input ng-model="state" type="text" class="form-control col" id="inputState" placeholder="State/Province">
+        <input ng-model="card.data.state" type="text" class="form-control col" id="inputState" placeholder="State/Province">
         <label for="inputCountry" class="control-label sr-only">Country</label>
-        <input ng-model="country" type="text" class="form-control" id="inputCountry" placeholder="Country">
+        <input ng-model="card.data.country" type="text" class="form-control" id="inputCountry" placeholder="Country">
         <label for="inputZip" class="control-label sr-only">Zip</label>
-        <input ng-model="zip" type="text" class="form-control col col-lg-3" id="inputZip" placeholder="Zip">
+        <input ng-model="card.data.zip" type="text" class="form-control col col-lg-3" id="inputZip" placeholder="Zip">
       </div>
     </form>
   </div>

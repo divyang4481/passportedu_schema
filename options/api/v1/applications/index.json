@@ -1,0 +1,114 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "{{application.type}}",
+  "type": "object",
+  "description": "Fill out an Application for",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "application": {
+      "title": "Admissions Application",
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "cards": {
+      "title": "Application Cards",
+      "type": "array",
+      "items": {
+        "title": "Card {{}}",
+        "type": "object",
+        "properties": {
+          "type": {
+            "title": "Card Type",
+            "description": "Type of the Card",
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "title": "Card",
+            "rel": "{{_id}}",
+            "type": "{{type}}",
+            "importance": "cards",
+            "template": "/templates/api/v1/card/{{type}}",
+            "href": "/api/v1/applications/{{applicationId}}/cards/{{_id}}",
+            "method": "POST"
+          }
+        ]
+      }
+    },
+    "errors": {
+      "title": "Errors",
+      "type":"array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "title": "Try Again",
+            "rel": "Try Again",
+            "method": "GET",
+            "importance": "content",
+            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+          }
+        ]
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "Home Page",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Save Application",
+      "rel": "register",
+      "importance": "content",
+      "href": "/api/v1/register/applications/{{applicationId}}",
+      "method": "POST",
+      "properties": {
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        },
+        "fullName": {
+          "title": "Your Full Name",
+          "description": "Your first name and last name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Your Email Address",
+          "description": "A valid email address where we can contact you.",
+          "type": "email"
+        }
+      },
+      "required": ["username", "password", "email", "fullName"]
+    }
+  ]
+}

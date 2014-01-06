@@ -1,10 +1,9 @@
 {
   "id": "/api/v1/students/{{studentId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Student Home",
+  "title": "My Schools",
   "type": "object",
-  "name": "Student Home",
-  "description": "A Student's entry point or home page.",
+  "description": "These are the schools you are applying to",
   "properties": {
     "studentId": {
       "title": "Unique ID of a Student",
@@ -280,9 +279,10 @@
         "links": [
           {
             "title": "View Details",
-            "description": "You've decided to apply to {{data.institutionName}}",
+            "description": "{{data.institutionName}}",
             "rel": "full_{{_id}}",
             "method": "GET",
+            "card": "extraSmallCard",
             "importance": "content",
             "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
           }

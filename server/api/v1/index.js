@@ -38,4 +38,9 @@ api.use('/admissions/', admissions);
 /**
  *
  */
+var applications = require('./applications');
+api.use('/applications', applications);
+/**
+ *
+ */
 module.exports = api;

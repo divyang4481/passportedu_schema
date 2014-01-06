@@ -1,10 +1,10 @@
 {
   "id": "/api/v1/students/{{studentId}}/applications",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Student Applications",
+  "title": "My Universal Application",
   "type": "object",
   "name": "Student Applications",
-  "description": "Applications to attend a college or a university as a student.",
+  "description": "All of the information you need to apply",
   "properties": {
     "studentId": {
       "title": "Unique ID of an Student",
@@ -88,10 +88,10 @@
       "href": "/api/v1/students/{{studentId}}/application"
     },
     {
-      "title": "Cards",
-      "rel": "cards",
+      "title": "Search Schools",
+      "rel": "search",
       "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/application/cards"
+      "href": "/api/v1/students/{{studentId}}/search/schools"
     }
   ]
 }

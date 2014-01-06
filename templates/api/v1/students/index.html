@@ -1,0 +1,34 @@
+<div ng-include="'/templates/common/navMenu'"></div>
+<div class="jumbotron">
+  <h1 ng-bind="client.schema.title"></h1>
+
+  <p ng-bind="client.schema.description"></p>
+
+  <div class="clearfix"></div>
+</div>
+<div ng-repeat="link in client.links | filter: {rel: 'register'}">
+
+  <div class="panel panel-default col-md-3">
+    <h2 ng-bind="link.title"></h2>
+
+    <form class="form-horizontal well">
+      <div class="form-group">
+        <label class="control-label">Username</label>
+        <input ng-model="link.properties.username.value" type="text" class="form-control" placeholder="Username">
+      </div>
+      <div class="form-group">
+        <label class="control-label">Password</label>
+        <input ng-model="link.properties.password.value" type="password" class="form-control" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label class="control-label">Email Address</label>
+        <input ng-model="link.properties.email.value" type="email" class="form-control" placeholder="name@email.com">
+      </div>
+      <div class="form-group">
+        <label class="col-md-7 col-sm-7"></label>
+        <button class="btn btn-primary" ng-click="traverse()">Register</button>
+      </div>
+    </form>
+
+  </div>
+</div>

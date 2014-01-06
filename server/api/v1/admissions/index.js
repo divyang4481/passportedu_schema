@@ -67,12 +67,10 @@ api.get('/:admissionsId', function(req, res) {
     .where({_id: admissionsId})
     .exec(function(err, Admissions) {
       response.student = Admissions[0];
-      console.log(Admissions);
-      school.find({_id: { $in: Admissions[0].schoolIds}}, function(err, Schools) {
-        console.log(err);
-        response.schools = Schools;
+//      school.find({_id: { $in: Admissions[0].schoolIds}}, function(err, Schools) {
+//        response.schools = Schools;
         res.json(response);
-      });
+//      });
     });
 });
 /**

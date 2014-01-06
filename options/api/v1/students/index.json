@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/students",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Students Area",
+  "title": "Get Started",
   "type": "object",
-  "description": "The root resource for students at PassportEDU",
+  "description": "Welcome to PassportEDU",
   "properties": {
     "meta": {
       "title": "Student ID",
@@ -36,8 +36,8 @@
     {
       "title": "Register",
       "rel": "register",
-      "importance": "administrative",
-      "href": "/api/v1/register/student",
+      "importance": "content",
+      "href": "/api/v1/register/students",
       "method": "POST",
       "properties": {
         "username": {

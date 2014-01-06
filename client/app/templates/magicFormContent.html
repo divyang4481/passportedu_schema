@@ -2,8 +2,8 @@
   <h4 ng-bind="link.description"></h4>
 
   <div class="well-sm">
-    <form class="form-horizontal" role="form">
-      <div ng-repeat="(propName, property) in link.properties" class="form-group">
+    <form class="form-horizontal" role="form" ng-init="predicate='order'">
+      <div ng-repeat="property in link.properties | orderBy:predicate" class="form-group">
         <label ng-bind="property.title"
           class="col-sm-12 control-label"></label>
 

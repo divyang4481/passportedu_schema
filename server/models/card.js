@@ -21,6 +21,7 @@ var CardSchema = new mongoose.Schema({
   owners: [
     { type: Schema.Types.Mixed }
   ],
+  data: Schema.Types.Mixed,
   type: { type: String, enum: cardTypes },
   updated: { type: Date, default: Date.now }
 });
