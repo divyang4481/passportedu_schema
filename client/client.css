@@ -1,5 +1,7 @@
 body {
     overflow-y: scroll;
+    padding-bottom: 120px;
+    padding-top: 30px;
 }
 
 .modal .modal-body {
@@ -9,6 +11,13 @@ body {
 
 .nav, .pagination li {
     cursor: pointer
+}
+
+.drop {
+    margin: 20px;
+    min-height: 100px;
+    padding: 25px;
+    border: 1px dashed #fff;
 }
 
 .extraSmallCard {
@@ -39,11 +48,37 @@ body {
     margin: 15px;
 }
 
-.drop {
-    margin: 20px;
-    min-height: 100px;
-    padding: 25px;
-    border: 1px dashed #fff;
+.navCard {
+    min-height: 35px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.navCard:after {
+    content: " ";
+    width: 600px;
+    height: 150px;
+    position: relative;
+}
+
+.leftPanel {
+    position: fixed;
+    height: 100%;
+    width: 100px;
+    left: 0px;
+    top: 0px;
+    border-right: 1px solid black;
+    margin: 0px;
+    padding: 0px;
+    padding-top: 100px;
+}
+
+.dangerDelete {
+    border: 1px solid red;
+}
+
+.suggestAdd {
+    border: 1px solid green;
 }
 
 @media only screen

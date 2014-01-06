@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Application Types",
   "type": "object",
-  "description": "A list of application types",
+  "description": "A list of your application types",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -31,10 +31,11 @@
             },
             "links": [
               {
-                "title": "{{type}}",
+                "title": "Edit",
                 "rel": "full_{{_id}}",
+                "card": "extraSmallCard",
                 "importance": "content",
-                "description": "View and Edit {{type}} Application",
+                "description": "{{type}}",
                 "method": "GET",
                 "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
               }
@@ -77,7 +78,7 @@
     {
       "title": "Create a New Application Type",
       "rel": "create",
-      "importance": "administrative",
+      "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/new"
     }

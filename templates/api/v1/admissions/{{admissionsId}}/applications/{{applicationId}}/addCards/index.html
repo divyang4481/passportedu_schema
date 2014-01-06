@@ -18,19 +18,15 @@
           <drop-down-nav links='client.links' importance="administrative" title="'Admin'" click="traverse"></drop-down-nav>
         </ul>
       </div>
-      <div class="panel panel-default heroCard" drop="addCardToApplication">
-        <h2>Dropping Cards Here</h2>
-        <h4>adds them to the current application</h4>
-      </div>
     </div>
   </nav>
-  <div class="jumbotron">
+  <div class="page-header">
     <h1 ng-bind="client.schema.title"></h1>
 
     <p ng-bind="client.schema.description"></p>
   </div>
   <div class="row">
-    <div class="col-md-12 panel panel-default">
+    <div class="col-md-12">
       <div ng-repeat='link in client.links | filter: {importance: "cards"}'
         ng-model="link"
         ng-include="link.template"
@@ -39,4 +35,12 @@
       </div>
     </div>
   </div>
+  <nav class="container navbar-fixed-bottom">
+    <div drop="performLinkAction"
+      class="alert alert-success">
+      <h4>Dragging and Dropping Cards Here</h4>
+
+      <p class="label label-success">adds them from to the current application</p>
+    </div>
+  </nav>
 </div>

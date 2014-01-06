@@ -304,7 +304,7 @@ api.delete('/:admissionsId/applications/:applicationId/cards/:cardId', function(
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
   card.findOneAndRemove({_id: cardId}, function(err) {
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/cards');
+    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
     res.send(300);
   });
 });

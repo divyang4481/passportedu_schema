@@ -44,13 +44,6 @@
     },
     {
       "title": "Create a New Application Type",
-      "rel": "self",
-      "importance": "administrative",
-      "method": "POST",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
-    },
-    {
-      "title": "Create a New Application Type",
       "rel": "create",
       "importance": "content",
       "method": "POST",
@@ -61,13 +54,6 @@
           "type": "string"
         }
       }
-    },
-    {
-      "title": "Create a Undergraduate Application Type",
-      "rel": "create",
-      "importance": "administrative",
-      "method": "POST",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
     }
   ]
 }

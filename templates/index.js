@@ -28,12 +28,10 @@ function loadVariPath(startPath, remaining, bestFile, callback) {
  * @param callback
  */
 function loadPath(startPath, remaining, bestFile, callback) {
-  console.log('load', startPath);
   if (remaining.length == 0) {
     fs.exists(startPath + '/index.html', function(exists) {
       if (exists) {
         bestFile = startPath + '/index.html';
-        console.log('loadFileIndex', bestFile);
         fs.readFile(bestFile, function(err, data) {
           callback(data);
         });
@@ -42,7 +40,6 @@ function loadPath(startPath, remaining, bestFile, callback) {
           if (exists) {
             bestFile = startPath + '.html';
           }
-          console.log('loadFile with html', bestFile);
           fs.readFile(bestFile, function(err, data) {
             callback(data);
           });

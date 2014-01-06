@@ -38,11 +38,11 @@
         },
         "links": [
           {
-            "rel": "{{type}}",
+            "rel": "{{_id}}",
             "importance": "cards",
             "template": "/templates/api/v1/card/{{type}}",
             "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
-            "method": "GET"
+            "method": "DELETE"
           }
         ]
       }
@@ -107,17 +107,17 @@
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
     },
     {
-      "title": "Add Application Cards",
+      "title": "Add More Cards to {{application.type}}",
       "rel": "cards",
-      "importance": "navigation",
+      "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/addCards"
     },
     {
-      "title": "Delete",
+      "title": "Delete Application",
       "description": "{{application.type}}",
       "rel": "delete",
-      "importance": "content",
+      "importance": "administrative",
       "method": "DELETE",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
     }

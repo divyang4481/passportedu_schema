@@ -26,7 +26,7 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
   })
   .controller('CardSelection', function($scope) {
     $scope.cards = [];
-    $scope.addCardToApplication = function(card, element){
+    $scope.performLinkAction = function(card, element){
       $scope.client.traverse(card.rel, {type: card.rel});
     };
   })

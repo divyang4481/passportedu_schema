@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Cards",
+  "title": "Add More Cards to {{application.type}}",
   "type": "object",
-  "description": "Cards Available for Applications",
+  "description": "You may add these cards to your application for {{application.type}}",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
