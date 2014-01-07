@@ -67,7 +67,6 @@ api.get('/:studentId', function(req, res) {
     .where({_id: studentId})
     .exec(function(err, Student) {
       response.student = Student[0];
-      console.log(Student);
       school.find({_id: { $in: Student[0].schoolIds}}, function(err, Schools) {
         console.log(err);
         response.schools = Schools;
@@ -163,54 +162,11 @@ api.put('/:studentId/search/schools/:schoolId/save', function(req, res) {
  */
 api.get('/:studentId/application', function(req, res) {
   var studentId = req.params.studentId;
-  req.query.studentId = studentId;
-  queryM(application)(req, function(err, applications) {
+  card.find({"owners.students": studentId} ,function(err, Cards) {
     res.json({
       studentId: studentId,
-      applications: applications
+      cards: Cards
     });
-  });
-});
-/**
- *
- */
-api.post('/:studentId/application/cards', function(req, res) {
-  var studentId = req.params.studentId
-    , applicationId = req.params.applicationId
-    , cardBody = req.body;
-  cardBody.owners = [];
-  cardBody.owners.push({application: applicationId});
-  cardBody.owners.push({student: studentId});
-  cardBody.mediaType = req.body.mediaType;
-  cardBody.data = JSON.parse(req.body.data);
-  var Card = new card(cardBody);
-  Card.save(function(err) {
-    if (err) {
-      res.send(415);
-      return;
-    }
-    res.set('Location', '/api/v1/students/' + studentId + '/application/cards/' + Card._id);
-    res.send(300);
-  });
-});
-/**
- *
- */
-api.get('/:studentId/application/cards', function(req, res) {
-  var studentId = req.params.studentId
-    , applicationId = req.params.applicationId;
-  req.query.owners = {application: applicationId};
-  queryM(card)(req, function(err, data) {
-    var response = {
-      studentId: studentId,
-      applicationId: applicationId,
-      meta: data.meta,
-      cards: data.result,
-      count: data.count,
-      pages: data.pages,
-      page: data.page
-    };
-    res.json(response);
   });
 });
 /**

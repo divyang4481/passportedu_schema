@@ -2,7 +2,13 @@ var mongoose = require('mongoose')
   , _ = require('underscore')
   , bcrypt = require('bcrypt')
   , SALT_WORK_FACTOR = 10;
+/**
+ *
+ */
 var userPerms = 'school, admin, student'.split(', ');
+/**
+ *
+ */
 var UserSchema = new mongoose.Schema({
   username: {type: String, required: true, index: { unique: true }},
   password: {type: String, required: true},
@@ -11,6 +17,9 @@ var UserSchema = new mongoose.Schema({
   token: String,
   userPerms: [
     { type: String, enum: userPerms }
+  ],
+  applicationIds: [
+    { type: String }
   ],
   schoolIds: [
     { type: String }

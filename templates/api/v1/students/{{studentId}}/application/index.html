@@ -1,0 +1,15 @@
+<div ng-include="'/templates/common/navMenu'"></div>
+<div class="page-header">
+  <h1 ng-bind="client.schema.title"></h1>
+
+  <div ng-bind="client.schema.description" class="alert alert-info"></div>
+
+  <div class="clearfix"></div>
+</div>
+<div class="pinColumns">
+  <div ng-repeat='link in client.links | filter: {importance: "cards"}'
+    ng-model="link"
+    ng-include="link.template"
+    class="pin">
+  </div>
+</div>

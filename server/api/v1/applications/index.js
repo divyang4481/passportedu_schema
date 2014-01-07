@@ -9,13 +9,15 @@ var express = require('express')
 /**
  *
  */
-api.get('/:applicationId', function(req, res) {
-  var applicationId = req.params.applicationId;
+api.get('/:applicationId/schools/:schoolId', function(req, res) {
+  var applicationId = req.params.applicationId
+    , schoolId = req.params.schoolId;
   application.findById(applicationId, function(err, Application) {
-    card.find({owners: {application: applicationId}}, function(err, Cards) {
+    card.find({"owners.applications": applicationId}, function(err, Cards) {
       res.json({
         applicationId: Application._id,
         application: Application,
+        schoolId: schoolId,
         cards: Cards
       });
     });

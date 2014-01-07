@@ -23,25 +23,25 @@ body {
 .extraSmallCard {
     width: 320px;
     height: 200px;
-    margin: 15px;
+    margin: 10px;
 }
 
 .smallCard {
     width: 320px;
     height: 250px;
-    margin: 15px;
+    margin: 10px;
 }
 
 .mediumCard {
     width: 320px;
     height: 360px;
-    margin: 15px;
+    margin: 10px;
 }
 
 .largeCard {
     width: 320px;
     height: 520px;
-    margin: 15px;
+    margin: 10px;
 }
 
 .heroCard {

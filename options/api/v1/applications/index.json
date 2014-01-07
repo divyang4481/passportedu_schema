@@ -5,14 +5,14 @@
   "type": "object",
   "description": "Fill out an Application for",
   "properties": {
-    "admissionsId": {
-      "title": "Unique ID of an Admissions Agent",
+    "applicationId": {
+      "title": "Unique ID of this Application",
       "readonly": true,
       "identity": true,
       "type": "string"
     },
     "application": {
-      "title": "Admissions Application",
+      "title": "Application",
       "type": "object",
       "properties": {
         "_id": {
@@ -22,6 +22,12 @@
           "type": "string"
         }
       }
+    },
+    "schoolId": {
+      "title": "School ID",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
     },
     "cards": {
       "title": "Application Cards",
@@ -48,27 +54,6 @@
           }
         ]
       }
-    },
-    "errors": {
-      "title": "Errors",
-      "type":"array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        },
-        "links": [
-          {
-            "title": "Try Again",
-            "rel": "Try Again",
-            "method": "GET",
-            "importance": "content",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
-          }
-        ]
-      }
     }
   },
   "links": [
@@ -84,7 +69,7 @@
       "title": "Save Application",
       "rel": "register",
       "importance": "content",
-      "href": "/api/v1/register/applications/{{applicationId}}",
+      "href": "/api/v1/register/applications/{{applicationId}}/schools/{{schoolId}}",
       "method": "POST",
       "properties": {
         "username": {

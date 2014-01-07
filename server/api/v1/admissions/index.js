@@ -164,7 +164,7 @@ api.get('/:admissionsId/applications/:applicationId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   application.findById(applicationId).exec(function(err, App) {
-    card.find({"owners.application": applicationId}, function(err, Cards) {
+    card.find({"owners.applications": applicationId}, function(err, Cards) {
       res.json({
         admissionsId: admissionsId,
         applicationId: applicationId,
@@ -212,9 +212,9 @@ api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, 
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardBody = req.body;
-  cardBody.owners = [];
-  cardBody.owners.push({application: applicationId});
-  cardBody.owners.push({admissions: admissionsId});
+  cardBody.owners = {};
+  cardBody.owners.applications = applicationId;
+  cardBody.owners.admissions = admissionsId;
   cardBody.type = req.params[0];
   var Card = new card(cardBody);
   Card.save(function(err) {

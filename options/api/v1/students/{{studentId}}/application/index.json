@@ -12,51 +12,28 @@
       "identity": true,
       "type": "string"
     },
-    "applications": {
-      "title": "Student applications",
-      "type": "object",
-      "properties": {
-        "result": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "applicationId": {
-                "type": "string"
-              },
-              "data": {
-                "type": "string"
-              },
-              "student": {
-                "type": "object",
-                "properties": {
-                  "studentId": {
-                    "type": "string"
-                  }
-                }
-              },
-              "schools": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "schoolId": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "links": [
-              {
-                "title": "Full Application {{_id}}",
-                "description": "{{description}}",
-                "rel": "full_{{applicationId}}",
-                "href": "/api/v1/students/{{studentId}}/applications/{{_id}}"
-              }
-            ]
+    "cards": {
+      "title": "Application Cards",
+      "type": "array",
+      "items": {
+        "title": "Card {{}}",
+        "type": "object",
+        "properties": {
+          "type": {
+            "title": "Card Type",
+            "description": "Type of the Card",
+            "type": "string"
           }
-        }
+        },
+        "links": [
+          {
+            "rel": "{{_id}}",
+            "importance": "cards",
+            "template": "/templates/api/v1/card/{{type}}",
+            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
+            "method": "PUT"
+          }
+        ]
       }
     }
   },
