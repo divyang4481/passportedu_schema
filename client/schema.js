@@ -117,6 +117,7 @@ angular.module('schema', ['ngResource'])
             , aLink = angular.copy(link);
           angular.extend(d, data[seg][n]);
           aLink.rel = aLink.rel;
+          angular.extend(aLink, data[seg][n]);
           apiClient.compileLink(root, d, angular.copy(pathParts), aLink);
         }
       }
@@ -125,6 +126,7 @@ angular.module('schema', ['ngResource'])
           , lLink = angular.copy(link);
         angular.extend(d, data[seg]);
         lLink.rel = lLink.rel;
+        angular.extend(lLink.data, data[seg]);
         apiClient.compileLink(root, d, angular.copy(pathParts), lLink);
       }
     }

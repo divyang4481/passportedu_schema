@@ -62,17 +62,14 @@ api.get('/:studentId', function(req, res) {
   var response = {
     studentId: studentId
   };
-  user.find()
-    .select('-_id, -__v, -username, -password, -token, -userPerms')
-    .where({_id: studentId})
-    .exec(function(err, Student) {
-      response.student = Student[0];
-      school.find({_id: { $in: Student[0].schoolIds}}, function(err, Schools) {
-        console.log(err);
-        response.schools = Schools;
-        res.json(response);
-      });
+  user.findById(studentId, function(err, Student) {
+    console.log(studentId, err, Student)
+    response.student = Student;
+    school.find({_id: { $in: Student.schoolIds}}, function(err, Schools) {
+      response.schools = Schools;
+      res.json(response);
     });
+  });
 });
 /**
  *
@@ -162,7 +159,7 @@ api.put('/:studentId/search/schools/:schoolId/save', function(req, res) {
  */
 api.get('/:studentId/application', function(req, res) {
   var studentId = req.params.studentId;
-  card.find({"owners.students": studentId} ,function(err, Cards) {
+  card.find({"owners.students": studentId}, function(err, Cards) {
     res.json({
       studentId: studentId,
       cards: Cards
