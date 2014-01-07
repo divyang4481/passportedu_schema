@@ -4,11 +4,11 @@
     <h1 ng-bind="client.schema.title"></h1>
     <magic-form-link ng-repeat="link in client.links | filter: {rel: 'register'}" link="link"></magic-form-link>
   </div>
-  <div class="row">
+  <div class="pinColumns">
     <div ng-repeat='card in cards'
       ng-model="card"
       ng-include="card.template"
-      class="pull-left">
+      class="pin">
     </div>
   </div>
 
