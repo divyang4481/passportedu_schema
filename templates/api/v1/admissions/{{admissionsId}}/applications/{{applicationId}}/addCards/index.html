@@ -25,14 +25,12 @@
 
     <p ng-bind="client.schema.description"></p>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div ng-repeat='link in client.links | filter: {importance: "cards"}'
-        ng-model="link"
-        ng-include="link.template"
-        class="pull-left"
-        drag>
-      </div>
+  <div class="pinColumns">
+    <div ng-repeat='link in client.links | filter: {importance: "cards"}'
+      ng-model="link"
+      ng-include="link.template"
+      class="pin"
+      drag>
     </div>
   </div>
   <nav class="container navbar-fixed-bottom">

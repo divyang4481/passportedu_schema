@@ -217,7 +217,6 @@ api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, 
   cardBody.owners.push({admissions: admissionsId});
   cardBody.type = req.params[0];
   var Card = new card(cardBody);
-  console.log(cardBody);
   Card.save(function(err) {
     if (err) {
       res.send(415);

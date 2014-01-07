@@ -52,11 +52,11 @@
       </button>
     </div>
   </div>
-  <div class="row">
+  <div class="pinColumns">
     <div ng-repeat='link in client.links | filter: {importance: "cards"}'
       ng-model="link"
       ng-include="link.template"
-      class="pull-left"
+      class="pin"
       drag>
     </div>
   </div>
