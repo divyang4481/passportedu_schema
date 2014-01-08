@@ -5,7 +5,7 @@
     <magic-form-link ng-repeat="link in client.links | filter: {rel: 'register'}" link="link"></magic-form-link>
   </div>
   <div class="pinColumns">
-    <div ng-repeat='card in cards'
+    <div ng-repeat='card in client.links | filter: {importance: "cards"}'
       ng-model="card"
       ng-include="card.template"
       class="pin">
@@ -27,7 +27,6 @@
             ng-bind="link.title"></h4>
         </div>
         <div class="modal-body">
-
           <form class="form-horizontal well">
             <div class="form-group">
               <label class="control-label">Username</label>

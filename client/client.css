@@ -88,6 +88,7 @@ and (orientation: portrait) {
     .container {
         padding: 0px;
     }
+
     .extraSmallCard, .smallCard, .mediumCard, .largeCard, .heroCard {
         margin: 0px;
         margin-bottom: 10px;
@@ -95,13 +96,13 @@ and (orientation: portrait) {
 }
 
 .pinColumns {
-    -moz-column-count: 3;
+    -moz-column-count: 1;
     -moz-column-gap: 10px;
     -moz-column-fill: auto;
-    -webkit-column-count: 3;
+    -webkit-column-count: 1;
     -webkit-column-gap: 10px;
     -webkit-column-fill: auto;
-    column-count: 2;
+    column-count: 1;
     column-gap: 3px;
     column-fill: auto;
 }
@@ -116,19 +117,36 @@ and (orientation: portrait) {
     border: none;
 }
 
-
-@media all and (max-width: 1280px) {
+@media (min-width: 992px) {
+    .container {
+        width: 750px;
+    }
     .pinColumns {
+        -moz-column-gap: 3px;
+        -moz-column-fill: auto;
+        -webkit-column-gap: 3px;
+        -webkit-column-fill: auto;
+        column-gap: 3px;
+        column-fill: auto;
         -moz-column-count: 2;
         -webkit-column-count: 2;
         column-count: 2;
     }
 }
 
-@media all and (max-width: 960px) {
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
     .pinColumns {
-        -moz-column-count: 1;
-        -webkit-column-count: 1;
-        column-count: 1;
+        -moz-column-gap: 3px;
+        -moz-column-fill: auto;
+        -webkit-column-gap: 3px;
+        -webkit-column-fill: auto;
+        column-gap: 3px;
+        column-fill: auto;
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+        column-count: 3;
     }
 }

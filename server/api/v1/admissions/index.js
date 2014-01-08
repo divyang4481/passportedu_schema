@@ -9,7 +9,8 @@ var express = require('express')
   , card = require('../../../models/card')
   , application = require('../../../models/application')
   , school = require('../../../models/school')
-  , queryM = require('../../../verbs/query');
+  , queryM = require('../../../verbs/query')
+  , q = require('q');
 /**
  *
  */
@@ -67,10 +68,10 @@ api.get('/:admissionsId', function(req, res) {
     .where({_id: admissionsId})
     .exec(function(err, Admissions) {
       response.student = Admissions[0];
-//      school.find({_id: { $in: Admissions[0].schoolIds}}, function(err, Schools) {
-//        response.schools = Schools;
-        res.json(response);
-//      });
+      //      school.find({_id: { $in: Admissions[0].schoolIds}}, function(err, Schools) {
+      //        response.schools = Schools;
+      res.json(response);
+      //      });
     });
 });
 /**
@@ -157,21 +158,28 @@ api.post('/:admissionsId/applications', function(req, res) {
     res.send(300);
   });
 });
-/**
- *
- */
-api.get('/:admissionsId/applications/:applicationId', function(req, res) {
-  var admissionsId = req.params.admissionsId
-    , applicationId = req.params.applicationId;
+var getApplicationCards = function(admissionsId, applicationId) {
+  var deferred = q.defer();
   application.findById(applicationId).exec(function(err, App) {
     card.find({"owners.applications": applicationId}, function(err, Cards) {
-      res.json({
+      deferred.resolve({
         admissionsId: admissionsId,
         applicationId: applicationId,
         application: _.omit(App, ['_id']),
         cards: Cards
       });
     });
+  });
+  return deferred.promise;
+};
+/**
+ *
+ */
+api.get('/:admissionsId/applications/:applicationId', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId;
+  getApplicationCards(admissionsId, applicationId).then(function(response) {
+    res.json(response);
   });
 });
 /**
@@ -222,8 +230,9 @@ api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, 
       res.send(415);
       return;
     }
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/addCards');
-    res.send(300);
+    getCardsAndApp(admissionsId, applicationId).then(function(response) {
+      res.json(response);
+    });
   });
 });
 /**
@@ -232,35 +241,39 @@ api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, 
 api.get('/:admissionsId/applications/:applicationId/addCards', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
-  application.findById(applicationId).exec(function(err, App) {
-    req.query.owners = {admissions: admissionsId};
-    queryM(card)(req, function(err, data) {
-      var response = {
-        admissionsId: admissionsId,
-        applicationId: applicationId,
-        application: _.omit(App, ['_id']),
-        cards: [
-          {type: "application/attendance/term"},
-          {type: "application/documents/transcript"},
-          {type: "application/documents/passport"},
-          {type: "application/documents/government"},
-          {type: "application/contact/basic"},
-          {type: "application/contact/guardian"},
-          {type: "application/contact/address/home"},
-          {type: "application/contact/address/mailing"},
-          {type: "application/nationality"},
-          {type: "application/demographic"},
-          {type: "application/language"},
-          {type: "application/academic/exams/sat"},
-          {type: "application/academic/exams/gre"},
-          {type: "application/academic/exams/gmat"},
-          {type: "application/academic/schools/previous"}
-        ]
-      };
-      res.json(response);
-    });
+  getCardsAndApp(admissionsId, applicationId).then(function(response) {
+    res.json(response);
   });
 });
+var getCardsAndApp = function(admissionsId, applicationId) {
+  var deferred = q.defer();
+  application.findById(applicationId).exec(function(err, App) {
+    var response = {
+      admissionsId: admissionsId,
+      applicationId: applicationId,
+      application: _.omit(App, ['_id']),
+      cards: [
+        {type: "application/attendance/term"},
+        {type: "application/documents/transcript"},
+        {type: "application/documents/passport"},
+        {type: "application/documents/government"},
+        {type: "application/contact/basic"},
+        {type: "application/contact/guardian"},
+        {type: "application/contact/address/home"},
+        {type: "application/contact/address/mailing"},
+        {type: "application/nationality"},
+        {type: "application/demographic"},
+        {type: "application/language"},
+        {type: "application/academic/exams/sat"},
+        {type: "application/academic/exams/gre"},
+        {type: "application/academic/exams/gmat"},
+        {type: "application/academic/schools/previous"}
+      ]
+    };
+    deferred.resolve(response);
+  });
+  return deferred.promise;
+}
 /**
  *
  */

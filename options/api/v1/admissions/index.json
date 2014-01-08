@@ -33,6 +33,9 @@
       "title": "Register",
       "rel": "register",
       "importance": "content",
+      "semantics": {
+
+      },
       "href": "/api/v1/register/admissions",
       "method": "POST",
       "properties": {
