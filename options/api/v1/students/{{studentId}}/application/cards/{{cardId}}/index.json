@@ -58,30 +58,24 @@
       "href": "/api/v1/students/{{studentId}}/application"
     },
     {
-      "title": "Cards",
-      "rel": "cards",
-      "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/application/cards"
-    },
-    {
       "title": "Card",
       "rel": "self",
       "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+      "href": "/api/v1/students/{{studentId}}/applications/cards/{{cardId}}"
     },
     {
       "title": "Delete this Application Card",
       "rel": "delete",
       "importance": "content",
       "method": "DELETE",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}"
+      "href": "/api/v1/students/{{studentId}}/applications/cards/{{cardId}}"
     },
     {
       "title": "Update this Application Card",
       "rel": "update",
       "importance": "content",
       "method": "PUT",
-      "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{cardId}}",
+      "href": "/api/v1/students/{{studentId}}/applications/cards/{{cardId}}",
       "properties": {
         "data": {
           "title": "Data",

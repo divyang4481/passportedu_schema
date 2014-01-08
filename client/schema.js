@@ -1,39 +1,43 @@
 angular.module('schema', ['ngResource'])
   .config(function($httpProvider) {
-    var interceptor = ['$rootScope', '$q', '$location', 'jsonClient', function(rootScope, $q, $location, jsonClient) {
-      var apiClient = jsonClient();
-      rootScope.$on('$locationChangeSuccess', function() {
-        rootScope.actualLocation = $location.path();
-      });
-
-      rootScope.$watch(function () {return $location.path()}, function (newLocation, oldLocation) {
-        if(rootScope.actualLocation === newLocation) {
-          apiClient.buildClient(newLocation);
+    /**
+     * Intercept location changes so updating api endpoint
+     */
+    var interceptor = ['$rootScope', '$q', '$location', 'jsonClient',
+      function(rootScope, $q, $location, jsonClient) {
+        rootScope.$on('$locationChangeSuccess', function() {
+          rootScope.actualLocation = $location.path();
+        });
+        rootScope.$watch(function() {
+          return $location.path()
+        }, function(newLocation, oldLocation) {
+          if (rootScope.actualLocation === newLocation) {
+            jsonClient().buildClient(newLocation);
+          }
+        });
+        var success = function(response) {
+          return response;
+        };
+        var error = function(response) {
+          var status = response.status;
+          if (status == 300) {
+            var url = response.headers().location;
+            apiClient.buildClient(url);
+          }
+          if (status == 415) {
+            apiClient.errors = [
+              {
+                message: 'Please choose the correct mediaType and resubmit'
+              }
+            ];
+          }
+          // otherwise
+          return $q.reject(response);
+        };
+        return function(promise) {
+          return promise.then(success, error);
         }
-      });
-      var success = function(response) {
-        return response;
-      };
-      var error = function(response) {
-        var status = response.status;
-        if (status == 300) {
-          var url = response.headers().location;
-          apiClient.buildClient(url);
-        }
-        if (status == 415) {
-          apiClient.errors = [
-            {
-              message: "Please choose the correct mediaType and resubmit"
-            }
-          ];
-        }
-        // otherwise
-        return $q.reject(response);
-      };
-      return function(promise) {
-        return promise.then(success, error);
-      }
-    }];
+      }];
     $httpProvider.responseInterceptors.push(interceptor);
   })
   .factory('jsonClient', function() {
@@ -42,6 +46,35 @@ angular.module('schema', ['ngResource'])
       return apiClient;
     }
   })
+  .factory('debounce', ['$timeout', function($timeout) {
+    /**
+     * will cal fn once after timeout even if more than one call wdo debounced fn was made
+     * @param {Function} fn to call debounced
+     * @param {Number} timeout
+     * @param {boolean} apply will be passed to $timeout as last param, if the debounce is triggering infinite digests, set this to false
+     * @returns {Function} which you can call instead fn as if you were calling fn
+     */
+    function debounce(fn, timeout, apply) {
+      timeout = angular.isUndefined(timeout) ? 0 : timeout;
+      apply = angular.isUndefined(apply) ? true : apply; // !!default is true! most suitable to my experience
+      var nthCall = 0;
+      return function() { // intercepting fn
+        var that = this;
+        var argz = arguments;
+        nthCall++;
+        var later = (function(version) {
+          return function() {
+            if (version === nthCall) {
+              return fn.apply(that, argz);
+            }
+          };
+        })(nthCall);
+        return $timeout(later, timeout, apply);
+      };
+    }
+
+    return debounce;
+  }])
   .factory('jsonSchema', function($resource, $interpolate, $q, $http, $location, jsonClient) {
     var apiClient = jsonClient();
     /**
@@ -137,7 +170,7 @@ angular.module('schema', ['ngResource'])
      */
     apiClient.resolveSchema = function(url) {
       var deferred = $q.defer();
-      $http({method: "OPTIONS", url: url}).success(function(schema, status, headers, config) {
+      $http({method: 'OPTIONS', url: url}).success(function(schema, status, headers, config) {
         deferred.resolve(schema);
       }).error(function(data, status, headers, config) {
           console.error(data, status, headers);
@@ -206,8 +239,8 @@ angular.module('schema', ['ngResource'])
      */
     apiClient.traverse = function(rel, params) {
       var deferred = $q.defer();
-      apiClient.options(rel, params).then(function(schema) {
-        apiClient.link(rel, params).then(function(data) {
+      apiClient.link(rel, params).then(function(data) {
+        apiClient.options(rel, params).then(function(schema) {
           apiClient.data = data;
           apiClient.schema = schema;
           apiClient.links = [];
@@ -218,6 +251,7 @@ angular.module('schema', ['ngResource'])
           apiClient.schema = JSON.parse(flatSchema);
           deferred.resolve(apiClient);
         });
+      }, function() {
       });
       return deferred.promise;
     };
@@ -231,6 +265,7 @@ angular.module('schema', ['ngResource'])
      */
     apiClient.link = function(rel, params, addHeaders) {
       var deferred = $q.defer();
+      // Setting up link
       apiClient.findRelLink(rel, apiClient.links).then(function(link) {
         var eLink = angular.copy(link)
           , flatLink = JSON.stringify(eLink)
@@ -241,7 +276,7 @@ angular.module('schema', ['ngResource'])
           , methods = {}
           , defaults = {}
           , headers = {
-            "Content-Type": "application/json"
+            'Content-Type': 'application/json'
           };
         var payload = {};
         for(var p in eLink.properties) {
@@ -256,9 +291,16 @@ angular.module('schema', ['ngResource'])
         angular.forEach(eLink.properties, function(config, prop) {
           defaults[prop] = angular.isDefined(config.default) ? config.default : null;
         });
-        apiClient.resourceURLTraverse(eLink.href, defaults, methods, method, payload).then(function(response) {
-          deferred.resolve(response);
-        });
+        // Now doing the link traversal
+        var nofollow = angular.isDefined(eLink.nofollow);
+        apiClient.resourceURLTraverse(eLink.href, defaults, methods, method, payload, nofollow).then(
+          function(response) {
+            if (nofollow) {
+              deferred.resolve(response);
+            } else {
+              deferred.reject();
+            }
+          });
       });
       return deferred.promise;
     }
@@ -269,23 +311,21 @@ angular.module('schema', ['ngResource'])
      * @param methods
      * @param method
      * @param payload
+     * @param nofollow
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
-    apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload) {
-      $location.path(url);
-      apiClient.url = url;
+    apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload, nofollow) {
+      if (!nofollow) {
+        $location.path(url);
+        apiClient.url = url;
+      }
       var deferred = $q.defer();
       var resource = $resource(url, defaults, methods);
       resource[method](payload, function(response) {
-        apiClient.data = response;
         deferred.resolve(response);
       });
       return deferred.promise;
-    }
+    };
     return apiClient.buildClient;
-  })
-  .filter('navLinks', function() {
-    return function(links) {
-    }
   });
 

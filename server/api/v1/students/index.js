@@ -9,7 +9,8 @@ var express = require('express')
   , card = require('../../../models/card')
   , application = require('../../../models/application')
   , school = require('../../../models/school')
-  , queryM = require('../../../verbs/query');
+  , queryM = require('../../../verbs/query')
+  , q = require('q');
 /**
  *
  */
@@ -157,13 +158,23 @@ api.put('/:studentId/search/schools/:schoolId/save', function(req, res) {
 /**
  *
  */
-api.get('/:studentId/application', function(req, res) {
-  var studentId = req.params.studentId;
+var getApplication = function(studentId) {
+  var deferred = q.defer();
   card.find({"owners.students": studentId}, function(err, Cards) {
-    res.json({
+    deferred.resolve({
       studentId: studentId,
       cards: Cards
     });
+  });
+  return deferred.promise;
+}
+/**
+ *
+ */
+api.get('/:studentId/application', function(req, res) {
+  var studentId = req.params.studentId;
+  getApplication(studentId).then(function(response) {
+    res.json(response);
   });
 });
 /**
@@ -171,12 +182,10 @@ api.get('/:studentId/application', function(req, res) {
  */
 api.get('/:studentId/application/cards/:cardId', function(req, res) {
   var studentId = req.params.studentId
-    , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
   card.findById(cardId).exec(function(err, Card) {
     res.json({
       studentId: studentId,
-      applicationId: applicationId,
       cardId: cardId,
       card: Card
     });
@@ -187,12 +196,12 @@ api.get('/:studentId/application/cards/:cardId', function(req, res) {
  */
 api.put('/:studentId/application/cards/:cardId', function(req, res) {
   var studentId = req.params.studentId
-    , applicationId = req.params.applicationId
     , cardId = req.params.cardId
-    , cardPost = req.body;
-  card.findOneAndUpdate(cardId, cardPost, function(err, Card) {
-    res.set('Location', '/api/v1/students/' + studentId + '/application/cards/' + Card._id);
-    res.send(300);
+    , cardPost = _.omit(req.body, '_id');
+  card.update({_id: cardId}, cardPost, function(err, affected, Card) {
+    getApplication(studentId).then(function(response) {
+      res.json(response);
+    });
   });
 });
 /**
@@ -200,10 +209,9 @@ api.put('/:studentId/application/cards/:cardId', function(req, res) {
  */
 api.delete('/:studentId/application/cards/:cardId', function(req, res) {
   var studentId = req.params.studentId
-    , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
   card.findOneAndRemove({_id: cardId}, function(err) {
-    res.set('Location', '/api/v1/students/' + studentId + '/application/cards');
+    res.set('Location', '/api/v1/students/' + studentId + '/application');
     res.send(300);
   });
 });

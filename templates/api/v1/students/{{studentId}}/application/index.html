@@ -8,8 +8,9 @@
 </div>
 <div class="pinColumns">
   <div ng-repeat='card in client.links | filter: {importance: "cards"}'
-    ng-model="card"
     ng-include="card.template"
-    class="pin">
+    class="pin"
+    ng-model="card"
+    auto-save-card>
   </div>
 </div>

@@ -6,22 +6,18 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
       return input.replace(/[^a-zA-Z0-9]/g, '_');
     };
   })
-  .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema, base64) {
+  .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema) {
     $scope.client = {};
     $scope.traverse = function() {
-      angular.element('.modal').modal('hide');
-      $('.modal-backdrop').remove();
+      //      angular.element('.modal').modal('hide');
+      //      $('.modal-backdrop').remove();
       $scope.client.traverse(this.link.rel, {});
-    };
-    $scope.getTemplate = function() {
-      return '/templates/' + $scope.client.url;
     };
     var startURL = $location.path();
     startURL = startURL ? startURL : '/api/v1';
     new jsonSchema(startURL).then(function(client) {
       var passport = client;
       $scope.client = passport;
-      $scope.client.forms = {};
     });
   })
   .controller('CardSelection', function($scope) {
@@ -30,11 +26,16 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
       $scope.client.traverse(card.rel, {type: card.rel});
     };
   })
-  .controller('StudentApplication', function($scope, $filter) {
-    $scope.saveCard = function() {
-      $scope.client.traverse(this.link.rel, {
-        cards: $scope.cards
-      });
+  .directive('autoSaveCard', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function(scope, element, attrs, ngModel) {
+        element.bind('keypress', function(e) {
+          var link = ngModel.$viewValue;
+          scope.client.link(link.rel, link);
+        });
+      }
     };
   })
   .controller('AnonApplication', function($scope, $filter) {
