@@ -118,7 +118,7 @@
       "title": "Preview",
       "description": "{{application.type}}",
       "rel": "preview",
-      "target": "preview",
+      "target": "new",
       "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/applications/{{application._id}}/schools/1234"

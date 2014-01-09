@@ -292,10 +292,9 @@ angular.module('schema', ['ngResource'])
           defaults[prop] = angular.isDefined(config.default) ? config.default : null;
         });
         // Now doing the link traversal
-        var nofollow = angular.isDefined(eLink.nofollow);
-        apiClient.resourceURLTraverse(eLink.href, defaults, methods, method, payload, nofollow).then(
+        apiClient.resourceURLTraverse(eLink.href, defaults, methods, method, payload, eLink.target).then(
           function(response) {
-            if (!nofollow) {
+            if (eLink.target !== 'nofollow') {
               deferred.resolve(response);
             } else {
               deferred.reject();
@@ -311,19 +310,24 @@ angular.module('schema', ['ngResource'])
      * @param methods
      * @param method
      * @param payload
-     * @param nofollow
+     * @param target
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
-    apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload, nofollow) {
-      if (!nofollow) {
-        $location.path(url);
-        apiClient.url = url;
-      }
+    apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload, target) {
       var deferred = $q.defer();
-      var resource = $resource(url, defaults, methods);
-      resource[method](payload, function(response) {
-        deferred.resolve(response);
-      });
+      if (target === 'new') {
+        window.open('#' + url);
+        deferred.reject({});
+      } else {
+        if (target !== 'nofollow') {
+          $location.path(url);
+          apiClient.url = url;
+        }
+        var resource = $resource(url, defaults, methods);
+        resource[method](payload, function(response) {
+          deferred.resolve(response);
+        });
+      }
       return deferred.promise;
     };
     return apiClient.buildClient;
