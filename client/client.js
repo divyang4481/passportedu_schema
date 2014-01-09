@@ -9,8 +9,8 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
   .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema) {
     $scope.client = {};
     $scope.traverse = function() {
-      //      angular.element('.modal').modal('hide');
-      //      $('.modal-backdrop').remove();
+      angular.element('.modal').modal('hide');
+      $('.modal-backdrop').remove();
       $scope.client.traverse(this.link.rel, {});
     };
     var startURL = $location.path();
@@ -26,14 +26,17 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
       $scope.client.traverse(card.rel, {type: card.rel});
     };
   })
-  .directive('autoSaveCard', function() {
+  .directive('autoSaveCard', function(debounce) {
     return {
       restrict: 'A',
       require: 'ngModel',
       link: function(scope, element, attrs, ngModel) {
-        element.bind('keypress', function(e) {
+        var saveIt = debounce(function() {
           var link = ngModel.$viewValue;
           scope.client.link(link.rel, link);
+        }, 100);
+        element.bind('keypress', function(e) {
+          saveIt();
         });
       }
     };

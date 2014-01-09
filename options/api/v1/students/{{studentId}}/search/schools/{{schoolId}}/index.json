@@ -267,7 +267,7 @@
           "title": "Apply Here",
           "description": "{{data.institutionName}}",
           "rel": "addSchool",
-          "importance": "content",
+          "importance": "callToAction",
           "method": "PUT",
           "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}/apply"
         },
@@ -275,7 +275,7 @@
           "title": "Save this School for Later",
           "description": "{{data.institutionName}}",
           "rel": "saveSchool",
-          "importance": "content",
+          "importance": "callToAction",
           "method": "PUT",
           "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}/save"
         }
@@ -305,7 +305,7 @@
     },
     {
       "title": "My Application",
-      "rel": "applications",
+      "rel": "application",
       "importance": "navigation",
       "href": "/api/v1/students/{{studentId}}/application"
     },
@@ -322,6 +322,20 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/students/{{studentId}}/search/schools/{{school._id}}"
+    },
+    {
+      "title": "Search Schools",
+      "rel": "search",
+      "importance": "callToAction",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}/search/schools"
+    },
+    {
+      "title": "My Application",
+      "rel": "application",
+      "importance": "callToAction",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}/application"
     }
   ]
 }

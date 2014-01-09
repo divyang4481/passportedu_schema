@@ -4,6 +4,24 @@
 
   <p ng-bind="client.schema.description"></p>
 
+  <div class="btn-group">
+    <button ng-repeat='link in client.links | filter: {importance: "callToAction"}'
+      type="button"
+      class="btn"
+      ng-click="traverse()"
+      ng-class="{
+        'btn-danger': link.method == 'DELETE',
+        'btn-success': link.method != 'DELETE'
+        }">
+      <i class="glyphicon"
+        ng-class="{
+        'glyphicon-minus-sign': link.method == 'DELETE',
+        'glyphicon-plus-sign': link.method != 'DELETE'
+        }"></i>&nbsp;
+      <span ng-bind="link.title"></span>
+    </button>
+  </div>
+
   <div class="clearfix"></div>
 </div>
 <div class="container">

@@ -22,7 +22,7 @@ angular.module('schema', ['ngResource'])
           var status = response.status;
           if (status == 300) {
             var url = response.headers().location;
-            apiClient.buildClient(url);
+            jsonClient().buildClient(url);
           }
           if (status == 415) {
             apiClient.errors = [
@@ -295,7 +295,7 @@ angular.module('schema', ['ngResource'])
         var nofollow = angular.isDefined(eLink.nofollow);
         apiClient.resourceURLTraverse(eLink.href, defaults, methods, method, payload, nofollow).then(
           function(response) {
-            if (nofollow) {
+            if (!nofollow) {
               deferred.resolve(response);
             } else {
               deferred.reject();

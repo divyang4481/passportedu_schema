@@ -31,8 +31,8 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
       cardBody.type = cardLink.type;
       cardBody.owners = {};
       cardBody.owners.students = studentId;
-      var Card = new card(cardBody);
-      Card.save();
+      card.create(cardBody);
+      console.log(cardLink, cardBody);
     });
     if (err) {
       res.json({

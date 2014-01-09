@@ -200,7 +200,7 @@ api.put('/:admissionsId/applications/:applicationId', function(req, res) {
 api.delete('/:admissionsId/applications/:applicationId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
-  application.findOneAndRemove(applicationId, function(err) {
+  application.remove({_id: applicationId}, function(err) {
     if (err) {
       res.json({
         "errors": [
