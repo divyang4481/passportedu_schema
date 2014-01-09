@@ -16,13 +16,13 @@
       <div class="collapse navbar-collapse" id="navbar-collapse-1">
         <ul class="nav navbar-nav">
           <magic-link
-            ng-repeat='link in client.links | filter: {importance:"navigation"}'
+            ng-repeat='link in client.links | semantics: {importance: "navigation"}'
             ng-animate="{enter: 'fade-show', leave: 'fade-hide'}"
             click="traverse"
             link="link"></magic-link>
         </ul>
         <ul class="nav navbar-nav navbar-right"
-          ng-show='(client.links | filter: {importance:"administrative"}).length'>
+          ng-show='(client.links | semantics: {importance: "administrative"}).length'>
           <drop-down-nav links='client.links'
             importance="administrative"
             title="'Admin'"
@@ -37,32 +37,32 @@
     <p ng-bind="client.schema.description"></p>
 
     <div class="btn-group">
-      <button ng-repeat='link in client.links | filter: {importance: "callToAction"}'
+      <button ng-repeat='link in client.links | semantics: {importance: "callToAction"}'
         type="button"
         class="btn"
         ng-click="traverse()"
         ng-class="{
-        'btn-danger': link.method == 'DELETE',
-        'btn-success': link.method != 'DELETE'
+        'btn-danger': link._link.method == 'DELETE',
+        'btn-success': link._link.method != 'DELETE'
         }">
         <i class="glyphicon"
           ng-class="{
-        'glyphicon-minus-sign': link.method == 'DELETE',
-        'glyphicon-plus-sign': link.method != 'DELETE'
+        'glyphicon-minus-sign': link._link.method == 'DELETE',
+        'glyphicon-plus-sign': link._link.method != 'DELETE'
         }"></i>&nbsp;
-        <span ng-bind="link.title"></span>
+        <span ng-bind="link._link.title"></span>
       </button>
     </div>
   </div>
   <div class="pinColumns">
-    <div ng-repeat='link in client.links | filter: {importance: "cards"}'
+    <div ng-repeat='link in client.links | semantics: {importance: "cards"}'
       ng-model="link"
-      ng-include="link.template"
+      ng-include="link._link.template"
       class="pin"
       drag>
     </div>
   </div>
-  <nav ng-show='(client.links | filter: {importance: "cards"}).length'
+  <nav ng-show='(client.links | semantics: {importance: "cards"}).length'
     class="container navbar-fixed-bottom">
     <div drop="performLinkAction"
       class="alert alert-danger">

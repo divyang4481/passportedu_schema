@@ -11,7 +11,7 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
     $scope.traverse = function() {
       angular.element('.modal').modal('hide');
       $('.modal-backdrop').remove();
-      $scope.client.traverse(this.link.rel, {});
+      $scope.client.traverse(this.link._link.rel, this.link);
     };
     var startURL = $location.path();
     startURL = startURL ? startURL : '/api/v1';
@@ -33,7 +33,7 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
       link: function(scope, element, attrs, ngModel) {
         var saveIt = debounce(function() {
           var link = ngModel.$viewValue;
-          scope.client.link(link.rel, link);
+          scope.client.link(link._link.rel, link);
         }, 100);
         element.bind('keypress', function(e) {
           saveIt();

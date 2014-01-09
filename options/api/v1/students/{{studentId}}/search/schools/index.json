@@ -6,6 +6,9 @@
   "name": "Search ror Schools",
   "description": "Find the right schools.",
   "properties": {
+    "cardType": {
+      "type": "string"
+    },
     "result": {
       "type": "array",
       "items": {
@@ -260,10 +263,31 @@
         "links": [
           {
             "title": "View Details",
-            "description": "{{data.institutionName}}",
+            "description": "view more information about this school.",
             "rel": "full_{{_id}}",
+            "associated": {
+              "apply": "apply_{{_id}}",
+              "save": "save_{{_id}}"
+            },
+            "template": "/templates/api/v1/card/{{cardType}}",
             "method": "GET",
             "importance": "content",
+            "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
+          },
+          {
+            "title": "Apply Now",
+            "description": "Apply to this school now, and see the application.",
+            "rel": "apply_{{_id}}",
+            "template": "/templates/api/v1/card/{{cardType}}",
+            "method": "GET",
+            "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
+          },
+          {
+            "title": "Save",
+            "description": "Save this school for later.",
+            "rel": "save_{{_id}}",
+            "template": "/templates/api/v1/card/{{cardType}}",
+            "method": "GET",
             "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
           }
         ]
@@ -320,89 +344,9 @@
     {
       "title": "Search Schools",
       "rel": "self",
-      "importance": "tool",
+      "importance": "search",
       "href": "/api/v1/students/{{studentId}}/search/schools",
       "properties": {
-        "offset": {
-          "title": "offset",
-          "description": "Offset to start with",
-          "required": false,
-          "type": "number"
-        },
-        "limit": {
-          "title": "limit",
-          "description": "Number of items to return",
-          "required": false,
-          "type": "number"
-        },
-        "data.institutionName": {
-          "title": "School Name",
-          "description": "School Name is equal to",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.city": {
-          "title": "City",
-          "description": "City is equal to",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.state": {
-          "title": "State",
-          "description": "State is equal to",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.zip": {
-          "title": "Zip",
-          "description": "Zip is equal to",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.financesRequired": {
-          "title": "Finances Required",
-          "description": "amount required for acceptance",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.diplomaRequired": {
-          "title": "Diploma Required",
-          "description": "is it required for acceptance",
-          "identity": false,
-          "readonly": false,
-          "type": "enum",
-          "enum": [
-            true,
-            false
-          ]
-        },
-        "data.referencesRequired": {
-          "title": "References Required",
-          "description": "are they required for acceptance",
-          "identity": false,
-          "readonly": false,
-          "type": "enum",
-          "enum": [
-            true,
-            false
-          ]
-        },
-        "data.essaysRequired": {
-          "title": "Essays Required ",
-          "description": "is one required for acceptance",
-          "identity": false,
-          "readonly": false,
-          "type": "enum",
-          "enum": [
-            true,
-            false
-          ]
-        },
         "data.institutionName*": {
           "title": "Institution Name",
           "description": "contains",
@@ -417,246 +361,132 @@
           "readonly": false,
           "type": "string"
         },
-        "data.totalEnrollment>": {
-          "title": "Total Enrollment",
-          "description": "is greater than",
+        "data.financesRequired<": {
+          "title": "minimum finances required",
+          "description": "amount required for acceptance",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
-        "data.totalUndergraduateEnrollment>": {
-          "title": "Total Undergraduate Enrollment",
-          "description": "is greater than",
+        "data.diplomaRequired": {
+          "title": "is diploma required?",
+          "description": "is it required for acceptance",
           "identity": false,
           "readonly": false,
-          "type": "number"
+          "type": "enum",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "data.referencesRequired": {
+          "title": "are references required?",
+          "description": "are they required for acceptance",
+          "identity": false,
+          "readonly": false,
+          "type": "enum",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "data.essaysRequired": {
+          "title": "are essays required ",
+          "description": "is one required for acceptance",
+          "identity": false,
+          "readonly": false,
+          "type": "enum",
+          "enum": [
+            true,
+            false
+          ]
         },
         "data.percentInternationalStudents>": {
-          "title": "Percent International Students",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.percentFemaleStudent>": {
-          "title": "Percent Female Students",
+          "title": "% international is greater than",
           "description": "is greater than",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.percentAdmitted>": {
-          "title": "Percent Admitted",
+          "title": "% admitted is greater than",
           "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATCriticalReading25>": {
-          "title": "SAT Critical Reading 25th Percentile",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATCriticalReading75>": {
-          "title": "SAT Critical Reading 75th Percentile",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATMath25>": {
-          "title": "SAT Math 25th Percentile",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATMath75>": {
-          "title": "SAT Math 75th Percentile",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATWriting25>": {
-          "title": "SAT Writing 25th Percentile",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATWriting75>": {
-          "title": "SAT Writing 75th Percentile",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SAT>": {
-          "title": "SAT Score",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.TOEFLScore>": {
-          "title": "TOEFL Score",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.IELTSScore>": {
-          "title": "IELTS Score",
-          "description": "is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.GPA>": {
-          "title": "GPA",
-          "description": "(High School Grade Point Average) is greater than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.totalEnrollment<": {
-          "title": "Total Enrollment",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.applicationFee<": {
-          "title": "Application Fee",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.totalUndergraduateEnrollment<": {
-          "title": "Total Undergraduate Enrollment",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.percentInternationalStudents<": {
-          "title": "Percent International Students",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.percentFemaleStudent<": {
-          "title": "Percent Female Students",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.percentAdmitted<": {
-          "title": "Percent Admitted",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.normalFeesTuition<": {
-          "title": "Normal Fees & Tuition",
-          "description": "are less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.outOfStateTuition<": {
-          "title": "Out Of State Tuition",
-          "description": "are less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.outOfStateFees<": {
-          "title": "Out Of State Fees",
-          "description": "are less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATCriticalReading25<": {
-          "title": "SAT Critical Reading 25th Percentile",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATCriticalReading75<": {
-          "title": "SAT Critical Reading 25th Percentile",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATMath25<": {
-          "title": "SAT Math 25th Percentile",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATMath75<": {
-          "title": "SAT Math 75th Percentile",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATWriting25<": {
-          "title": "SAT Writing 25the Percentile",
-          "description": "is less than",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATWriting75<": {
-          "title": "SAT Writing 75th Percentile",
-          "description": "is less than",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.SAT<": {
-          "title": "SAT Score",
+          "title": "SAT acceptable is less than",
           "description": "acceptable score is less than",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.TOEFLScore<": {
-          "title": "TOEFL Score",
+          "title": "TOEFL acceptable is less than",
           "description": "acceptable score is less than",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.IELTSScore<": {
-          "title": "IELTS Score",
+          "title": "IELTS acceptable is less than",
           "description": "acceptable score is less than",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.GPA<": {
-          "title": "GPA",
+          "title": "GPA acceptable is less than",
           "description": "acceptable GPA is less than",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
+        "data.SAT>": {
+          "title": "SAT accepted is greater than",
+          "description": "is greater than",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.TOEFLScore>": {
+          "title": "TOEFL accepted is greater than",
+          "description": "is greater than",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.IELTSScore>": {
+          "title": "IELTS accepted is greater than",
+          "description": "is greater than",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.GPA>": {
+          "title": "GPA accepted is greater than",
+          "description": "(High School Grade Point Average) is greater than",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.applicationFee<": {
+          "title": "application fee is less than",
+          "description": "is less than",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.outOfStateTuition<": {
+          "title": "tuition is less than",
+          "description": "are less than",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
         "data.financesRequired<": {
-          "title": "Finances Required",
+          "title": "finances required are less than",
           "description": "are less than",
           "identity": false,
           "readonly": false,

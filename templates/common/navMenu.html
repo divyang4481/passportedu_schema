@@ -11,9 +11,9 @@
     </div>
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <magic-link ng-repeat='link in client.links | filter: {importance:"navigation"}' click="traverse" link="link" ng-cloak></magic-link>
+        <magic-link ng-repeat='link in client.links | semantics: {importance: "navigation"}' click="traverse" link="link" ng-cloak></magic-link>
       </ul>
-      <ul class="nav navbar-nav navbar-right" ng-show='(client.links | filter: {importance:"administrative"}).length'>
+      <ul class="nav navbar-nav navbar-right" ng-show='(client.links | semantics: {importance:"administrative"}).length'>
         <drop-down-nav links='client.links' importance="administrative" title="'Admin'" click="traverse"></drop-down-nav>
       </ul>
     </div>

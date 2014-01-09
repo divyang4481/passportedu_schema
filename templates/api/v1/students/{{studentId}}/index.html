@@ -9,14 +9,14 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div ng-repeat='link in client.links | filter: {importance:"tool"}' class="panel panel-default" ng-class="link.card">
+      <div ng-repeat='link in client.links | semantics: {importance: "tool"}' class="panel panel-default" ng-class="link._link.card">
         <div class="panel-body">
           <magic-form-content click="traverse" link="link"></magic-form-content>
         </div>
       </div>
     </div>
     <div class="col-md-8">
-      <div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default" ng-class="link.card">
+      <div ng-repeat='link in client.links | semantics: {importance: "content"}' class="panel panel-default" ng-class="link._link.card">
         <div class="panel-body">
           <magic-form-content click="traverse" link="link"></magic-form-content>
         </div>

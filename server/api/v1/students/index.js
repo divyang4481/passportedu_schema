@@ -109,6 +109,7 @@ api.delete('/:studentId/schools/:schoolId', function(req, res) {
 api.get('/:studentId/search/schools', function(req, res) {
   queryM(school)(req, function(err, response) {
     response.studentId = req.params.studentId;
+    response.cardType = 'search/results/schools';
     res.json(response);
   });
 });

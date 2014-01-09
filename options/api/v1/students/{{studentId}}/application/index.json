@@ -29,7 +29,7 @@
           {
             "rel": "{{_id}}",
             "importance": "cards",
-            "nofollow": true,
+            "target": "nofollow",
             "template": "/templates/api/v1/card/{{type}}",
             "href": "/api/v1/students/{{studentId}}/application/cards/{{_id}}",
             "method": "PUT"

@@ -40,6 +40,19 @@ angular.module('schema', ['ngResource'])
       }];
     $httpProvider.responseInterceptors.push(interceptor);
   })
+  .filter('semantics', function() {
+    return function(links, semantics) {
+      var filtered = [];
+      angular.forEach(links, function (link) {
+        angular.forEach(semantics, function(value, key) {
+          if (link._link[key] == value) {
+            filtered.push(link);
+          }
+        });
+      });
+      return filtered;
+    };
+  })
   .factory('jsonClient', function() {
     var apiClient = {};
     return function() {
@@ -86,7 +99,7 @@ angular.module('schema', ['ngResource'])
     apiClient.findRelLink = function(rel, links) {
       var deferred = $q.defer();
       angular.forEach(links, function(link) {
-        if (link.rel === rel) {
+        if (link._link.rel === rel) {
           deferred.resolve(link);
         }
       });
@@ -136,7 +149,8 @@ angular.module('schema', ['ngResource'])
           , flatLink = JSON.stringify(eLink)
           , flatLinkInterpolater = $interpolate(flatLink);
         flatLink = flatLinkInterpolater(data);
-        eLink = JSON.parse(flatLink);
+        eLink = {};
+        eLink._link = JSON.parse(flatLink);
         if (!angular.isArray(root.links)) {
           root.links = [];
         }
@@ -147,18 +161,18 @@ angular.module('schema', ['ngResource'])
       if (angular.isArray(data[seg])) {
         for(var n in data[seg]) {
           var d = angular.copy(data)
-            , aLink = angular.copy(link);
+            , aLink = {};
+          aLink._link = angular.copy(link);
           angular.extend(d, data[seg][n]);
-          aLink.rel = aLink.rel;
           angular.extend(aLink, data[seg][n]);
           apiClient.compileLink(root, d, angular.copy(pathParts), aLink);
         }
       }
       if (!angular.isArray(data[seg]) && angular.isObject(data[seg])) {
         var d = angular.copy(data)
-          , lLink = angular.copy(link);
+          , lLink = {};
+        lLink._link = angular.copy(link);
         angular.extend(d, data[seg]);
-        lLink.rel = lLink.rel;
         angular.extend(lLink, data[seg]);
         apiClient.compileLink(root, d, angular.copy(pathParts), lLink);
       }
@@ -225,7 +239,7 @@ angular.module('schema', ['ngResource'])
         , payload = {};
       angular.extend(payload, params, apiClient.data);
       apiClient.findRelLink(rel, apiClient.links).then(function(link) {
-        apiClient.resolveSchema(link.href).then(function(schema) {
+        apiClient.resolveSchema(link._link.href).then(function(schema) {
           deferred.resolve(schema);
         });
       });
@@ -272,15 +286,15 @@ angular.module('schema', ['ngResource'])
           , flatLinkInterpolater = $interpolate(flatLink);
         flatLink = flatLinkInterpolater(params);
         eLink = JSON.parse(flatLink);
-        var method = eLink.method ? eLink.method : 'GET'
+        var method = eLink._link.method ? eLink._link.method : 'GET'
           , methods = {}
           , defaults = {}
           , headers = {
             'Content-Type': 'application/json'
           };
         var payload = {};
-        for(var p in eLink.properties) {
-          payload[p] = eLink.properties[p].value;
+        for(var p in eLink._link.properties) {
+          payload[p] = eLink._link.properties[p].value;
         }
         angular.extend(payload, params);
         angular.extend(headers, apiClient.staticHeaders, addHeaders);
@@ -288,11 +302,11 @@ angular.module('schema', ['ngResource'])
           method: method,
           headers: headers
         };
-        angular.forEach(eLink.properties, function(config, prop) {
+        angular.forEach(eLink._link.properties, function(config, prop) {
           defaults[prop] = angular.isDefined(config.default) ? config.default : null;
         });
         // Now doing the link traversal
-        apiClient.resourceURLTraverse(eLink.href, defaults, methods, method, payload, eLink.target).then(
+        apiClient.resourceURLTraverse(eLink._link.href, defaults, methods, method, payload, eLink._link.target).then(
           function(response) {
             if (eLink.target !== 'nofollow') {
               deferred.resolve(response);

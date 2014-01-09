@@ -1,5 +1,5 @@
-<div ng-if="link.properties || (link.method !== 'GET' && link.method !== 'DELETE')"
-  id="{{link.title | fieldName}}"
+<div ng-if="link._link.properties || (link._link.method !== 'GET' && link._link.method !== 'DELETE')"
+  id="{{link._link.title | fieldName}}"
   class="modal fade"
   tabindex="-1"
   role="dialog">
@@ -11,12 +11,12 @@
           data-dismiss="modal"
           aria-hidden="true">&times;</button>
         <h4 class="modal-title"
-          ng-bind="link.title"></h4>
+          ng-bind="link._link.title"></h4>
       </div>
       <div class="modal-body">
         <form class="form-horizontal"
           role="form">
-          <div ng-repeat="(propName, property) in link.properties"
+          <div ng-repeat="(propName, property) in link._link.properties"
             class="form-group">
             <label ng-bind="property.title"
               class="col-sm-6 control-label"
@@ -128,12 +128,12 @@
                 aria-hidden="true">
                 <i class="glyphicon glyphicon-white"
                   ng-class="{
-                  'glyphicon-plus-sign': link.method == 'POST',
-                  'glyphicon-pencil': link.method == 'PUT',
-                  'glyphicon-tags': link.properties
+                  'glyphicon-plus-sign': link._link.method == 'POST',
+                  'glyphicon-pencil': link._link.method == 'PUT',
+                  'glyphicon-tags': link._link.properties
                   }"></i>
                 &nbsp;
-                <span ng-bind="link.title"></span>
+                <span ng-bind="link._link.title"></span>
               </button>
             </div>
           </div>

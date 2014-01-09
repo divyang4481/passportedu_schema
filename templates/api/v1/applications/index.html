@@ -5,14 +5,14 @@
     <magic-form-link ng-repeat="link in client.links | filter: {rel: 'register'}" link="link"></magic-form-link>
   </div>
   <div class="pinColumns">
-    <div ng-repeat='card in client.links | filter: {importance: "cards"}'
+    <div ng-repeat='card in client.links | semantics: {importance: "cards"}'
       ng-model="card"
       ng-include="card.template"
       class="pin">
     </div>
   </div>
   <div ng-repeat="link in client.links | filter: {rel: 'register'}"
-    id="{{link.title | fieldName}}"
+    id="{{link._link.title | fieldName}}"
     class="modal fade"
     tabindex="-1"
     role="dialog">
@@ -24,7 +24,7 @@
             data-dismiss="modal"
             aria-hidden="true">&times;</button>
           <h4 class="modal-title"
-            ng-bind="link.title"></h4>
+            ng-bind="link._link.title"></h4>
         </div>
         <div class="modal-body">
           <form class="form-horizontal well">

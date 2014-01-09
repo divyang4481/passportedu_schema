@@ -5,24 +5,24 @@
   <p ng-bind="client.schema.description"></p>
 
   <div class="btn-group">
-    <button ng-repeat='link in client.links | filter: {importance: "callToAction"}'
+    <button ng-repeat='link in client.links | semantics: {importance: "callToAction"}'
       type="button"
       class="btn"
       ng-click="traverse()"
       ng-class="{
-        'btn-danger': link.method == 'DELETE',
-        'btn-success': link.method != 'DELETE'
+        'btn-danger': link._link.method == 'DELETE',
+        'btn-success': link._link.method != 'DELETE'
         }">
       <i class="glyphicon"
         ng-class="{
-        'glyphicon-minus-sign': link.method == 'DELETE',
-        'glyphicon-plus-sign': link.method != 'DELETE'
+        'glyphicon-minus-sign': link._link.method == 'DELETE',
+        'glyphicon-plus-sign': link._link.method != 'DELETE'
         }"></i>&nbsp;
-      <span ng-bind="link.title"></span>
+      <span ng-bind="link._link.title"></span>
     </button>
   </div>
 </div>
-<div ng-repeat='link in client.links | filter: {importance:"content"}' class="panel panel-default {{link.card}}">
+<div ng-repeat='link in client.links | semantics: {importance: "content"}' class="panel panel-default {{link._link.card}}">
   <div class="panel-body">
     <magic-form-content click="traverse" link="link"></magic-form-content>
   </div>
