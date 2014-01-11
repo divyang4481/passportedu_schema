@@ -29,7 +29,6 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
       Card.data = postCard.data;
       Card.owners = postCard.owners;
       Card.type = postCard._link.type;
-      Card.owners = {};
       Card.owners.students = studentId;
       card.create(Card);
     });

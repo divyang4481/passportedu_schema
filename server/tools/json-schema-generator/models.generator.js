@@ -106,24 +106,27 @@ var getLinks = function(resource_path, model) {
   var properties = _.extend({}, paging, equalTo, lookAhead, greaterThan, lessThan, notEqual);
   var links = [];
   links.push({
-    "title": "Home",
-    "description": "The root resource for Passport EDU",
-    "rel": "home",
-    "href": "/api/v1"
+    title: "Home",
+    description: "The root resource for Passport EDU",
+    rel: "home",
+    importance: "navigation",
+    href: "/api/v1"
   });
   links.push({
     title: "Search " +model.modelName + "s",
     rel: "self",
+    importance: "navigation",
     href: path.join('/api/v1/resources', resourceName(model)),
     properties: properties
   });
-//  links.push({
-//    title: 'Create a ' + model.modelName,
-//    rel: "create",
-//    method: "POST",
-//    href: path.join('/api/v1/resources', resourceName(model)),
-//    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
-//  });
+  links.push({
+    title: 'Create a ' + model.modelName,
+    rel: "create",
+    importance: "callToAction",
+    method: "POST",
+    href: path.join('/api/v1/resources', resourceName(model)),
+    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
+  });
   return links;
 };
 /**
@@ -149,6 +152,7 @@ var generateSchema = function(model_path, model) {
             {
               title: 'Full ' + model.modelName + ' id: {{_id}}',
               rel: "full",
+              importance: "content",
               href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
             }
           ]
@@ -157,8 +161,9 @@ var generateSchema = function(model_path, model) {
       "meta": {
         "links":[
           {
-            "rel": "page_{{page}}",
             "title": "Page {{page}}",
+            "rel": "page_{{page}}",
+            "importance": "paging",
             "href": "/api/v1/resources/" + resourceName(model) + "/?{{query}}"
           }
         ]

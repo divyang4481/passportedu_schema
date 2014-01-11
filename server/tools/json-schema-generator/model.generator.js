@@ -88,32 +88,37 @@ var getLinks = function(resource_path, model) {
   links.push({
     "title": "Home",
     "description": "The root resource for Passport EDU",
+    "importance": "navigation",
     "rel": "home",
     "href": "/api/v1"
   });
   links.push({
     title: "Search " + model.modelName + "s",
     rel: model.modelName + "s",
+    importance: "navigation",
     href: path.join('/api/v1/resources', resourceName(model))
   });
   links.push({
     title: "This " + model.modelName,
     rel: "self",
+    importance: "navigation",
     href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
   });
-//  links.push({
-//    title: 'Delete this ' + model.modelName,
-//    rel: "destroy",
-//    method: "DELETE",
-//    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
-//  });
-//  links.push({
-//    title: 'Update this ' + model.modelName,
-//    rel: "update",
-//    method: "PUT",
-//    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}"),
-//    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
-//  });
+  links.push({
+    title: 'Delete this ' + model.modelName,
+    rel: "destroy",
+    importance: "content",
+    method: "DELETE",
+    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}")
+  });
+  links.push({
+    title: 'Update this ' + model.modelName,
+    rel: "update",
+    importance: "content",
+    method: "PUT",
+    href: path.join('/api/v1/resources', resourceName(model), "{{_id}}"),
+    properties: getProperties(model, ['String', 'Number', 'Date', 'Mixed', 'Boolean'])
+  });
   return links;
 };
 /**
