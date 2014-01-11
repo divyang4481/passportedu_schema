@@ -92,11 +92,11 @@ api.get('/:admissionsId/schools/:schoolId', function(req, res) {
 api.delete('/:admissionsId/schools/:schoolId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
-  user.findById(admissionsId, function(err, Student) {
-    Student.schoolIds = _.reject(Student.schoolIds, function(Id) {
+  user.findById(admissionsId, function(err, Admissions) {
+    Admissions.schoolIds = _.reject(Admissions.schoolIds, function(Id) {
       return Id === schoolId;
     });
-    Student.save(function(err) {
+    Admissions.save(function(err) {
       res.set('Location', '/api/v1/admissions/' + admissionsId);
       res.send(300);
     });
@@ -131,11 +131,10 @@ api.get('/:admissionsId/search/schools/:schoolId', function(req, res) {
  */
 api.get('/:admissionsId/applications', function(req, res) {
   var admissionsId = req.params.admissionsId;
-  req.query.admissionsId = admissionsId;
-  queryM(application)(req, function(err, applications) {
+  application.find({admissionsId: admissionsId}, function(err, Applications) {
     res.json({
       admissionsId: admissionsId,
-      applications: applications
+      applications: Applications
     });
   });
 });
@@ -155,6 +154,12 @@ api.post('/:admissionsId/applications', function(req, res) {
     res.send(300);
   });
 });
+/**
+ *
+ * @param admissionsId
+ * @param applicationId
+ * @returns {adapter.pending.promise|*|promise|Q.promise}
+ */
 var getApplicationCards = function(admissionsId, applicationId) {
   var deferred = q.defer();
   application.findById(applicationId).exec(function(err, App) {
@@ -242,6 +247,12 @@ api.get('/:admissionsId/applications/:applicationId/addCards', function(req, res
     res.json(response);
   });
 });
+/**
+ *
+ * @param admissionsId
+ * @param applicationId
+ * @returns {adapter.pending.promise|*|promise|Q.promise}
+ */
 var getCardsAndApp = function(admissionsId, applicationId) {
   var deferred = q.defer();
   application.findById(applicationId).exec(function(err, App) {
@@ -270,7 +281,62 @@ var getCardsAndApp = function(admissionsId, applicationId) {
     deferred.resolve(response);
   });
   return deferred.promise;
-}
+};
+/**
+ *
+ */
+api.get('/:admissionsId/applications/:applicationId/assign', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId;
+  user.findById(admissionsId, function(err, Admissions) {
+    school.find({_id: { $in: Admissions.schoolIds}}, function(err, Schools) {
+      application.findById(applicationId, function(err, Application) {
+        res.json({
+          admissionsId: admissionsId,
+          applicationId: applicationId,
+          application: Application,
+          schools: Schools
+        });
+      });
+    });
+  });
+});
+/**
+ *
+ */
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', function(req, res) {
+  res.json({hello:':)'})
+});
+/**
+ *
+ */
+api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId, function(err, School) {
+    School.applicationIds = _.union(School.applicationIds, [applicationId]);
+    School.save(function(err) {
+      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/assign');
+      res.send(300);
+    });
+  });
+});
+/**
+ *
+ */
+api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId, function(err, School) {
+    School.applicationIds = _.omit(School.applicationIds, applicationId);
+    School.save(function(err) {
+      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/assign');
+      res.send(300);
+    });
+  });
+});
 /**
  *
  */

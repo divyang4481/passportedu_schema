@@ -45,7 +45,7 @@
     {
       "title": "Create a New Application Type",
       "rel": "create",
-      "importance": "content",
+      "importance": "createCard",
       "method": "POST",
       "href": "/api/v1/admissions/{{admissionsId}}/applications",
       "properties": {

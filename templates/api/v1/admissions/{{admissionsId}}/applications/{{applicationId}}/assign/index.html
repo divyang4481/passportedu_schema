@@ -18,6 +18,17 @@
     </button>
   </div>
 </div>
-<div drag ng-repeat='link in client.links | semantics: {importance: "applications"}'
-  ng-include="link._link.template">
+<div ng-repeat='link in client.links | semantics: {importance: "schools"}'
+  ng-class="{'alert-info': dragging}" class="well panel smallCard">
+  <div class="panel-body">
+    <h2 ng-bind="link.data.institutionName"></h2>
+    <button type="button" class="btn btn-primary"
+      ng-click="link._link.method = button ? 'DELETE': 'PUT'; traverse();"
+      ng-init="button = (link.applicationIds | filter: client.data.applicationId).length"
+      ng-click=""
+      ng-bind="button ? 'ON' : 'OFF'"
+      ng-class="{'active': button}">
+
+    </button>
+  </div>
 </div>

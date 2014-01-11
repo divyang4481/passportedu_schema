@@ -120,22 +120,27 @@ api.get('/:studentId/search/schools/:schoolId', function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   school.findById(schoolId).exec().then(function(School) {
-    var response = {
-      studentId: studentId,
-      schoolId: schoolId,
-      school: School
-    }
-    res.json(response);
+    application.find({_id: {$in: School.applicationIds}}, function(err, Applications) {
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School,
+        applications: Applications
+      }
+      res.json(response);
+    });
   });
 });
 /**
  *
  */
-api.put('/:studentId/search/schools/:schoolId/apply', function(req, res) {
+api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', function(req, res) {
   var studentId = req.params.studentId
-    , schoolId = req.params.schoolId;
+    , schoolId = req.params.schoolId
+    , applicationId = req.params.applicationId;
   user.findById(studentId).exec(function(err, Student) {
     Student.schoolIds = _.union(Student.schoolIds, [schoolId]);
+    Student.applicationIds = _.union(Student.applicationIds, [applicationId]);
     Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId);
       res.send(300);
@@ -145,17 +150,48 @@ api.put('/:studentId/search/schools/:schoolId/apply', function(req, res) {
 /**
  *
  */
-api.put('/:studentId/search/schools/:schoolId/save', function(req, res) {
+api.put('/:studentId/schools/:schoolId/application/:applicationId/save', function(req, res) {
   var studentId = req.params.studentId
-    , schoolId = req.params.schoolId;
+    , schoolId = req.params.schoolId
+    , applicationId = req.params.applicationId;
   user.findById(studentId).exec(function(err, Student) {
     Student.schoolIds = _.union(Student.schoolIds, [schoolId]);
-    Student.save(function(err) {
+    Student.applicationIds = _.union(Student.applicationIds, [applicationId]);
+    addApplicationCardsToStudent(Student, applicationId);
+//    Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId + '/search/schools/' + schoolId);
       res.send(300);
-    });
+//    });
   });
 });
+/**
+ *
+ * @param student
+ * @param applicationId
+ */
+var addApplicationCardsToStudent = function(Student, applicationId) {
+  card.find({"owners.students": Student._id}, function(err, studentCards) {
+    card.find({"owners.applications": applicationId}, function(err, appCards) {
+      this.studentCardTypes = _.map(studentCards, function(card) {
+        return card.type;
+      });
+      this.Student = Student;
+      var addCards = _.reject(appCards, function(Card) {
+        return _.where(this.studentCardTypes, {type: Card.type}).length > 0;
+      }, this);
+      _.each(addCards, function(Card) {
+        var newCard = {
+          owners: {
+            students: Student._id.toString()
+          },
+          type: Card.type,
+          data: {}
+        };
+        card.create(newCard);
+      });
+    });
+  });
+};
 /**
  *
  */

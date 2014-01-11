@@ -14,9 +14,9 @@ body {
 }
 
 .drop {
-    margin: 20px;
+    margin: 0px;
     min-height: 100px;
-    padding: 25px;
+    padding: 0px;
     border: 1px dashed #fff;
 }
 

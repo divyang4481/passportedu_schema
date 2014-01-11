@@ -9,11 +9,11 @@
     "school": {
       "type": "object",
       "properties": {
-        "id": {
-          "title": "id ",
-          "description": "id ",
-          "identity": false,
-          "readonly": false,
+        "_id": {
+          "title": "_id ",
+          "description": "_id ",
+          "identity": true,
+          "readonly": true,
           "type": "string"
         },
         "data.unitId": {
@@ -217,69 +217,79 @@
           "description": "data.tags ",
           "identity": false,
           "readonly": false,
-          "type": ""
+          "type": "string"
         },
         "data.deadlines": {
           "title": "data.deadlines ",
           "description": "data.deadlines ",
           "identity": false,
           "readonly": false,
-          "type": ""
+          "type": "string"
         },
         "data.requiredHealthTests": {
           "title": "data.requiredHealthTests ",
           "description": "data.requiredHealthTests ",
           "identity": false,
           "readonly": false,
-          "type": ""
+          "type": "string"
         },
         "data.categories": {
           "title": "data.categories ",
           "description": "data.categories ",
           "identity": false,
           "readonly": false,
-          "type": ""
+          "type": "string"
         },
         "mediaTypes": {
           "title": "mediaTypes ",
           "description": "mediaTypes ",
           "identity": false,
           "readonly": false,
-          "type": ""
+          "type": "string"
         },
         "cardIds": {
           "title": "cardIds ",
           "description": "cardIds ",
           "identity": false,
           "readonly": false,
-          "type": ""
-        },
-        "_id": {
-          "title": "_id ",
-          "description": "_id ",
-          "identity": true,
-          "readonly": true,
           "type": "string"
-        }
-      },
-      "links": [
-        {
-          "title": "Apply Here",
-          "description": "{{data.institutionName}}",
-          "rel": "addSchool",
-          "importance": "callToAction",
-          "method": "PUT",
-          "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}/apply"
         },
-        {
-          "title": "Save this School for Later",
-          "description": "{{data.institutionName}}",
-          "rel": "saveSchool",
-          "importance": "callToAction",
-          "method": "PUT",
-          "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}/save"
+        "applications": {
+          "title": "Applications",
+          "description": "Applications accepted",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "_id": {
+                "type": "string",
+                "identity": false
+              }
+            },
+            "links": [
+              {
+                "title": "Apply to {{type}}",
+                "description": "{{data.institutionName}}",
+                "rel": "addSchool",
+                "importance": "callToAction",
+                "method": "PUT",
+                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/apply"
+              },
+              {
+                "title": "Save {{type}} School for Later",
+                "description": "{{data.institutionName}}",
+                "rel": "saveSchool",
+                "importance": "callToAction",
+                "method": "PUT",
+                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/save"
+              }
+            ]
+          }
         }
-      ]
+      }
     }
   },
   "links": [
@@ -322,20 +332,6 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/students/{{studentId}}/search/schools/{{school._id}}"
-    },
-    {
-      "title": "Search Schools",
-      "rel": "search",
-      "importance": "callToAction",
-      "method": "GET",
-      "href": "/api/v1/students/{{studentId}}/search/schools"
-    },
-    {
-      "title": "My Application",
-      "rel": "application",
-      "importance": "callToAction",
-      "method": "GET",
-      "href": "/api/v1/students/{{studentId}}/application"
     }
   ]
 }

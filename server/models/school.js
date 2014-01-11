@@ -48,7 +48,10 @@ var SchoolSchema = new mongoose.Schema({
       { type: String }
     ]
   },
-  mediaTypes: { type: String, enum: mediaTypes },
+  applicationIds: [
+    { type: String }
+  ],
+  mediaTypes: { type: String },
   cardIds: [
     { type: String }
   ]

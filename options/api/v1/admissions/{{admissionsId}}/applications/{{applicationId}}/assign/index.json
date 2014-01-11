@@ -1,9 +1,9 @@
 {
   "id": "/api/v1/admissions/{{admissionsId}}/applications",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Application Types",
+  "title": "Assign {{application.type}} to Schools",
   "type": "object",
-  "description": "A list of your application types",
+  "description": "",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -11,33 +11,28 @@
       "identity": true,
       "type": "string"
     },
-    "applications": {
-      "title": "Application Types",
-      "readonly": true,
-      "identity": false,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
+    "application": {
+      "title": "{{type}}",
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
         },
-        "links": [
-          {
-            "title": "{{type}}",
-            "rel": "full_{{_id}}",
-            "importance": "applications",
-            "template": "/templates/api/v1/card/admissions/applications",
-            "description": "{{type}}",
-            "method": "GET",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
-          }
-        ]
-      }
+        "type": {
+          "type": "string"
+        }
+      },
+      "links": [
+        {
+          "title": "{{type}}",
+          "description": "{{type}}",
+          "rel": "full_{{_id}}",
+          "importance": "applications",
+          "template": "/templates/api/v1/card/admissions/applications",
+          "method": "GET",
+          "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
+        }
+      ]
     },
     "schools": {
       "title": "Application Types",
@@ -57,12 +52,12 @@
         "links": [
           {
             "title": "{{data.institutionName}}",
-            "rel": "full_{{_id}}",
+            "description": "{{type}}",
+            "rel": "assign_{{_id}}",
             "importance": "schools",
             "template": "/templates/api/v1/card/admissions/schools",
-            "description": "{{type}}",
-            "method": "GET",
-            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
+            "method": "PUT",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/assign"
           }
         ]
       }
@@ -104,13 +99,6 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
-    },
-    {
-      "title": "Create a New Application Type",
-      "rel": "create",
-      "importance": "callToAction",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications/new"
     }
   ]
 }

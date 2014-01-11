@@ -45,7 +45,7 @@ angular.module('schema', ['ngResource'])
       var filtered = [];
       angular.forEach(links, function(link) {
         angular.forEach(semantics, function(value, key) {
-          if (link._link[key] == value) {
+          if (angular.isDefined(link._link) && link._link[key] == value) {
             filtered.push(link);
           }
         });

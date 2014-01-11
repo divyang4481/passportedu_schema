@@ -94,7 +94,7 @@
     },
     {
       "title": "Application Types",
-      "rel": "types",
+      "rel": "self",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
@@ -107,19 +107,11 @@
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
     },
     {
-      "title": "Add More Cards",
+      "title": "Cards",
       "rel": "cards",
       "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/addCards"
-    },
-    {
-      "title": "Delete Application",
-      "description": "{{application.type}}",
-      "rel": "delete",
-      "importance": "callToAction",
-      "method": "DELETE",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
     },
     {
       "title": "Preview",
@@ -129,6 +121,22 @@
       "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/applications/{{application._id}}/schools/1234"
+    },
+    {
+      "title": "Schools",
+      "description": "{{application.type}}",
+      "rel": "assign",
+      "importance": "callToAction",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/assign"
+    },
+    {
+      "title": "Delete",
+      "description": "{{application.type}}",
+      "rel": "delete",
+      "importance": "callToAction",
+      "method": "DELETE",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
     }
   ]
 }

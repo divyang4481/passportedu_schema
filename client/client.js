@@ -11,7 +11,30 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
     $scope.traverse = function() {
       angular.element('.modal').modal('hide');
       $('.modal-backdrop').remove();
+      if (this.link._link.method === 'DELETE') {
+      }
       $scope.client.traverse(this.link._link.rel, this.link);
+    };
+    /**
+     * Perform the link action on the Draggable
+     * @param drag
+     */
+    $scope.performDragLinkAction = function(drag) {
+      $scope.client.traverse(drag._link.rel, drag);
+    };
+    /**
+     * Perform the link action on the Drop Area
+     * @param drag
+     * @param drop
+     */
+    $scope.performDropLinkAction = function(drag, drop) {
+      $scope.client.traverse(drop._link.rel, drop);
+    };
+    $scope.enterDrop = function() {
+      $scope.dropping = 1;
+    };
+    $scope.leaveDrop = function() {
+      $scope.dropping = 0;
     };
     var startURL = $location.path();
     startURL = startURL ? startURL : '/api/v1';
@@ -21,7 +44,6 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
     });
   })
   .controller('CardSelection', function($scope) {
-    $scope.cards = [];
     $scope.performLinkAction = function(card) {
       $scope.client.traverse(card._link.rel, card);
     };

@@ -7,10 +7,7 @@ module.exports = function(model) {
    */
   var putFunc = function(req, res) {
     var body = _.extend(req.body, req.restrictQuery);
-    var savedModel = new model(body);
-    var upsertData = savedModel.toObject();
-    delete upsertData._id;
-    model.update({_id: savedModel._id}, upsertData, {}, function(err, doc) {
+    model.update({_id: req.params.id}, body, {}, function(err, doc) {
       if (err) {
         res.json({error: err});
         return;
