@@ -2,7 +2,8 @@
 <div class="jumbotron">
   <h1 ng-bind="client.schema.title"></h1>
 
-  <p ng-bind="client.schema.description"></p>
+  <p ng-bind="client.schema.description" class="visible-lg visible-md"></p>
+
   <div class="btn-group">
     <button ng-repeat='link in client.links | semantics: {importance: "callToAction"}'
       type="button"
@@ -21,8 +22,10 @@
     </button>
   </div>
 </div>
-<div ng-repeat='link in client.links | semantics: {importance: "content"}' class="panel panel-default {{link._link.card}}">
-  <div class="panel-body">
-    <magic-form-content click="traverse" link="link"></magic-form-content>
+
+<h2 class="alert alert-success">My Schools</h2>
+
+<div class="pinColumns">
+  <div ng-repeat='link in client.links | semantics: {importance: "content"}' ng-include="link._link.template" class="pin">
   </div>
 </div>

@@ -22,8 +22,8 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
   })
   .controller('CardSelection', function($scope) {
     $scope.cards = [];
-    $scope.performLinkAction = function(card, element) {
-      $scope.client.traverse(card.rel, {type: card.rel});
+    $scope.performLinkAction = function(card) {
+      $scope.client.traverse(card._link.rel, card);
     };
   })
   .directive('autoSaveCard', function(debounce) {
@@ -52,10 +52,11 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
       });
     });
     $scope.submitRegisterApp = function() {
-      $scope.client.traverse(this.link.rel,
+      var cards = $filter('semantics')($scope.client.links, {importance: "cards"});
+      $scope.client.traverse(this.link._link.rel,
         {
           student: $scope.student,
-          cards: $scope.cards
+          cards: cards
         });
     };
   })

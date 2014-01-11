@@ -15,16 +15,15 @@ api.get('/', function(req, res) {
  *
  */
 api.post('/', function(req, res) {
-  var student = req.body;
-  var Student = new user(student);
-  Student.userPerms = ['admissions'];
-  Student.save(function(err) {
+  var admissions = req.body;
+  admissions.userPerms = ['admissions'];
+  user.create(admissions, function(err, Admissions) {
     if (err) {
       res.json({
         error: err
       });
     } else {
-      res.set('Location', '/api/v1/admissions/' + Student._id);
+      res.set('Location', '/api/v1/admissions/' + Admissions._id);
       res.send(300);
     }
   });

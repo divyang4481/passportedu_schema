@@ -43,7 +43,7 @@ angular.module('schema', ['ngResource'])
   .filter('semantics', function() {
     return function(links, semantics) {
       var filtered = [];
-      angular.forEach(links, function (link) {
+      angular.forEach(links, function(link) {
         angular.forEach(semantics, function(value, key) {
           if (link._link[key] == value) {
             filtered.push(link);
@@ -61,15 +61,15 @@ angular.module('schema', ['ngResource'])
   })
   .factory('debounce', ['$timeout', function($timeout) {
     /**
-     * will cal fn once after timeout even if more than one call wdo debounced fn was made
-     * @param {Function} fn to call debounced
+     * calling fn once after timeout no matter how many calls made, within timeout
+     * @param {Function} fn to debounce
      * @param {Number} timeout
-     * @param {boolean} apply will be passed to $timeout as last param, if the debounce is triggering infinite digests, set this to false
-     * @returns {Function} which you can call instead fn as if you were calling fn
+     * @param {boolean} apply will be passed to $timeout
+     * @returns {Function} callable
      */
     function debounce(fn, timeout, apply) {
       timeout = angular.isUndefined(timeout) ? 0 : timeout;
-      apply = angular.isUndefined(apply) ? true : apply; // !!default is true! most suitable to my experience
+      apply = angular.isUndefined(apply) ? true : apply;
       var nthCall = 0;
       return function() { // intercepting fn
         var that = this;
@@ -120,8 +120,9 @@ angular.module('schema', ['ngResource'])
       if (angular.isDefined(schema.links)) {
         for(var l in schema.links) {
           var pathPartsCopy = angular.copy(pathParts)
-            , rootDataCopy = angular.copy(root.data);
-          apiClient.compileLink(root, rootDataCopy, pathPartsCopy, schema.links[l]);
+            , rootDataCopy = angular.copy(root.data)
+            , data = {};
+          apiClient.compileLink(root, rootDataCopy, data, pathPartsCopy, schema.links[l]);
         }
       }
       if (angular.isDefined(schema.properties)) {
@@ -143,14 +144,15 @@ angular.module('schema', ['ngResource'])
      * @param pathParts
      * @param link
      */
-    apiClient.compileLink = function(root, data, pathParts, link) {
+    apiClient.compileLink = function(root, wholeData, data, pathParts, link) {
       if (pathParts.length === 0) {
         var eLink = angular.copy(link)
           , flatLink = JSON.stringify(eLink)
           , flatLinkInterpolater = $interpolate(flatLink);
-        flatLink = flatLinkInterpolater(data);
+        flatLink = flatLinkInterpolater(wholeData);
         eLink = {};
         eLink._link = JSON.parse(flatLink);
+        angular.extend(eLink, data);
         if (!angular.isArray(root.links)) {
           root.links = [];
         }
@@ -158,23 +160,19 @@ angular.module('schema', ['ngResource'])
         return;
       }
       var seg = pathParts.shift();
-      if (angular.isArray(data[seg])) {
-        for(var n in data[seg]) {
-          var d = angular.copy(data)
-            , aLink = {};
-          aLink._link = angular.copy(link);
-          angular.extend(d, data[seg][n]);
-          angular.extend(aLink, data[seg][n]);
-          apiClient.compileLink(root, d, angular.copy(pathParts), aLink);
+      if (angular.isArray(wholeData[seg])) {
+        for(var n in wholeData[seg]) {
+          var d = angular.copy(wholeData[seg][n])
+            , aLink = angular.copy(link);
+          angular.extend(wholeData, wholeData[seg][n]);
+          apiClient.compileLink(root, wholeData, d, angular.copy(pathParts), aLink);
         }
       }
-      if (!angular.isArray(data[seg]) && angular.isObject(data[seg])) {
-        var d = angular.copy(data)
-          , lLink = {};
-        lLink._link = angular.copy(link);
-        angular.extend(d, data[seg]);
-        angular.extend(lLink, data[seg]);
-        apiClient.compileLink(root, d, angular.copy(pathParts), lLink);
+      if (!angular.isArray(wholeData[seg]) && angular.isObject(wholeData[seg])) {
+        var d = angular.copy(wholeData[seg])
+          , lLink = angular.copy(link);
+        angular.extend(wholeData, wholeData[seg]);
+        apiClient.compileLink(root, wholeData, d, angular.copy(pathParts), lLink);
       }
     }
     /**
@@ -292,11 +290,11 @@ angular.module('schema', ['ngResource'])
           , headers = {
             'Content-Type': 'application/json'
           };
+        // Validate against link schema
         var payload = {};
-        for(var p in eLink._link.properties) {
-          payload[p] = eLink._link.properties[p].value;
-        }
-        angular.extend(payload, params);
+        angular.forEach(eLink._link.properties, function(propertyConfig, propertyName) {
+          payload[propertyName] = params[propertyName];
+        });
         angular.extend(headers, apiClient.staticHeaders, addHeaders);
         methods[method] = {
           method: method,

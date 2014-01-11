@@ -16,35 +16,6 @@
       "title": "Students Home",
       "rel": "self",
       "href": "/api/v1/students"
-    },
-    {
-      "title": "Register",
-      "rel": "register",
-      "href": "/api/v1/register",
-      "method": "POST",
-      "properties": {
-        "username": {
-          "title": "Your username",
-          "description": "Your email address or username",
-          "type": "string"
-        },
-        "password": {
-          "title": "Your password",
-          "description": "Your password",
-          "type": "password"
-        },
-        "fullName": {
-          "title": "Your Full Name",
-          "description": "Your first name and last name",
-          "type": "string"
-        },
-        "email": {
-          "title": "Your Email Address",
-          "description": "A valid email address where we can contact you.",
-          "type": "email"
-        }
-      },
-      "required": ["username", "password"]
     }
   ]
 }

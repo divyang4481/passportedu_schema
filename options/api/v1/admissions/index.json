@@ -33,37 +33,30 @@
       "title": "Register",
       "rel": "register",
       "importance": "content",
-      "semantics": {
-
-      },
       "href": "/api/v1/register/admissions",
       "method": "POST",
       "properties": {
         "password": {
           "title": "Your password",
-          "type": "password",
-          "order": 3
+          "type": "password"
         },
         "fullName": {
           "title": "Your Full Name",
           "description": "First name and last name",
-          "type": "string",
-          "order": 1
+          "type": "string"
         },
         "email": {
           "title": "Your Email Address",
           "description": "A valid email address",
-          "type": "email",
-          "order": 4
+          "type": "email"
         },
         "username": {
           "title": "Your username",
           "description": "Your email address or username",
-          "type": "string",
-          "order": 2
+          "type": "string"
         }
       },
-      "required": ["username", "password", "email", "fullName"]
+      "required": ["username", "password", "email"]
     }
   ]
 }

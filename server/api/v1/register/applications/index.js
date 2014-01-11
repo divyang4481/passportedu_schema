@@ -18,28 +18,27 @@ api.get('/', function(req, res) {
  */
 api.post('/:applicationId/schools/:schoolId', function(req, res) {
   var student = req.body.student
-    , cards = req.body.cards
-    , Student = new user(student);
-  Student.userPerms = ['students'];
-  Student.applicationIds = [req.params.applicationId];
-  Student.schoolIds = [req.params.schoolId];
-  Student.save(function(err) {
+    , cards = req.body.cards;
+  student.userPerms = ['students'];
+  student.applicationIds = [req.params.applicationId];
+  student.schoolIds = [req.params.schoolId];
+  user.create(student, function(err, Student) {
     var studentId = Student._id.toString();
-    _.each(cards, function(cardLink) {
-      var cardBody = {};
-      cardBody.data = cardLink.data;
-      cardBody.type = cardLink.type;
-      cardBody.owners = {};
-      cardBody.owners.students = studentId;
-      card.create(cardBody);
-      console.log(cardLink, cardBody);
+    _.each(cards, function(postCard) {
+      var Card = {};
+      Card.data = postCard.data;
+      Card.owners = postCard.owners;
+      Card.type = postCard._link.type;
+      Card.owners = {};
+      Card.owners.students = studentId;
+      card.create(Card);
     });
     if (err) {
       res.json({
         error: err
       });
     } else {
-      res.set('Location', '/api/v1/students/' + Student._id);
+      res.set('Location', '/api/v1/students/' + studentId);
       res.send(300);
     }
   });

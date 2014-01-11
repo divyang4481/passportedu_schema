@@ -63,16 +63,13 @@ api.get('/:admissionsId', function(req, res) {
   var response = {
     admissionsId: admissionsId
   };
-  user.find()
-    .select('-_id, -__v, -username, -password, -token, -userPerms')
-    .where({_id: admissionsId})
-    .exec(function(err, Admissions) {
-      response.student = Admissions[0];
-      //      school.find({_id: { $in: Admissions[0].schoolIds}}, function(err, Schools) {
-      //        response.schools = Schools;
+  user.findById(admissionsId, function(err, Admissions) {
+    response.student = Admissions;
+    school.find({_id: { $in: Admissions.schoolIds}}, function(err, Schools) {
+      response.schools = Schools;
       res.json(response);
-      //      });
     });
+  });
 });
 /**
  *
@@ -316,6 +313,59 @@ api.delete('/:admissionsId/applications/:applicationId/cards/:cardId', function(
   card.findOneAndRemove({_id: cardId}, function(err) {
     res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
     res.send(300);
+  });
+});
+/**
+ *
+ */
+api.get('/:admissionsId/search/schools', function(req, res) {
+  queryM(school)(req, function(err, response) {
+    response.admissionsId = req.params.admissionsId;
+    response.cardType = 'search/results/schools';
+    res.json(response);
+  });
+});
+/**
+ *
+ */
+api.get('/:admissionsId/search/schools/:schoolId', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId).exec().then(function(School) {
+    var response = {
+      admissionsId: admissionsId,
+      schoolId: schoolId,
+      school: School
+    }
+    res.json(response);
+  });
+});
+/**
+ *
+ */
+api.put('/:admissionsId/search/schools/:schoolId/claim', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId;
+  user.findById(admissionsId).exec(function(err, Admissions) {
+    Admissions.schoolIds = _.union(Admissions.schoolIds, [schoolId]);
+    Admissions.save(function(err) {
+      res.set('Location', '/api/v1/admissions/' + admissionsId);
+      res.send(300);
+    });
+  });
+});
+/**
+ *
+ */
+api.delete('/:admissionsId/search/schools/:schoolId/claim', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId;
+  user.findById(admissionsId).exec(function(err, Admissions) {
+    Admissions.schoolIds = _.without(Admissions.schoolIds, schoolId);
+    Admissions.save(function(err) {
+      res.set('Location', '/api/v1/admissions/' + admissionsId);
+      res.send(300);
+    });
   });
 });
 /**

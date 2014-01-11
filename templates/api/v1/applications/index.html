@@ -2,16 +2,16 @@
   <div ng-include="'/templates/common/navMenu'"></div>
   <div class="page-header">
     <h1 ng-bind="client.schema.title"></h1>
-    <magic-form-link ng-repeat="link in client.links | filter: {rel: 'register'}" link="link"></magic-form-link>
+    <magic-form-link ng-repeat="link in client.links | semantics: {rel: 'register'}" link="link"></magic-form-link>
   </div>
   <div class="pinColumns">
     <div ng-repeat='card in client.links | semantics: {importance: "cards"}'
       ng-model="card"
-      ng-include="card.template"
+      ng-include="card._link.template"
       class="pin">
     </div>
   </div>
-  <div ng-repeat="link in client.links | filter: {rel: 'register'}"
+  <div ng-repeat="link in client.links | semantics: {rel: 'register'}"
     id="{{link._link.title | fieldName}}"
     class="modal fade"
     tabindex="-1"

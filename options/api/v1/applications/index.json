@@ -72,28 +72,50 @@
       "href": "/api/v1/register/applications/{{applicationId}}/schools/{{schoolId}}",
       "method": "POST",
       "properties": {
-        "username": {
-          "title": "Your username",
-          "description": "Your email address or username",
-          "type": "string"
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object"
+              },
+              "type": {
+                "type": "string"
+              },
+              "owners": {
+                "type": "string"
+              }
+            }
+          }
         },
-        "password": {
-          "title": "Your password",
-          "description": "Your password",
-          "type": "password"
-        },
-        "fullName": {
-          "title": "Your Full Name",
-          "description": "Your first name and last name",
-          "type": "string"
-        },
-        "email": {
-          "title": "Your Email Address",
-          "description": "A valid email address where we can contact you.",
-          "type": "email"
+        "student": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "title": "Your username",
+              "description": "Your email address or username",
+              "type": "string"
+            },
+            "password": {
+              "title": "Your password",
+              "description": "Your password",
+              "type": "password"
+            },
+            "fullName": {
+              "title": "Your Full Name",
+              "description": "Your first name and last name",
+              "type": "string"
+            },
+            "email": {
+              "title": "Your Email Address",
+              "description": "A valid email address where we can contact you.",
+              "type": "email"
+            }
+          },
+          "required": ["username", "password", "email", "fullName"]
         }
-      },
-      "required": ["username", "password", "email", "fullName"]
+      }
     }
   ]
 }

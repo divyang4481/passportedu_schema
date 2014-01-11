@@ -31,10 +31,11 @@
             },
             "links": [
               {
-                "title": "Edit",
+                "title": "{{type}}",
                 "rel": "full_{{_id}}",
                 "card": "extraSmallCard",
                 "importance": "content",
+                "template": "/templates/api/v1/card/admissions/schools",
                 "description": "{{type}}",
                 "method": "GET",
                 "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
@@ -74,6 +75,13 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Search Schools",
+      "rel": "search",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
     },
     {
       "title": "Create a New Application Type",

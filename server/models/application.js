@@ -4,6 +4,9 @@ var mongoose = require('mongoose')
 var ApplicationSchema = new mongoose.Schema({
   type: String,
   admissionsId: String,
+  schoolIds: [
+    { type: String }
+  ],
   data: Schema.Types.Mixed,
   mediaType: String,
   schemaCards: [

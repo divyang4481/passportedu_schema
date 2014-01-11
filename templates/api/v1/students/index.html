@@ -6,7 +6,7 @@
 
   <div class="clearfix"></div>
 </div>
-<div ng-repeat="link in client.links | filter: {_link:{rel: 'register'}}">
+<div ng-repeat="link in client.links | semantics: {rel: 'register'}">
 
   <div class="panel panel-default col-md-3">
     <h2 ng-bind="link._link.title"></h2>
@@ -29,6 +29,5 @@
         <button class="btn btn-primary" ng-click="traverse()">Register</button>
       </div>
     </form>
-
   </div>
 </div>

@@ -10,6 +10,66 @@
       "readonly": true,
       "identity": true,
       "type": "string"
+    },
+    "schools": {
+      "title": "My Schools",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "title": "_id ",
+            "description": "_id ",
+            "identity": true,
+            "readonly": true,
+            "type": "string"
+          },
+          "data.unitId": {
+            "title": "Unit ID",
+            "description": "Unique ID of School",
+            "identity": false,
+            "readonly": false,
+            "type": "number"
+          },
+          "data.institutionName": {
+            "title": "School Name",
+            "description": "",
+            "identity": false,
+            "readonly": false,
+            "type": "string"
+          },
+          "data.city": {
+            "title": "City",
+            "description": "City in which school is",
+            "identity": false,
+            "readonly": false,
+            "type": "string"
+          },
+          "data.state": {
+            "title": "State",
+            "description": "State where school is",
+            "identity": false,
+            "readonly": false,
+            "type": "string"
+          },
+          "data.zip": {
+            "title": "Zip",
+            "description": "Zip code of school",
+            "identity": false,
+            "readonly": false,
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "title": "{{data.institutionName}}",
+            "rel": "full_{{_id}}",
+            "importance": "content",
+            "template": "/templates/api/v1/card/search/results/schools",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
+          }
+        ]
+      }
     }
   },
   "links": [
@@ -43,11 +103,11 @@
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
     },
     {
-      "title": "Application Types",
-      "rel": "applications_call",
-      "importance": "callToAction",
+      "title": "Search Schools",
+      "rel": "search",
+      "importance": "navigation",
       "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+      "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
     }
   ]
 }

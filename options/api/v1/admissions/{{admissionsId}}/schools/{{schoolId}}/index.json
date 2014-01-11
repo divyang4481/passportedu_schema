@@ -1,0 +1,319 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "My Dashboard",
+  "type": "object",
+  "description": "Your School {{school.data.institutionName}}",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "schoolId": {
+      "title": "Unique ID of a School",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "school": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "title": "_id ",
+          "description": "_id ",
+          "identity": true,
+          "readonly": true,
+          "type": "string"
+        },
+        "data.unitId": {
+          "title": "Unit Id",
+          "description": "Government Identifier",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.institutionName": {
+          "title": "School Name",
+          "description": "Name of University or College",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.city": {
+          "title": "City",
+          "description": "City where school located",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.state": {
+          "title": "State ",
+          "description": "State where school located",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.zip": {
+          "title": "Zip",
+          "description": "Zip where school located",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.totalEnrollment": {
+          "title": "Total Enrollment",
+          "description": "Total Enrollment",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.applicationFee": {
+          "title": "Application Fee",
+          "description": "The cost of applying to school",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.totalUndergraduateEnrollment": {
+          "title": "Total Undergraduate Enrollment",
+          "description": "The number of undergraduates enrolled",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.percentInternationalStudents": {
+          "title": "Percentage International Students",
+          "description": "Percentage of admissions body arriving from foreign countries",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.percentFemaleStudent": {
+          "title": "Percentage Female Students",
+          "description": "Percentage of admissions body identifying as female",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.percentAdmitted": {
+          "title": "Percentage Admitted",
+          "description": "Percentage of applicants admitted",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.normalFeesTuition": {
+          "title": "Normal Fees & Tuition",
+          "description": "The cost of attending for an in-State admissions",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.outOfStateTuition": {
+          "title": "Out Of State Tuition",
+          "description": "The cost of tuition for an international admissions",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.outOfStateFees": {
+          "title": "Out Of State Fees ",
+          "description": "The fees for an international admissions",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.SATCriticalReading25": {
+          "title": "SAT Critical Reading 25th Percentile",
+          "description": "The lower end of the scores accepted",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.SATCriticalReading75": {
+          "title": "SAT Critical Reading 75the Percentile",
+          "description": "The higher end of the scores accepted",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.SATMath25": {
+          "title": "SAT Math 25the Percentile",
+          "description": "The lower end of the scores accepted",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.SATMath75": {
+          "title": "SAT Math 75th Percentile",
+          "description": "The higher end of the scores accepted",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.SATWriting25": {
+          "title": "data.SATWriting25 ",
+          "description": "data.SATWriting25 ",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.SATWriting75": {
+          "title": "data.SATWriting75 ",
+          "description": "data.SATWriting75 ",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.SAT": {
+          "title": "data.SAT ",
+          "description": "data.SAT ",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.TOEFLScore": {
+          "title": "data.TOEFLScore ",
+          "description": "data.TOEFLScore ",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.IELTSScore": {
+          "title": "data.IELTSScore ",
+          "description": "data.IELTSScore ",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.GPA": {
+          "title": "data.GPA ",
+          "description": "data.GPA ",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.financesRequired": {
+          "title": "data.financesRequired ",
+          "description": "data.financesRequired ",
+          "identity": false,
+          "readonly": false,
+          "type": "number"
+        },
+        "data.diplomaRequired": {
+          "title": "data.diplomaRequired ",
+          "description": "data.diplomaRequired ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.referencesRequired": {
+          "title": "data.referencesRequired ",
+          "description": "data.referencesRequired ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.essaysRequired": {
+          "title": "data.essaysRequired ",
+          "description": "data.essaysRequired ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.tags": {
+          "title": "data.tags ",
+          "description": "data.tags ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.deadlines": {
+          "title": "data.deadlines ",
+          "description": "data.deadlines ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.requiredHealthTests": {
+          "title": "data.requiredHealthTests ",
+          "description": "data.requiredHealthTests ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "data.categories": {
+          "title": "data.categories ",
+          "description": "data.categories ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "mediaTypes": {
+          "title": "mediaTypes ",
+          "description": "mediaTypes ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "cardIds": {
+          "title": "cardIds ",
+          "description": "cardIds ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        }
+      },
+      "links": [
+        {
+          "title": "Un-claim this School",
+          "description": "{{data.institutionName}}",
+          "rel": "claim",
+          "importance": "callToAction",
+          "method": "DELETE",
+          "href": "/api/v1/admissions/{{admissionsId}}/search/schools/{{_id}}/claim"
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "admissions",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Application Types",
+      "rel": "applications",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Search Schools",
+      "rel": "search",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    }
+  ]
+}
