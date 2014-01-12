@@ -331,12 +331,12 @@ angular.module('schema', ['ngResource'])
         window.open('#' + url);
         deferred.reject({});
       } else {
-        if (target !== 'nofollow') {
-          $location.path(url);
-          apiClient.url = url;
-        }
         var resource = $resource(url, defaults, methods);
         resource[method](payload, function(response) {
+          if (target !== 'nofollow') {
+            $location.path(url);
+            apiClient.url = url;
+          }
           deferred.resolve(response);
         });
       }

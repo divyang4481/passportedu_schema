@@ -66,7 +66,7 @@ api.get('/:studentId', function(req, res) {
   user.findById(studentId, function(err, Student) {
     console.log(studentId, err, Student)
     response.student = Student;
-    school.find({_id: { $in: Student.schoolIds}}, function(err, Schools) {
+    school.find({_id: { $in: Student.schools}}, function(err, Schools) {
       response.schools = Schools;
       res.json(response);
     });
@@ -94,7 +94,7 @@ api.delete('/:studentId/schools/:schoolId', function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   user.findById(studentId, function(err, Student) {
-    Student.schoolIds = _.reject(Student.schoolIds, function(Id) {
+    Student.schools = _.reject(Student.schools, function(Id) {
       return Id === schoolId;
     });
     Student.save(function(err) {
@@ -119,16 +119,13 @@ api.get('/:studentId/search/schools', function(req, res) {
 api.get('/:studentId/search/schools/:schoolId', function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
-  school.findById(schoolId).exec().then(function(School) {
-    application.find({_id: {$in: School.applicationIds}}, function(err, Applications) {
-      var response = {
-        studentId: studentId,
-        schoolId: schoolId,
-        school: School,
-        applications: Applications
-      }
-      res.json(response);
-    });
+  school.findById(schoolId).populate("applications").exec(function(err, School) {
+    var response = {
+      studentId: studentId,
+      schoolId: schoolId,
+      school: School
+    }
+    res.json(response);
   });
 });
 /**
@@ -139,8 +136,8 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', functi
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
   user.findById(studentId).exec(function(err, Student) {
-    Student.schoolIds = _.union(Student.schoolIds, [schoolId]);
-    Student.applicationIds = _.union(Student.applicationIds, [applicationId]);
+    Student.schools = _.union(Student.schools, [schoolId]);
+    Student.applications = _.union(Student.applications, [applicationId]);
     addApplicationCardsToStudent(Student, applicationId);
     Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId + '/application');
@@ -156,8 +153,8 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', functio
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
   user.findById(studentId).exec(function(err, Student) {
-    Student.schoolIds = _.union(Student.schoolIds, [schoolId]);
-    Student.applicationIds = _.union(Student.applicationIds, [applicationId]);
+    Student.schools = _.union(Student.schools, [schoolId]);
+    Student.applications = _.union(Student.applications, [applicationId]);
     addApplicationCardsToStudent(Student, applicationId);
     Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId + '/search/schools/' + schoolId);
@@ -172,7 +169,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', functio
  */
 var addApplicationCardsToStudent = function(Student, applicationId) {
   card.find({"owners.students": Student._id.toString()}, function(err, studentCards) {
-    card.find({"owners.applications": applicationId}, function(err, appCards) {
+    card.find({'owners.applications': applicationId}, function(err, appCards) {
       this.studentCardTypes = _.map(studentCards, function(card) {
         return card.type;
       });
@@ -194,7 +191,9 @@ var addApplicationCardsToStudent = function(Student, applicationId) {
           type: Card.type,
           data: {}
         };
-        card.create(newCard);
+        var C = new card(newCard);
+        card.create(newCard, function(err, Card) {
+        });
       });
     });
   });

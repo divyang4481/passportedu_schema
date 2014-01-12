@@ -11,6 +11,39 @@
       "identity": true,
       "type": "string"
     },
+    "admissions": {
+      "type": "object",
+      "properties": {
+        "schools": {
+          "title": "Application Types",
+          "readonly": true,
+          "identity": false,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "data.institutionName": {
+                "type": "string"
+              }
+            },
+            "links": [
+              {
+                "title": "{{data.institutionName}}",
+                "description": "{{type}}",
+                "rel": "assign_{{_id}}",
+                "importance": "schools",
+                "template": "/templates/api/v1/card/admissions/schools",
+                "method": "PUT",
+                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/assign"
+              }
+            ]
+          }
+        }
+      }
+    },
     "application": {
       "title": "{{type}}",
       "type": "object",
@@ -33,34 +66,6 @@
           "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
         }
       ]
-    },
-    "schools": {
-      "title": "Application Types",
-      "readonly": true,
-      "identity": false,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "data.institutionName": {
-            "type": "string"
-          }
-        },
-        "links": [
-          {
-            "title": "{{data.institutionName}}",
-            "description": "{{type}}",
-            "rel": "assign_{{_id}}",
-            "importance": "schools",
-            "template": "/templates/api/v1/card/admissions/schools",
-            "method": "PUT",
-            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/assign"
-          }
-        ]
-      }
     }
   },
   "links": [

@@ -82,7 +82,7 @@ api.get('/:admissionsId', function(req, res) {
   };
   user.findById(admissionsId, function(err, Admissions) {
     response.student = Admissions;
-    school.find({_id: { $in: Admissions.schoolIds}}, function(err, Schools) {
+    school.find({_id: { $in: Admissions.schools}}, function(err, Schools) {
       response.schools = Schools;
       res.json(response);
     });
@@ -94,14 +94,21 @@ api.get('/:admissionsId', function(req, res) {
 api.get('/:admissionsId/schools/:schoolId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
-  school.findById(schoolId).exec().then(function(School) {
-    var response = {
-      admissionsId: admissionsId,
-      schoolId: schoolId,
-      school: School
-    }
-    res.json(response);
-  });
+  school.findById(schoolId)
+    .populate('applications')
+    .exec(function(err, School) {
+      user.find({schools: schoolId, userPerms: 'students'})
+        .populate("Card")
+        .exec(function(err, Applicants) {
+          var response = {
+            admissionsId: admissionsId,
+            schoolId: schoolId,
+            school: School,
+            applicants: Applicants
+          }
+          res.json(response);
+        })
+    });
 });
 /**
  *
@@ -110,7 +117,7 @@ api.delete('/:admissionsId/schools/:schoolId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   user.findById(admissionsId, function(err, Admissions) {
-    Admissions.schoolIds = _.reject(Admissions.schoolIds, function(Id) {
+    Admissions.schools = _.reject(Admissions.schools, function(Id) {
       return Id === schoolId;
     });
     Admissions.save(function(err) {
@@ -118,6 +125,28 @@ api.delete('/:admissionsId/schools/:schoolId', function(req, res) {
       res.send(300);
     });
   });
+});
+/**
+ *
+ */
+api.get('/:admissionsId/schools/:schoolId/applicants/:applicantId', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
+    , applicantId = req.params.applicantId;
+  user.findById(applicantId)
+    .populate('applications')
+    .populate('schools')
+    .exec(function(err, Applicant) {
+      card.find({'owners.students': applicantId}).exec(function(err, Cards) {
+        var response = {
+          admissionsId: admissionsId,
+          schoolId: schoolId,
+          applicant: Applicant,
+          cards: Cards
+        }
+        res.json(response);
+      });
+    });
 });
 /**
  *
@@ -134,7 +163,7 @@ api.get('/:admissionsId/search/schools', function(req, res) {
 api.get('/:admissionsId/search/schools/:schoolId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
-  school.findById(schoolId).exec().then(function(School) {
+  school.findById(schoolId).populate('applications').exec(function(err, School) {
     var response = {
       admissionsId: admissionsId,
       schoolId: schoolId,
@@ -305,24 +334,16 @@ var getCardsAndApp = function(admissionsId, applicationId) {
 api.get('/:admissionsId/applications/:applicationId/assign', function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
-  user.findById(admissionsId, function(err, Admissions) {
-    school.find({_id: { $in: Admissions.schoolIds}}, function(err, Schools) {
-      application.findById(applicationId, function(err, Application) {
-        res.json({
-          admissionsId: admissionsId,
-          applicationId: applicationId,
-          application: Application,
-          schools: Schools
-        });
+  user.findById(admissionsId).populate("schools").exec(function(err, Admissions) {
+    application.findById(applicationId, function(err, Application) {
+      res.json({
+        admissionsId: admissionsId,
+        applicationId: applicationId,
+        admissions: Admissions,
+        application: Application
       });
     });
   });
-});
-/**
- *
- */
-api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', function(req, res) {
-  res.json({hello: ':)'})
 });
 /**
  *
@@ -332,7 +353,7 @@ api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', f
     , applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
-    School.applicationIds = _.union(School.applicationIds, [applicationId]);
+    School.applications = _.union(School.applications, [applicationId]);
     School.save(function(err) {
       res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/assign');
       res.send(300);
@@ -347,7 +368,7 @@ api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign'
     , applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
-    School.applicationIds = _.omit(School.applicationIds, applicationId);
+    School.applications = _.omit(School.applications, applicationId);
     School.save(function(err) {
       res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/assign');
       res.send(300);
@@ -430,7 +451,7 @@ api.put('/:admissionsId/search/schools/:schoolId/claim', function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   user.findById(admissionsId).exec(function(err, Admissions) {
-    Admissions.schoolIds = _.union(Admissions.schoolIds, [schoolId]);
+    Admissions.schools = _.union(Admissions.schools, [schoolId]);
     Admissions.save(function(err) {
       res.set('Location', '/api/v1/admissions/' + admissionsId);
       res.send(300);
@@ -444,7 +465,7 @@ api.delete('/:admissionsId/search/schools/:schoolId/claim', function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   user.findById(admissionsId).exec(function(err, Admissions) {
-    Admissions.schoolIds = _.without(Admissions.schoolIds, schoolId);
+    Admissions.schools = _.without(Admissions.schools, schoolId);
     Admissions.save(function(err) {
       res.set('Location', '/api/v1/admissions/' + admissionsId);
       res.send(300);

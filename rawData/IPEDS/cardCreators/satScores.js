@@ -31,7 +31,7 @@ rawImporter().then(function(schools) {
       }
       var satScores = new CardModel(satScores);
       satScores.save(function(err) {
-        newSchool.cardIds.push(satScores._id);
+        newSchool.cards.push(satScores._id);
         newSchool.save(function(err) {
           console.log(newSchool);
         });

@@ -23,8 +23,8 @@
   <div class="panel-body">
     <h2 ng-bind="link.data.institutionName"></h2>
     <button type="button" class="btn btn-primary"
+      ng-init="button = (link.applications | filter: client.data.applicationId).length"
       ng-click="link._link.method = button ? 'DELETE': 'PUT'; traverse();"
-      ng-init="button = (link.applicationIds | filter: client.data.applicationId).length"
       ng-click=""
       ng-bind="button ? 'ON' : 'OFF'"
       ng-class="{'active': button}">

@@ -18,11 +18,11 @@ var UserSchema = new mongoose.Schema({
   userPerms: [
     { type: String, enum: userPerms }
   ],
-  applicationIds: [
-    { type: String }
+  applications: [
+    {type: String, ref: "Application"}
   ],
-  schoolIds: [
-    { type: String }
+  schools: [
+    {type: String, ref: "School"}
   ]
 });
 UserSchema.pre('save', function(next) {

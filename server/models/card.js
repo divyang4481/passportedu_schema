@@ -18,9 +18,13 @@ var mongoose = require('mongoose')
     "application/academic/schools/previous"
   ];
 var CardSchema = new mongoose.Schema({
-  owners:  Schema.Types.Mixed,
+  owners: Schema.Types.Mixed,
   data: Schema.Types.Mixed,
-  type: { type: String, enum: cardTypes },
-  updated: { type: Date, default: Date.now }
+  type: {
+    type: String, enum: cardTypes
+  },
+  updated: {
+    type: Date, default: Date.now
+  }
 });
 module.exports = mongoose.model('Card', CardSchema);

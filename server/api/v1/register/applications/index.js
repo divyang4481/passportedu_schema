@@ -20,8 +20,8 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
   var student = req.body.student
     , cards = req.body.cards;
   student.userPerms = ['students'];
-  student.applicationIds = [req.params.applicationId];
-  student.schoolIds = [req.params.schoolId];
+  student.applications = [req.params.applicationId];
+  student.schools = [req.params.schoolId];
   user.create(student, function(err, Student) {
     var studentId = Student._id.toString();
     _.each(cards, function(postCard) {

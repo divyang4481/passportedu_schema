@@ -247,8 +247,8 @@
           "readonly": false,
           "type": "string"
         },
-        "cardIds": {
-          "title": "cardIds ",
+        "cards": {
+          "title": "Cards",
           "description": "cardIds ",
           "identity": false,
           "readonly": false,

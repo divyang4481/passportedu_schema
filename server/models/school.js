@@ -47,12 +47,12 @@ var SchoolSchema = new mongoose.Schema({
       { type: String }
     ]
   },
-  applicationIds: [
-    { type: String }
+  applications: [
+    {type: String, ref: "Application"}
   ],
   mediaTypes: { type: String },
-  cardIds: [
-    { type: String }
+  cards: [
+    {type: String, ref: "Card"}
   ]
 });
 module.exports = mongoose.model("School", SchoolSchema);

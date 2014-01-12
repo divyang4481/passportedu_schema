@@ -4,8 +4,8 @@ var mongoose = require('mongoose')
 var ApplicationSchema = new mongoose.Schema({
   type: String,
   admissionsId: String,
-  schoolIds: [
-    { type: String }
+  schools: [
+    {type: String, ref: "School"}
   ],
   data: Schema.Types.Mixed,
   mediaType: String,
@@ -27,7 +27,7 @@ var restMap = function(app) {
     'student': {
       'studentId': app.studentId
     },
-    'schools': _.map(app.schoolIds, schoolMap)
+    'schools': _.map(app.schools, schoolMap)
   };
 };
 ApplicationSchema.static('rest', function(query, callback) {
