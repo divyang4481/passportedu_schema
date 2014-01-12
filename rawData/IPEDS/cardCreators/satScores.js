@@ -19,12 +19,11 @@ rawImporter().then(function(schools) {
       var satScores = {
         data: {
           title: 'SAT Math Score Range',
-          bigEnd: school.SATMath75,
-          smallEnd: school.SATMath25,
-          paragraph: ''
+          seventyFifth: school.SATMath75,
+          twentyFifth: school.SATMath25
         },
-        mediaTypes: [
-          "/api/v1/card/range/small.json"
+        type: [
+          "schools/sat/range"
         ],
         owners: [
           {schools: newSchool._id}

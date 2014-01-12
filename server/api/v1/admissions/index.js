@@ -56,6 +56,23 @@ api.get('/login', function(req, res) {
   }
 });
 /**
+ * Admissions Area
+ */
+api.get('/logout', function(req, res) {
+  authenticate.logout(req, function(err, auth) {
+    if (auth.user.userType !== 'admissions') {
+      res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
+      res.send(401);
+      return;
+    }
+    if (auth.user.userType !== 'students') {
+      res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
+      res.send(401);
+      return;
+    }
+  });
+});
+/**
  *
  */
 api.get('/:admissionsId', function(req, res) {
@@ -305,7 +322,7 @@ api.get('/:admissionsId/applications/:applicationId/assign', function(req, res) 
  *
  */
 api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', function(req, res) {
-  res.json({hello:':)'})
+  res.json({hello: ':)'})
 });
 /**
  *

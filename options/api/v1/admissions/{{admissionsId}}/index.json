@@ -108,6 +108,13 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    },
+    {
+      "title": "Logout",
+      "rel": "logout",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/logout"
     }
   ]
 }

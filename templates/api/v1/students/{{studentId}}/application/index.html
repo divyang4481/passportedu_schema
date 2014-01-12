@@ -21,7 +21,7 @@
   </div>
 </div>
 <div class="pinColumns">
-  <div ng-repeat='card in client.links | semantics: {importance: "cards"}'
+  <div ng-repeat='card in client.links | semantics: {importance: "cards"} | orderBy: card._id'
     ng-include="card._link.template"
     class="pin"
     ng-model="card"

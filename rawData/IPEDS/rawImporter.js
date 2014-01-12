@@ -45,12 +45,14 @@ module.exports = function() {
         SATMath25: fields[24],
         SATMath75: fields[25],
         SATWriting25: fields[26],
-        SATWriting75: fields[27]
+        SATWriting75: fields[27],
+        applicationIds: [],
+        cardsIds: []
       };
       return school;
     }).join(function(transformedSchools) {
 //      console.log(transformedSchools);
-      console.log('resolved');
+//      console.log('resolved');
       deferred.resolve(transformedSchools);
     });
   return deferred.promise;

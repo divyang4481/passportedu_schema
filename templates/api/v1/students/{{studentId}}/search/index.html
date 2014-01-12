@@ -32,15 +32,15 @@
     </div>
   </div>
   <div class="row">
-    <a ng-click="showAdvanced = showAdvanced !== true">advanced search</a>
-
     <div class="col-md-12">
       <div ng-repeat='link in client.links | semantics: {importance: "search"}' class="panel panel-default heroCard">
         <div class="panel-body">
-          <input type="text" class="form-control" ng-model="link._link.institutionName" placeholder="Search">
-          <button ng-click="traverse(); showAdvanced = false;" type="submit" class="btn btn-primary form-control">
+          <input type="text" class="form-control" ng-model="link['data.institutionName*']" placeholder="Search">
+          <button ng-click="traverse()" type="submit" class="btn btn-primary form-control">
             <i class="glyphicon glyphicon-white glyphicon-search"></i> Search
           </button>
+          <a ng-click="showAdvanced = true;">advanced search</a>
+
           <div ng-show='showAdvanced' ng-repeat="(propName, property) in link._link.properties | orderBy:predicate" class="form-group pull-left">
             <label ng-bind="property.title" class="col-sm-12 control-label"></label>
 
@@ -63,11 +63,9 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="pinColumns">
-      <div ng-repeat='link in client.links | semantics: {importance: "content"}'
-        ng-include="link._link.template"
-        class="pin"></div>
-    </div>
+  <div class="pinColumns">
+    <div ng-repeat='link in client.links | semantics: {importance: "content"}'
+      ng-include="link._link.template"
+      class="pin"></div>
   </div>
 </div>

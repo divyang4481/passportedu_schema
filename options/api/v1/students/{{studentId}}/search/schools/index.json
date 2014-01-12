@@ -343,7 +343,7 @@
     },
     {
       "title": "Search Schools",
-      "rel": "self",
+      "rel": "search",
       "importance": "search",
       "href": "/api/v1/students/{{studentId}}/search/schools",
       "properties": {

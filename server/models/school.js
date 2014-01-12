@@ -5,7 +5,6 @@ var mongoose = require('mongoose')
     "college"
   ];
 var SchoolSchema = new mongoose.Schema({
-  id: String,
   data: {
     unitId: Number,
     institutionName: String,

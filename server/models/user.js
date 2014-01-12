@@ -89,4 +89,18 @@ UserSchema.static('auth', function(username, token, callback) {
     });
   });
 });
+/**
+ * Auth method for authorizing users to resources
+ */
+UserSchema.static('deAuth', function(username, token, callback) {
+  var self = this;
+  self.findOne({username: username, token: token}, function(err, User) {
+    if (User) {
+      User.token = '';
+      User.save(function(err) {
+        callback(null, User);
+      });
+    }
+  });
+});
 module.exports = mongoose.model("User", UserSchema);

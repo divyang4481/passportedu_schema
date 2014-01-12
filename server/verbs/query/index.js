@@ -26,6 +26,7 @@ module.exports = function(model) {
       queryVars.offset = offset = 0;
     }
     query.skip(offset);
+    query.sort('field _id');
     query.exec(function(err, result) {
       if (err) {
         callback(err);

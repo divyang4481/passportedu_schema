@@ -273,7 +273,7 @@
               {
                 "title": "Apply to {{type}}",
                 "description": "{{data.institutionName}}",
-                "rel": "addSchool",
+                "rel": "addSchool_{{_id}}",
                 "importance": "callToAction",
                 "method": "PUT",
                 "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/apply"
@@ -281,7 +281,7 @@
               {
                 "title": "Save {{type}} School for Later",
                 "description": "{{data.institutionName}}",
-                "rel": "saveSchool",
+                "rel": "saveSchool_{{_id}}",
                 "importance": "callToAction",
                 "method": "PUT",
                 "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/save"

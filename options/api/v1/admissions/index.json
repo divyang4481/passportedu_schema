@@ -30,6 +30,13 @@
       "href": "/api/v1/admissions/login"
     },
     {
+      "title": "Logout",
+      "rel": "logout",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/logout"
+    },
+    {
       "title": "Register",
       "rel": "register",
       "importance": "content",

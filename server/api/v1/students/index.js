@@ -141,8 +141,9 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', functi
   user.findById(studentId).exec(function(err, Student) {
     Student.schoolIds = _.union(Student.schoolIds, [schoolId]);
     Student.applicationIds = _.union(Student.applicationIds, [applicationId]);
+    addApplicationCardsToStudent(Student, applicationId);
     Student.save(function(err) {
-      res.set('Location', '/api/v1/students/' + studentId);
+      res.set('Location', '/api/v1/students/' + studentId + '/application');
       res.send(300);
     });
   });
@@ -158,10 +159,10 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', functio
     Student.schoolIds = _.union(Student.schoolIds, [schoolId]);
     Student.applicationIds = _.union(Student.applicationIds, [applicationId]);
     addApplicationCardsToStudent(Student, applicationId);
-//    Student.save(function(err) {
+    Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId + '/search/schools/' + schoolId);
       res.send(300);
-//    });
+    });
   });
 });
 /**
@@ -170,14 +171,20 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', functio
  * @param applicationId
  */
 var addApplicationCardsToStudent = function(Student, applicationId) {
-  card.find({"owners.students": Student._id}, function(err, studentCards) {
+  card.find({"owners.students": Student._id.toString()}, function(err, studentCards) {
     card.find({"owners.applications": applicationId}, function(err, appCards) {
       this.studentCardTypes = _.map(studentCards, function(card) {
         return card.type;
       });
       this.Student = Student;
+      // Remove each instance of a card student already has from those being added
       var addCards = _.reject(appCards, function(Card) {
-        return _.where(this.studentCardTypes, {type: Card.type}).length > 0;
+        if (_.contains(this.studentCardTypes, Card.type)) {
+          var index = _.indexOf(this.studentCardTypes, Card.type);
+          this.studentCardTypes.splice(index, 1);
+          return true;
+        }
+        return false;
       }, this);
       _.each(addCards, function(Card) {
         var newCard = {
