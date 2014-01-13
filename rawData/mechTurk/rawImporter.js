@@ -26,7 +26,6 @@ new lazy (fs.createReadStream (__dirname + '/mechTurkURLS.csv')).lines.map (Stri
 	return school.accept === 'x';
 }).join (function (transformedSchools) {
 	_.each (transformedSchools, function (school) {
-			console.log (school.unitId);
 			SchoolModel.findOne ({"data.unitId": Number (school.unitId)}, function (err, School) {
 					console.log (School);
 					School.data.state = school.state;

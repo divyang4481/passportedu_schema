@@ -43,7 +43,7 @@ module.exports = function(model) {
           , prevOffset = Math.min(count - limit, Number(offset) - Number(limit))
           , meta = []
           , currentPage = (Math.ceil(queryVars.offset / queryVars.limit))
-          , minBound = Math.max(1, (currentPage - 10))
+          , minBound = Math.max(0, (currentPage - 10))
           , maxBound = Math.min((count / limit), currentPage + 10);
         firstPage.offset = 0;
         meta.push({
