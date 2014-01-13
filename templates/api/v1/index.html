@@ -1,13 +1,150 @@
 <div ng-include="'/templates/common/navMenu'"></div>
 <div class="jumbotron">
+  <!--Heading and Description-->
   <h1 ng-bind="client.schema.title"></h1>
 
-  <p ng-bind="client.schema.description"></p>
-
-  <div class="clearfix"></div>
+  <h2 ng-bind="client.schema.description"></h2>
+  <!-- Calls To Action-->
+  <div class="btn-group">
+    <button ng-repeat='link in client.links | semantics: {importance: "callToAction"}'
+      type="button" class="btn" ng-click="traverse()" ng-class="{
+        'btn-danger': link._link.method == 'DELETE',
+        'btn-success': link._link.method != 'DELETE'
+        }">
+      <i class="glyphicon" ng-class="{
+        'glyphicon-minus-sign': link._link.method == 'DELETE',
+        'glyphicon-plus-sign': link._link.method != 'DELETE'
+        }"></i>&nbsp;
+      <span ng-bind="link._link.title"></span>
+    </button>
+  </div>
 </div>
-<div ng-repeat='link in client.links | semantics: {importance: "content"}' class="panel panel-default smallCard">
+<!--Basic Content-->
+<div class="pinColumns">
+  <div ng-repeat='link in client.links | semantics: {importance: "content"}'
+    ng-include="link._link.template"
+    class="pin">
+  </div>
+</div>
+<!--Cards-->
+<div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length == 0" class="pinColumns">
+  <div ng-repeat='link in client.links | semantics: {importance: "cards"}'
+    ng-model="link"
+    ng-include="link._link.template"
+    class="pin">
+  </div>
+</div>
+<!--Draggable-->
+<div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length" class="pinColumns">
+  <div ng-repeat='link in client.links | semantics: {importance: "cards"}'
+    ng-model="link"
+    ng-include="link._link.template"
+    class="pin"
+    drag>
+  </div>
+</div>
+<!--Droppable Area-->
+<nav ng-repeat="link in client.links | semantics: {importance: 'drop'}"
+  class="container navbar-fixed-bottom">
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title" ng-bind="link._link.title"></h3>
+      <h6 ng-bind="link._link.description"></h6>
+    </div>
+    <div class="panel-body">
+      <div drop="performDragLinkAction"></div>
+    </div>
+  </div>
+</nav>
+
+<!--Search Results-->
+<div ng-show="(client.links | semantics: {importance: 'search'}).length" class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <!--Paging-->
+      <ul class="pagination">
+        <li ng-repeat='link in client.links | semantics: {importance: "paging"}'
+          ng-click="traverse()" ng-class="{'active': link._link.rel == 'self'}">
+          <a ng-bind="link._link.title"></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <!--Search Form-->
+      <form>
+        <div ng-repeat='link in (client.links | semantics: {importance: "search"})'
+          class="panel panel-default heroCard">
+          <div class="panel-body">
+            <!--Primary Search Field-->
+            <div class="input-group">
+              <input ng-repeat='(propName, property) in (link._link.properties | filterObjectBy:{importance:"mainSearchString"})'
+                type="text" class="form-control"
+                ng-model="link[propName]"
+                placeholder="{{property.title}}">
+
+              <div class="input-group-btn">
+                <button ng-click="traverse()"
+                  type="submit"
+                  class="btn btn-primary">
+                  <i class="glyphicon glyphicon-white glyphicon-search"></i> Search
+                </button>
+                <!--Advanced Search-->
+                <button type="button"
+                  class="btn btn-info"
+                  data-toggle="collapse"
+                  data-target="#advancedSearch">
+                  advanced search
+                </button>
+              </div>
+            </div>
+            <!--Additional Search properties-->
+            <div id="advancedSearch" class="collapse out">
+              <div
+                ng-repeat="(propName, property) in link._link.properties"
+                class="form-group pull-left">
+                <label ng-bind="property.title" class="col-sm-12 control-label"></label>
+
+                <div ng-switch="property.type" data-trigger="hover" data-toggle="tooltip"
+                  title="{{property.description}}"
+                  class="col-sm-12">
+                  <input ng-switch-when="string" type="text" class="form-control" ng-model="link[propName]" placeholder="{{property.title}}">
+                  <input ng-switch-when="number" type="number" class="form-control" ng-model="link[propName]">
+                  <input ng-switch-when="password" type="password" class="form-control" ng-model="link[propName]">
+                  <input ng-switch-when="date-time" type="date" class="form-control" ng-model="link[propName]">
+                  <input ng-switch-when="email" type="email" class="form-control" ng-model="link[propName]">
+
+                  <div ng-switch-when="range" class="input-group">
+                    <span ng-bind="link[propName]" class="input-group-addon"></span>
+                    <input type="range" min="{{property.min}}" max="{{property.max}}" class="form-control" ng-model="link[propName]">
+                  </div>
+                  <select ng-switch-when="enum" class="form-control" ng-options="v as v for (k,v) in property.enum" ng-model="link[propName]">
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--Search Results-->
+  <div class="pinColumns">
+    <div ng-repeat='link in client.links | semantics: {importance: "results"}'
+      ng-include="link._link.template"
+      class="pin"></div>
+  </div>
+</div>
+<div ng-repeat='link in client.links | semantics: {importance: "toggle"}'
+  ng-class="{'alert-info': dragging}" class="well panel smallCard">
   <div class="panel-body">
-    <magic-form-content click="traverse" link="link"></magic-form-content>
+    <h2 ng-bind="link._link.title"></h2>
+    <button type="button" class="btn btn-primary"
+      ng-click="link._link.method = link._link.state > 0 ? 'DELETE': 'PUT'; traverse();"
+      ng-bind="link._link.state > 0 ? 'ON' : 'OFF'"
+      ng-class="{'active': link._link.state > 0}">
+
+    </button>
   </div>
 </div>

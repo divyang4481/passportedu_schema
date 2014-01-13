@@ -277,7 +277,7 @@
             },
             "template": "/templates/api/v1/card/search/results/schools",
             "method": "GET",
-            "importance": "content",
+            "importance": "results",
             "href": "/api/v1/admissions/{{admissionsId}}/search/schools/{{_id}}"
           }
         ]
@@ -334,13 +334,14 @@
     },
     {
       "title": "Search Schools",
-      "rel": "self",
+      "rel": "search",
       "importance": "search",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools",
       "properties": {
         "data.institutionName*": {
           "title": "Institution Name",
           "description": "contains",
+          "importance": "mainSearchString",
           "identity": false,
           "readonly": false,
           "type": "string"

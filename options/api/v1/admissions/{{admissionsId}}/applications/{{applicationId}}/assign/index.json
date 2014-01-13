@@ -34,7 +34,8 @@
                 "title": "{{data.institutionName}}",
                 "description": "{{type}}",
                 "rel": "assign_{{_id}}",
-                "importance": "schools",
+                "importance": "toggle",
+                "state": "{{(applications | filter: data.applicationId).length}}",
                 "template": "/templates/api/v1/card/admissions/schools",
                 "method": "PUT",
                 "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/assign"

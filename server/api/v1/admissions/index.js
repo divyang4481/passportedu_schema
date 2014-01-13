@@ -196,7 +196,8 @@ api.post('/:admissionsId/applications', function(req, res) {
     data: req.body.data
   });
   app.save(function(err) {
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + app._id);
+    var applicationId = app._id.toString();
+    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
     res.send(300);
   });
 });
@@ -368,7 +369,7 @@ api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign'
     , applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
-    School.applications = _.omit(School.applications, applicationId);
+    School.applications = _.without(School.applications, applicationId);
     School.save(function(err) {
       res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/assign');
       res.send(300);
@@ -403,7 +404,7 @@ api.put('/:admissionsId/applications/:applicationId/cards/:cardId', function(req
     , cardId = req.params.cardId
     , cardPost = req.body;
   card.findOneAndUpdate(cardId, cardPost, function(err, Card) {
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/cards/' + Card._id);
+    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/cards/' + cardId);
     res.send(300);
   });
 });

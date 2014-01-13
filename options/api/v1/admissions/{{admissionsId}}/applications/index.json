@@ -30,7 +30,7 @@
           {
             "title": "{{type}}",
             "rel": "full_{{_id}}",
-            "importance": "applications",
+            "importance": "content",
             "template": "/templates/api/v1/card/admissions/applications",
             "description": "{{type}}",
             "method": "GET",
@@ -58,7 +58,7 @@
           {
             "title": "{{data.institutionName}}",
             "rel": "full_{{_id}}",
-            "importance": "schools",
+            "importance": "content",
             "template": "/templates/api/v1/card/admissions/schools",
             "description": "{{type}}",
             "method": "GET",

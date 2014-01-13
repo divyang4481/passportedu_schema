@@ -137,6 +137,12 @@
       "importance": "callToAction",
       "method": "DELETE",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+    },
+    {
+      "title": "Drop Cards Here",
+      "description": "to remove them from this Application",
+      "rel": "addToApp",
+      "importance": "drop"
     }
   ]
 }
