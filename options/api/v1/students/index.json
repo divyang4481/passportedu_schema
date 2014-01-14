@@ -37,6 +37,7 @@
       "title": "Register",
       "rel": "register",
       "importance": "content",
+      "template": "/templates/api/v1/card/admissions/register",
       "href": "/api/v1/register/students",
       "method": "POST",
       "properties": {

@@ -100,7 +100,7 @@
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
     },
     {
-      "title": "Search Schools",
+      "title": "Claim a School",
       "rel": "search",
       "importance": "navigation",
       "method": "GET",
@@ -126,7 +126,7 @@
       "title": "Schools",
       "description": "{{application.type}}",
       "rel": "assign",
-      "importance": "callToAction",
+      "importance": "alsoCall",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/assign"
     },

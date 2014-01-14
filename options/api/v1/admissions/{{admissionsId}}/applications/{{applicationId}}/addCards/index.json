@@ -88,7 +88,7 @@
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
     },
     {
-      "title": "View Application",
+      "title": "Back To Application",
       "rel": "view",
       "importance": "callToAction",
       "method": "GET",

@@ -18,6 +18,19 @@
       <span ng-bind="link._link.title"></span>
     </button>
   </div>
+  <div class="btn-group pull-right">
+    <button ng-repeat='link in client.links | semantics: {importance: "alsoCall"}'
+      type="button" class="btn" ng-click="traverse()" ng-class="{
+        'btn-danger': link._link.method == 'DELETE',
+        'btn-success': link._link.method != 'DELETE'
+        }">
+      <i class="glyphicon" ng-class="{
+        'glyphicon-minus-sign': link._link.method == 'DELETE',
+        'glyphicon-plus-sign': link._link.method != 'DELETE'
+        }"></i>&nbsp;
+      <span ng-bind="link._link.title"></span>
+    </button>
+  </div>
 </div>
 <!--Basic Content-->
 <div class="pinColumns">

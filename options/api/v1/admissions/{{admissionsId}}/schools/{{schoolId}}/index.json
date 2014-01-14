@@ -352,7 +352,7 @@
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
     },
     {
-      "title": "Search Schools",
+      "title": "Claim a School",
       "rel": "search",
       "importance": "navigation",
       "method": "GET",

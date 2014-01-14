@@ -11,8 +11,7 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
     $scope.traverse = function() {
       angular.element('.modal').modal('hide');
       $('.modal-backdrop').remove();
-      if (this.link._link.method === 'DELETE') {
-      }
+
       $scope.client.traverse(this.link._link.rel, this.link);
     };
     /**

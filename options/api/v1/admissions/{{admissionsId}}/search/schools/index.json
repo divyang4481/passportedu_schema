@@ -326,7 +326,7 @@
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
     },
     {
-      "title": "Search Schools",
+      "title": "Claim a School",
       "rel": "self",
       "importance": "navigation",
       "method": "GET",
