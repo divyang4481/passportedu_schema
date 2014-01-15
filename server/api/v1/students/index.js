@@ -63,14 +63,13 @@ api.get('/:studentId', function(req, res) {
   var response = {
     studentId: studentId
   };
-  user.findById(studentId, function(err, Student) {
-    console.log(studentId, err, Student)
-    response.student = Student;
-    school.find({_id: { $in: Student.schools}}, function(err, Schools) {
-      response.schools = Schools;
+  user.findById(studentId)
+    .populate('schools')
+    .populate('applications')
+    .exec(function(err, Student) {
+      response.student = Student;
       res.json(response);
     });
-  });
 });
 /**
  *
@@ -164,7 +163,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', functio
 });
 /**
  *
- * @param student
+ * @param Student
  * @param applicationId
  */
 var addApplicationCardsToStudent = function(Student, applicationId) {

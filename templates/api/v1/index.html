@@ -42,9 +42,17 @@
 <!--Cards-->
 <div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length == 0" class="pinColumns">
   <div ng-repeat='link in client.links | semantics: {importance: "cards"}'
-    ng-model="link"
     ng-include="link._link.template"
     class="pin">
+  </div>
+</div>
+<!--Auto Cards (They auto traverse on change)-->
+<div class="pinColumns">
+  <div ng-repeat='link in client.links | semantics: {importance: "autoCards"} | orderBy:_id'
+    ng-include="link._link.template"
+    class="pin"
+    ng-model="link"
+    auto-save-card>
   </div>
 </div>
 <!--Draggable-->
@@ -149,6 +157,7 @@
       class="pin"></div>
   </div>
 </div>
+<!--Toggle Links-->
 <div ng-repeat='link in client.links | semantics: {importance: "toggle"}'
   ng-class="{'alert-info': dragging}" class="well panel smallCard">
   <div class="panel-body">
@@ -157,7 +166,6 @@
       ng-click="link._link.method = link._link.state > 0 ? 'DELETE': 'PUT'; traverse();"
       ng-bind="link._link.state > 0 ? 'ON' : 'OFF'"
       ng-class="{'active': link._link.state > 0}">
-
     </button>
   </div>
 </div>

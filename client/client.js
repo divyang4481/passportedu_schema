@@ -1,4 +1,4 @@
-var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink', 'dragAndDrop'])
+var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink', 'dragAndDrop', 'imageUpload'])
   .config(function($interpolateProvider) {
   })
   .filter('fieldName', function() {
@@ -56,7 +56,7 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
           var link = ngModel.$viewValue;
           scope.client.link(link._link.rel, link);
         }, 100);
-        element.bind('keypress', function(e) {
+        element.bind('keyup change image', function(e) {
           saveIt();
         });
       }

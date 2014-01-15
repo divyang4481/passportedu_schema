@@ -314,7 +314,7 @@
           "title": "{{page}}",
           "rel": "{{rel}}",
           "method": "GET",
-          "importance": "applicants",
+          "importance": "cards",
           "template": "/templates/api/v1/card/admissions/applicant",
           "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applicants/{{_id}}"
         }
