@@ -68,7 +68,7 @@
     {
       "title": "Save Application",
       "rel": "register",
-      "importance": "content",
+      "importance": "modal",
       "href": "/api/v1/register/applications/{{applicationId}}/schools/{{schoolId}}",
       "method": "POST",
       "properties": {
@@ -116,6 +116,11 @@
           "required": ["username", "password", "email", "fullName"]
         }
       }
+    },
+    {
+      "title": "Save Application",
+      "rel": "register",
+      "importance": "modalOpen"
     }
   ]
 }

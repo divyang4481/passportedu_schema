@@ -23,6 +23,7 @@ var CardSchema = new mongoose.Schema({
   type: {
     type: String, enum: cardTypes
   },
+  order: Number,
   updated: {
     type: Date, default: Date.now
   }

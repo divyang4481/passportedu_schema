@@ -63,13 +63,13 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 /**
  * Login method
  */
-UserSchema.static('login', function(credentials, callback) {
-  return this.findOne({ username: credentials.username }, function(err, User) {
+UserSchema.static('login', function(username, password, callback) {
+  return this.findOne({ username: username }, function(err, User) {
     if (_.isNull(User)) {
       callback({error: 'No User'});
       return;
     }
-    User.comparePassword(credentials.password, function(err, isMatch) {
+    User.comparePassword(password, function(err, isMatch) {
       callback(err, isMatch, isMatch ? User : {});
     });
   });
@@ -84,9 +84,7 @@ UserSchema.static('auth', function(username, token, callback) {
       callback(null, result);
       return;
     }
-    self.login({username: username, password: token}, function(err, match, user) {
-      callback(err, user);
-    });
+    callback({error: "not Authorized"});
   });
 });
 /**
@@ -100,6 +98,8 @@ UserSchema.static('deAuth', function(username, token, callback) {
       User.save(function(err) {
         callback(null, User);
       });
+    } else {
+      callback({error: "not Authorized"});
     }
   });
 });

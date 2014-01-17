@@ -6,6 +6,7 @@ var express = require('express')
   , path = require('path')
   , fs = require('fs')
   , mongoose = require('mongoose');
+
 // Mongoose
 mongoose.connect('mongodb://localhost/psprt');
 /**
@@ -14,6 +15,7 @@ mongoose.connect('mongodb://localhost/psprt');
 var app = express();
 app.set('port', 8081);
 //app.use(express.logger());
+
 /**
  * Static resources
  */

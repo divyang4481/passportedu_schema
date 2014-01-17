@@ -16,21 +16,53 @@ var express = require('express')
  */
 api.use(function(req, res, next) {
   // All deeper URL's require authentication
-  authenticate.auth(req, function(err, auth) {
-    // Allowing unauthenticated users to remain in public students area...landing page
-    if (req.originalUrl === '/api/v1/students') {
-      req.studentsId = auth.user.userId;
+  var authToken = req.get('Token');
+  var authHeader = req.get('Authorization');
+  if (authHeader) {
+    authenticate.login(req, authHeader, function(err, authorization) {
+      if (err && req.originalUrl === '/api/v1/students') {
+        next();
+        return;
+      }
+      if ((err) || (authorization.user.userType !== 'students')) {
+        res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
+        res.send(401);
+        return;
+      }
+      req.studentsId = authorization.user.userId;
+      req.username = authorization.user.username;
+      req.token = authorization.user.token; // Token needs to be sent back and forth always
+      next();
+      return;
+    })
+  } else if (authToken) {
+    authenticate.auth(req, authToken, function(err, authorization) {
+      // Allowing unauthenticated users to remain in public students area...landing page
+      if (err && req.originalUrl === '/api/v1/students') {
+        next();
+        return;
+      }
+      if ((err) || (authorization.user.userType !== 'students')) {
+        res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
+        res.send(401);
+        return;
+      }
+      req.studentsId = authorization.user.userId;
+      req.username = authorization.user.username;
+      req.token = authorization.user.token; // Token needs to be sent back and forth always
+      next();
+      return;
+    });
+  } else {
+    if (req.originalUrl === '/api/v1/admissions') {
       next();
       return;
     }
-    if ((err) || (auth.user.userType !== 'students')) {
-      res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
-      res.send(401);
-      return;
-    }
-    req.studentsId = auth.user.userId;
-    next();
-  });
+    res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
+    res.send(401);
+    return;
+  }
+  return;
 });
 /**
  * Students Area
@@ -40,7 +72,7 @@ api.get('/', function(req, res) {
     res.json({});
   } else {
     res.set('Location', '/api/v1/students/' + req.studentsId);
-    res.send(300);
+    res.send(300, {username: req.username, token: req.token});
   }
 });
 /**
@@ -52,7 +84,7 @@ api.get('/login', function(req, res) {
     res.send(300);
   } else {
     res.set('Location', '/api/v1/students/' + req.studentsId);
-    res.send(300);
+    res.send(300, {username: req.username, token: req.token});
   }
 });
 /**
@@ -68,6 +100,8 @@ api.get('/:studentId', function(req, res) {
     .populate('applications')
     .exec(function(err, Student) {
       response.student = Student;
+      response.username = req.username;
+      response.token = req.token;
       res.json(response);
     });
 });
@@ -82,7 +116,9 @@ api.get('/:studentId/schools/:schoolId', function(req, res) {
       studentId: studentId,
       schoolId: schoolId,
       school: School
-    }
+    };
+    response.username = req.username;
+    response.token = req.token;
     res.json(response);
   });
 });
@@ -98,7 +134,7 @@ api.delete('/:studentId/schools/:schoolId', function(req, res) {
     });
     Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId);
-      res.send(300);
+      res.send(300, {username: req.username, token: req.token});
     });
   });
 });
@@ -109,6 +145,8 @@ api.get('/:studentId/search/schools', function(req, res) {
   queryM(school)(req, function(err, response) {
     response.studentId = req.params.studentId;
     response.cardType = 'search/results/schools';
+    response.username = req.username;
+    response.token = req.token;
     res.json(response);
   });
 });
@@ -123,7 +161,9 @@ api.get('/:studentId/search/schools/:schoolId', function(req, res) {
       studentId: studentId,
       schoolId: schoolId,
       school: School
-    }
+    };
+    response.username = req.username;
+    response.token = req.token;
     res.json(response);
   });
 });
@@ -140,7 +180,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', functi
     addApplicationCardsToStudent(Student, applicationId);
     Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId + '/application');
-      res.send(300);
+      res.send(300, {username: req.username, token: req.token});
     });
   });
 });
@@ -157,7 +197,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', functio
     addApplicationCardsToStudent(Student, applicationId);
     Student.save(function(err) {
       res.set('Location', '/api/v1/students/' + studentId + '/search/schools/' + schoolId);
-      res.send(300);
+      res.send(300, {username: req.username, token: req.token});
     });
   });
 });
@@ -216,6 +256,8 @@ var getApplication = function(studentId) {
 api.get('/:studentId/application', function(req, res) {
   var studentId = req.params.studentId;
   getApplication(studentId).then(function(response) {
+    response.username = req.username;
+    response.token = req.token;
     res.json(response);
   });
 });
@@ -226,11 +268,14 @@ api.get('/:studentId/application/cards/:cardId', function(req, res) {
   var studentId = req.params.studentId
     , cardId = req.params.cardId;
   card.findById(cardId).exec(function(err, Card) {
-    res.json({
+    var response = {
       studentId: studentId,
       cardId: cardId,
       card: Card
-    });
+    };
+    response.username = req.username;
+    response.token = req.token;
+    res.json(response);
   });
 });
 /**
@@ -242,6 +287,8 @@ api.put('/:studentId/application/cards/:cardId', function(req, res) {
     , cardPost = _.omit(req.body, '_id');
   card.update({_id: cardId}, cardPost, function(err, affected, Card) {
     getApplication(studentId).then(function(response) {
+      response.username = req.username;
+      response.token = req.token;
       res.json(response);
     });
   });
@@ -254,7 +301,7 @@ api.delete('/:studentId/application/cards/:cardId', function(req, res) {
     , cardId = req.params.cardId;
   card.findOneAndRemove({_id: cardId}, function(err) {
     res.set('Location', '/api/v1/students/' + studentId + '/application');
-    res.send(300);
+    res.send(300, {username: req.username, token: req.token});
   });
 });
 /**

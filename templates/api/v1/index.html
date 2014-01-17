@@ -18,6 +18,15 @@
       <span ng-bind="link._link.title"></span>
     </button>
   </div>
+  <!--Modal Actions-->
+  <div class="btn-group pull-right">
+    <a ng-repeat='link in client.links | semantics: {importance: "modalOpen"}'
+      data-target="#{{link._link.rel}}" role="button" class="btn btn-primary" data-toggle="modal">
+      <i class="glyphicon glyphicon-tags"></i>&nbsp;
+      <span ng-bind="link._link.title"></span>
+    </a>
+  </div>
+  <!--Also Call to Actions-->
   <div class="btn-group pull-right">
     <button ng-repeat='link in client.links | semantics: {importance: "alsoCall"}'
       type="button" class="btn" ng-click="traverse()" ng-class="{
@@ -41,27 +50,37 @@
 </div>
 <!--Cards-->
 <div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length == 0" class="pinColumns">
-  <div ng-repeat='link in client.links | semantics: {importance: "cards"}'
+  <div ng-repeat='link in client.links | semantics: {importance: "cards"} | orderBy:"order"'
     ng-include="link._link.template"
     class="pin">
   </div>
 </div>
 <!--Auto Cards (They auto traverse on change)-->
 <div class="pinColumns">
-  <div ng-repeat='link in client.links | semantics: {importance: "autoCards"} | orderBy:_id'
+  <div ng-repeat='link in client.links | semantics: {importance: "autoCards"} | orderBy:"order"'
     ng-include="link._link.template"
     class="pin"
     ng-model="link"
     auto-save-card>
   </div>
 </div>
-<!--Draggable-->
-<div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length" class="pinColumns">
-  <div ng-repeat='link in client.links | semantics: {importance: "cards"}'
-    ng-model="link"
-    ng-include="link._link.template"
-    class="pin"
-    drag>
+<!--Draggable Cards for Drop-able Cards-->
+<div ng-show="(client.links | semantics: {importance: 'arrangeCards'}).length"
+  class="pinColumns">
+  <div ng-repeat='link in client.links | semantics: {importance: "arrangeCards"} | orderBy:"order"' class="pin" style="position: relative;">
+    <div ng-bind="$index" ng-model="link" ng-init="link._index = $index"
+      drop="performDropLinkAction" class="panel panel-default dropCard"
+      enter="enterDrop" leave="leaveDrop"
+      ng-class="{'alert-success': link._dropOver}"></div>
+    <div ng-include="link._link.template" ng-class="{'alert alert-success': link._dropping}" ng-model="link" drag>
+    </div>
+  </div>
+</div>
+<!--Draggable Cards-->
+<div ng-show="(client.links | semantics: {importance: 'cards'}).length  && (client.links | semantics: {importance: 'drop'}).length"
+  class="pinColumns">
+  <div ng-repeat='link in client.links | semantics: {importance: "cards"} | orderBy:"order"'
+    ng-model="link" ng-include="link._link.template" class="pin" drag>
   </div>
 </div>
 <!--Droppable Area-->
@@ -167,5 +186,41 @@
       ng-bind="link._link.state > 0 ? 'ON' : 'OFF'"
       ng-class="{'active': link._link.state > 0}">
     </button>
+  </div>
+</div>
+<!--Modals-->
+<div ng-repeat="link in client.links | semantics: {importance: 'modal'}"
+  id="{{link._link.rel}}" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true">&times;</button>
+        <h4 class="modal-title"
+          ng-bind="link._link.title"></h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal well">
+          <div class="form-group">
+            <label class="control-label">Username</label>
+            <input ng-model="student.username" type="text" class="form-control" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Password</label>
+            <input ng-model="student.password" type="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Email Address</label>
+            <input ng-model="student.email" type="email" class="form-control" placeholder="name@email.com">
+          </div>
+          <div class="form-group">
+            <label class="col-md-7 col-sm-7"></label>
+            <button class="btn btn-primary" ng-click="submitRegisterApp()">Save Application & Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,0 +1,103 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Arrange Cards",
+  "type": "object",
+  "description": "Arrange card order for {{application.type}} application type",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "application": {
+      "title": "Admissions Application",
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "cards": {
+      "title": "Application Cards",
+      "type": "array",
+      "items": {
+        "title": "Card {{}}",
+        "type": "object",
+        "properties": {
+          "type": {
+            "title": "Card Type",
+            "description": "Type of the Card",
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "rel": "arrange_{{_id}}",
+            "importance": "arrangeCards",
+            "method": "PUT",
+            "target": "nofollow",
+            "template": "/templates/api/v1/card/{{type}}",
+            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}/arrange",
+            "properties": {
+              "order": {
+                "type": "number"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "Home Page",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "admissions",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "myHome",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Application Types",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Claim a School",
+      "rel": "search",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    },
+    {
+      "title": "Back",
+      "description": "{{application.type}}",
+      "rel": "application",
+      "importance": "callToAction",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+    }
+  ]
+}

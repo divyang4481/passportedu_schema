@@ -1,10 +1,10 @@
-angular.module('schema', ['ngResource'])
+angular.module('schema', ['ngResource', 'clientUtilities'])
   .config(function($httpProvider) {
     /**
      * Intercept location changes so updating api endpoint
      */
-    var interceptor = ['$rootScope', '$q', '$location', 'jsonClient',
-      function(rootScope, $q, $location, jsonClient) {
+    var interceptor = ['$rootScope', '$q', '$location', 'jsonClient', 'base64',
+      function(rootScope, $q, $location, jsonClient, base64) {
         rootScope.$on('$locationChangeSuccess', function() {
           rootScope.actualLocation = $location.path();
         });
@@ -16,6 +16,13 @@ angular.module('schema', ['ngResource'])
           }
         });
         var success = function(response) {
+          if (angular.isDefined(response.data.token) && angular.isDefined(response.data.username)) {
+            var client = jsonClient();
+            client.staticHeaders = {
+              'Authorization': null,
+              'Token': base64.encode(response.data.username + ':' + response.data.token)
+            };
+          }
           return response;
         };
         var error = function(response) {

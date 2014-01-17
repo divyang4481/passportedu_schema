@@ -1,4 +1,4 @@
-var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink', 'dragAndDrop', 'imageUpload'])
+var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'imageUpload'])
   .config(function($interpolateProvider) {
   })
   .filter('fieldName', function() {
@@ -11,7 +11,6 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
     $scope.traverse = function() {
       angular.element('.modal').modal('hide');
       $('.modal-backdrop').remove();
-
       $scope.client.traverse(this.link._link.rel, this.link);
     };
     /**
@@ -27,13 +26,14 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
      * @param drop
      */
     $scope.performDropLinkAction = function(drag, drop) {
-      $scope.client.traverse(drop._link.rel, drop);
+      drag.order = drop._index;
+      $scope.client.link(drag._link.rel, drag);
     };
-    $scope.enterDrop = function() {
-      $scope.dropping = 1;
+    $scope.enterDrop = function(drag, drop, el) {
+      drop._dropOver = true;
     };
-    $scope.leaveDrop = function() {
-      $scope.dropping = 0;
+    $scope.leaveDrop = function(drag, drop) {
+      drop._dropOver = false;
     };
     var startURL = $location.path();
     startURL = startURL ? startURL : '/api/v1';
@@ -41,11 +41,6 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
       var passport = client;
       $scope.client = passport;
     });
-  })
-  .controller('CardSelection', function($scope) {
-    $scope.performLinkAction = function(card) {
-      $scope.client.traverse(card._link.rel, card);
-    };
   })
   .directive('autoSaveCard', function(debounce) {
     return {
@@ -60,25 +55,6 @@ var client = angular.module('client', ['schema', 'clientUtilities', 'MagicLink',
           saveIt();
         });
       }
-    };
-  })
-  .controller('AnonApplication', function($scope, $filter) {
-    $scope.cards = [];
-    $scope.student = {};
-    $scope.$watch('client.links', function() {
-      angular.forEach($scope.client.links, function(link) {
-        if (link.importance == 'cards') {
-          $scope.cards.push(link);
-        }
-      });
-    });
-    $scope.submitRegisterApp = function() {
-      var cards = $filter('semantics')($scope.client.links, {importance: "cards"});
-      $scope.client.traverse(this.link._link.rel,
-        {
-          student: $scope.student,
-          cards: cards
-        });
     };
   })
   .run(function() {

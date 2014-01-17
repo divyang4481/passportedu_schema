@@ -2,7 +2,7 @@
  *
  */
 var _ = require('underscore')
-  , UserModel = require('../models/user')
+  , user = require('../models/user')
   , uuid = require('node-uuid');
 // Secret code word :)
 var secret = 'Passport is your ticket to better colleges and students.';
@@ -23,7 +23,7 @@ var logout = function(req, callback) {
   }
   authToken = new Buffer(authToken.replace(/Basic /, ''), 'base64').toString();
   var credentials = authToken.split(':');
-  UserModel.deAuth(credentials[0], credentials[1], function(err, User) {
+  user.deAuth(credentials[0], credentials[1], function(err, User) {
     if (err || !User) {
       callback({error: 'User not found'});
       return;
@@ -39,18 +39,20 @@ var logout = function(req, callback) {
   });
 }
 /**
- *
+ * var authToken = req.get('Authorization');
  */
-var login = function(req, callback) {
-  if (_.isUndefined(req.body.username)) {
-    callback({
-      error: {
-        message: 'Please provide a username.'
+var login = function(req, authHeader, callback) {
+  if (_.isUndefined(authHeader)) {
+    callback(null, {
+      user: {
+        userType: 'public'
       }
     });
     return;
   }
-  UserModel.login(req.body, function(err, match, User) {
+  authHeader = new Buffer(authHeader.replace(/Basic /, ''), 'base64').toString();
+  var credentials = authHeader.split(':');
+  user.login(credentials[0], credentials[1], function(err, match, User) {
     if (!match) {
       callback({
         error: {
@@ -76,10 +78,9 @@ var login = function(req, callback) {
   });
 };
 /**
- *
+ * Ongoing authorization of resources
  */
-var auth = function(req, callback) {
-  var authToken = req.get('Authorization');
+var auth = function(req, authToken, callback) {
   if (_.isUndefined(authToken)) {
     callback(null, {
       user: {
@@ -90,7 +91,7 @@ var auth = function(req, callback) {
   }
   authToken = new Buffer(authToken.replace(/Basic /, ''), 'base64').toString();
   var credentials = authToken.split(':');
-  UserModel.auth(credentials[0], credentials[1], function(err, User) {
+  user.auth(credentials[0], credentials[1], function(err, User) {
     if (err || !User) {
       callback({error: 'User not found'});
       return;
@@ -99,6 +100,7 @@ var auth = function(req, callback) {
       user: {
         userId: User._id,
         userType: User.userPerms[0],
+        token: User.token,
         fullName: User.fullName,
         username: User.username
       }

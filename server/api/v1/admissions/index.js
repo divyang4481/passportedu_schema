@@ -16,21 +16,53 @@ var express = require('express')
  */
 api.use(function(req, res, next) {
   // All deeper URL's require authentication
-  authenticate.auth(req, function(err, auth) {
-    // Allowing unauthenticated users to remain in public admissions area...landing page
+  var authToken = req.get('Token')
+    , authHeader = req.get('Authorization');
+  if (authHeader) {
+    authenticate.login(req, authHeader, function(err, authorization) {
+      if (err && req.originalUrl === '/api/v1/admissions') {
+        next();
+        return;
+      }
+      if ((err) || (authorization.user.userType !== 'admissions')) {
+        res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
+        res.send(401);
+        return;
+      }
+      req.admissionsId = authorization.user.userId.toString();
+      req.username = authorization.user.username;
+      req.token = authorization.user.token; // Token needs to be sent back and forth always
+      next();
+      return;
+    })
+  } else if (authToken) {
+    authenticate.auth(req, authToken, function(err, authorization) {
+      // Allowing unauthenticated users to remain in public students area...landing page
+      if (err && req.originalUrl === '/api/v1/admissions') {
+        next();
+        return;
+      }
+      if ((err) || (authorization.user.userType !== 'admissions')) {
+        res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
+        res.send(401);
+        return;
+      }
+      req.admissionsId = authorization.user.userId.toString();
+      req.username = authorization.user.username;
+      req.token = authorization.user.token; // Token needs to be sent back and forth always
+      next();
+      return;
+    });
+  } else {
     if (req.originalUrl === '/api/v1/admissions') {
-      req.admissionsId = auth.user.userId;
       next();
       return;
     }
-    if ((err) || (auth.user.userType !== 'admissions')) {
-      res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
-      res.send(401);
-      return;
-    }
-    req.admissionsId = auth.user.userId;
-    next();
-  });
+    res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
+    res.send(401);
+    return;
+  }
+  return;
 });
 /**
  * Admissions Area
@@ -273,6 +305,7 @@ api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, 
   cardBody.owners.applications = applicationId;
   cardBody.owners.admissions = admissionsId;
   cardBody.type = req.params[0];
+  cardBody.order = 100;
   var Card = new card(cardBody);
   Card.save(function(err) {
     if (err) {
@@ -392,6 +425,65 @@ api.get('/:admissionsId/applications/:applicationId/cards/:cardId', function(req
         cardId: cardId,
         card: Card
       });
+    });
+  });
+});
+/**
+ *
+ */
+api.get('/:admissionsId/applications/:applicationId/arrange', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId;
+  getApplicationCards(admissionsId, applicationId).then(function(response) {
+    res.json(response);
+  });
+});
+/**
+ *
+ */
+api.put('/:admissionsId/applications/:applicationId/cards/:cardId/arrange', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId
+    , cardId = req.params.cardId
+    , cardPost = req.body;
+  card.find({"owners.applications": applicationId}).sort('order').exec(function(err, Cards) {
+    var insertBeforeId = 0
+      , newCardOrder = 0;
+    for(i in Cards) {
+      var Card = Cards[i];
+      if (Card.order === cardPost.order) {
+        insertBeforeId = Card._id.toString();
+        newCardOrder = i;
+      }
+      Card.order = i;
+    }
+    var increment = 0;
+    var promises = [];
+    var thenFn = function(value) {
+      return value;
+    };
+    var order = 0;
+    _.each(Cards, function(Card) {
+      if (Card._id.toString() == insertBeforeId) {
+        increment = 1;
+      }
+      if (Card._id.toString() == cardId) {
+        Card.order = newCardOrder;
+      }
+      else {
+        Card.order = +order + +increment;
+      }
+      order++;
+      var deferred = q.defer();
+      Card.save(function(err, savedCard) {
+        deferred.resolve(savedCard);
+        console.log([savedCard.order, savedCard.type]);
+      });
+      promises.push(deferred.promise.then(thenFn));
+    })
+    q.all(promises).then(function(results) {
+      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/arrange');
+      res.send(300);
     });
   });
 });
