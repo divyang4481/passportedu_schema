@@ -9,8 +9,6 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
   .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema) {
     $scope.client = {};
     $scope.traverse = function() {
-      angular.element('.modal').modal('hide');
-      $('.modal-backdrop').remove();
       $scope.client.traverse(this.link._link.rel, this.link);
     };
     /**
@@ -26,8 +24,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
      * @param drop
      */
     $scope.performDropLinkAction = function(drag, drop) {
-      drag.order = drop._index;
-      $scope.client.link(drag._link.rel, drag);
+      $scope.client.traverse(drag._link.rel, {drag: drag, drop: drop});
     };
     $scope.enterDrop = function(drag, drop, el) {
       drop._dropOver = true;

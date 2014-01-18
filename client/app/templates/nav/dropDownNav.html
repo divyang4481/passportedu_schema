@@ -1,10 +1,10 @@
 <li class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
-    <b class="caret"></b> <span ng-bind="title"></span>
+    <i class="glyphicon glyphicon-cog"></i>
   </a>
   <ul class="dropdown-menu">
-    <li ng-click="click()" ng-repeat='link in links | filter: {importance:"administrative"}'>
-      <a ng-bind="link.title"></a>
+    <li ng-click="click()" ng-repeat='link in links | semantics: {importance:"administrative"}'>
+      <a ng-bind="link._link.title"></a>
     </li>
   </ul>
 </li>

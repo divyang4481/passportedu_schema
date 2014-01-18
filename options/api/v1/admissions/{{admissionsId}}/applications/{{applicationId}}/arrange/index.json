@@ -41,12 +41,15 @@
             "rel": "arrange_{{_id}}",
             "importance": "arrangeCards",
             "method": "PUT",
-            "target": "nofollow",
+            "target": "refresh",
             "template": "/templates/api/v1/card/{{type}}",
             "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}/arrange",
             "properties": {
-              "order": {
-                "type": "number"
+              "drag": {
+                "type": "object"
+              },
+              "drop": {
+                "type": "object"
               }
             }
           }

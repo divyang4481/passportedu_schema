@@ -389,8 +389,16 @@ api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', f
   school.findById(schoolId, function(err, School) {
     School.applications = _.union(School.applications, [applicationId]);
     School.save(function(err) {
-      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/assign');
-      res.send(300);
+      user.findById(admissionsId).populate("schools").exec(function(err, Admissions) {
+        application.findById(applicationId, function(err, Application) {
+          res.json({
+            admissionsId: admissionsId,
+            applicationId: applicationId,
+            admissions: Admissions,
+            application: Application
+          });
+        });
+      });
     });
   });
 });
@@ -403,9 +411,18 @@ api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign'
     , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
     School.applications = _.without(School.applications, applicationId);
-    School.save(function(err) {
-      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/assign');
-      res.send(300);
+    console.log(School.applications, applicationId);
+    School.save(function(err, Sc) {
+      user.findById(admissionsId).populate("schools").exec(function(err, Admissions) {
+        application.findById(applicationId, function(err, Application) {
+          res.json({
+            admissionsId: admissionsId,
+            applicationId: applicationId,
+            admissions: Admissions,
+            application: Application
+          });
+        });
+      });
     });
   });
 });
@@ -445,48 +462,53 @@ api.put('/:admissionsId/applications/:applicationId/cards/:cardId/arrange', func
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId
-    , cardPost = req.body;
+    , dragAndDrop = req.body;
   card.find({"owners.applications": applicationId}).sort('order').exec(function(err, Cards) {
-    var insertBeforeId = 0
-      , newCardOrder = 0;
-    for(i in Cards) {
-      var Card = Cards[i];
-      if (Card.order === cardPost.order) {
-        insertBeforeId = Card._id.toString();
-        newCardOrder = i;
-      }
-      Card.order = i;
-    }
-    var increment = 0;
-    var promises = [];
-    var thenFn = function(value) {
-      return value;
-    };
-    var order = 0;
-    _.each(Cards, function(Card) {
-      if (Card._id.toString() == insertBeforeId) {
-        increment = 1;
-      }
-      if (Card._id.toString() == cardId) {
-        Card.order = newCardOrder;
-      }
-      else {
-        Card.order = +order + +increment;
-      }
-      order++;
-      var deferred = q.defer();
-      Card.save(function(err, savedCard) {
-        deferred.resolve(savedCard);
-        console.log([savedCard.order, savedCard.type]);
+    reArrangeCards(cardId, Cards, dragAndDrop).then(function(savedCards) {
+      getApplicationCards(admissionsId, applicationId).then(function(response) {
+        res.json(response);
       });
-      promises.push(deferred.promise.then(thenFn));
-    })
-    q.all(promises).then(function(results) {
-      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/arrange');
-      res.send(300);
     });
   });
 });
+/**
+ *
+ * @param cardId
+ * @param Cards
+ * @param dragAndDrop
+ * @returns {adapter.deferred.promise|*|promise|Q.promise}
+ */
+var reArrangeCards = function(cardId, Cards, dragAndDrop) {
+  var mainDeferred = q.defer();
+  var cardIds = _.map(Cards, function(Card) {
+    return Card._id.toString();
+  });
+  var dropIndex = _.indexOf(cardIds, dragAndDrop.drop._id);
+  var dragIndex = _.indexOf(cardIds, dragAndDrop.drag._id);
+  var Drag = Cards.splice(dragIndex, 1)[0];
+  Cards.splice(dropIndex, 0, Drag);
+  var promises = [];
+  // Array of promises callback
+  var thenFn = function(value) {
+    return value;
+  };
+  for(var i in Cards) {
+    var saveIt = function(i, Cards, promises) {
+      var deferred = q.defer()
+        , Card = Cards[i];
+      Card.order = i;
+      Card.save(function(err, savedCard) {
+        deferred.resolve(savedCard);
+      });
+      promises.push(deferred.promise);
+    }
+    saveIt(i, Cards, promises);
+  }
+  q.all(promises).then(function(results) {
+    mainDeferred.resolve(results);
+  });
+  return mainDeferred.promise;
+}
 /**
  *
  */
@@ -496,8 +518,9 @@ api.put('/:admissionsId/applications/:applicationId/cards/:cardId', function(req
     , cardId = req.params.cardId
     , cardPost = req.body;
   card.findOneAndUpdate(cardId, cardPost, function(err, Card) {
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId + '/cards/' + cardId);
-    res.send(300);
+    getCardsAndApp(admissionsId, applicationId).then(function(response) {
+      res.json(response);
+    });
   });
 });
 /**
@@ -508,8 +531,9 @@ api.delete('/:admissionsId/applications/:applicationId/cards/:cardId', function(
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
   card.findOneAndRemove({_id: cardId}, function(err) {
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
-    res.send(300);
+    getApplicationCards(admissionsId, applicationId).then(function(response) {
+      res.json(response);
+    });
   });
 });
 /**

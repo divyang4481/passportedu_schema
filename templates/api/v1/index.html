@@ -1,4 +1,33 @@
-<div ng-include="'/templates/common/navMenu'"></div>
+<nav ng-cloak class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/#/api/v1">PassportEDU</a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <magic-link ng-repeat='link in client.links | semantics: {importance: "navigation"}' click="traverse" link="link" ng-cloak></magic-link>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" ng-show='(client.links | semantics: {importance:"administrative"}).length'>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-cog"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li ng-click="traverse()" ng-repeat='link in client.links | semantics: {importance:"administrative"}'>
+              <a ng-bind="link._link.title"></a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <div class="jumbotron">
   <!--Heading and Description-->
   <h1 ng-bind="client.schema.title"></h1>
@@ -68,7 +97,7 @@
 <div ng-show="(client.links | semantics: {importance: 'arrangeCards'}).length"
   class="pinColumns">
   <div ng-repeat='link in client.links | semantics: {importance: "arrangeCards"} | orderBy:"order"' class="pin" style="position: relative;">
-    <div ng-bind="$index" ng-model="link" ng-init="link._index = $index"
+    <div ng-bind="$index" ng-model="link"
       drop="performDropLinkAction" class="panel panel-default dropCard"
       enter="enterDrop" leave="leaveDrop"
       ng-class="{'alert-success': link._dropOver}"></div>
@@ -92,7 +121,7 @@
       <h6 ng-bind="link._link.description"></h6>
     </div>
     <div class="panel-body">
-      <div drop="performDragLinkAction"></div>
+      <div drop="performDragLinkAction" class="dropBottom"></div>
     </div>
   </div>
 </nav>
@@ -178,9 +207,11 @@
 </div>
 <!--Toggle Links-->
 <div ng-repeat='link in client.links | semantics: {importance: "toggle"}'
-  ng-class="{'alert-info': dragging}" class="well panel smallCard">
+  ng-class="{'alert-info': dragging}" class="well panel panel-default">
+  <div class="panel-heading">
+    <h3 ng-bind="link._link.title"></h3>
+  </div>
   <div class="panel-body">
-    <h2 ng-bind="link._link.title"></h2>
     <button type="button" class="btn btn-primary"
       ng-click="link._link.method = link._link.state > 0 ? 'DELETE': 'PUT'; traverse();"
       ng-bind="link._link.state > 0 ? 'ON' : 'OFF'"

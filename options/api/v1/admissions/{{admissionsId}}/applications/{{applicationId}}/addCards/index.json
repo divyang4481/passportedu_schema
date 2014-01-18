@@ -49,6 +49,7 @@
             "rel": "{{type}}",
             "description": "Add Card to Application",
             "importance": "cards",
+            "target": "nofollow",
             "template": "/templates/api/v1/card/{{type}}",
             "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/addCards/{{type}}",
             "method": "POST"

@@ -167,5 +167,9 @@ and (orientation: portrait) {
 }
 
 .dragOver {
-    background: green;
+    background: #d9edf7;
+}
+
+.dropBottom {
+    position: relative;
 }

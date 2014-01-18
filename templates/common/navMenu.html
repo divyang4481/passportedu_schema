@@ -14,7 +14,16 @@
         <magic-link ng-repeat='link in client.links | semantics: {importance: "navigation"}' click="traverse" link="link" ng-cloak></magic-link>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show='(client.links | semantics: {importance:"administrative"}).length'>
-        <drop-down-nav links='client.links' importance="administrative" title="'Admin'" click="traverse"></drop-down-nav>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-cog"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li ng-click="traverse()" ng-repeat='link in client.links | semantics: {importance:"administrative"}'>
+              <a ng-bind="link._link.title"></a>
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

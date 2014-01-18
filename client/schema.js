@@ -215,7 +215,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
       }
     }
     /**
-     * Useing the OPTIONS method on a URL to find schema
+     * Using the OPTIONS method on a URL to find schema
      * @param url
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
@@ -239,18 +239,15 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
       var def = $q.defer();
       apiClient.staticHeaders = {};
       apiClient.data = {};
-      apiClient.curies = [];
       apiClient.resolveSchema(url).then(function(schema) {
         apiClient.schema = schema;
+        apiClient.origSchema = angular.copy(schema);
         apiClient.links = schema.links;
         apiClient.resourceURLTraverse(url, {}, {'GET': {method: 'GET'}}, 'GET', {}).then(function(data) {
           apiClient.data = data;
           apiClient.links = [];
           apiClient.resolveEmbeddedLinks(apiClient, apiClient.schema);
-          flatSchema = JSON.stringify(schema);
-          flatSchemaInterpolator = $interpolate(flatSchema);
-          flatSchema = flatSchemaInterpolator(data);
-          apiClient.schema = JSON.parse(flatSchema);
+          apiClient.interpolateWholeSchema(apiClient.schema, data);
           def.resolve(apiClient);
         });
       });
@@ -290,68 +287,81 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
      */
     apiClient.traverse = function(rel, params) {
       var deferred = $q.defer();
-      apiClient.link(rel, params).then(function(data) {
-        apiClient.options(rel, params).then(function(schema) {
+      apiClient.findRelLink(rel, apiClient.links).then(function(link) {
+        apiClient.link(link, params).then(function(data) {
           apiClient.data = data;
-          apiClient.schema = schema;
-          apiClient.links = [];
-          apiClient.resolveEmbeddedLinks(apiClient, apiClient.schema);
-          flatSchema = JSON.stringify(schema);
-          flatSchemaInterpolator = $interpolate(flatSchema);
-          flatSchema = flatSchemaInterpolator(data);
-          apiClient.schema = JSON.parse(flatSchema);
-          deferred.resolve(apiClient);
+          if (link._link.target === 'nofollow') {
+            deferred.resolve(apiClient);
+            return;
+          }
+          if (link._link.target === 'refresh') {
+            apiClient.schema = schema;
+            apiClient.links = [];
+            apiClient.resolveEmbeddedLinks(apiClient, apiClient.origSchema);
+            apiClient.interpolateWholeSchema(apiClient.origSchema, data);
+            deferred.resolve(apiClient);
+            return;
+          }
+          apiClient.options(rel, params).then(function(schema) {
+            apiClient.schema = schema;
+            apiClient.origSchema = angular.copy(schema);
+            apiClient.links = [];
+            apiClient.resolveEmbeddedLinks(apiClient, apiClient.schema);
+            apiClient.interpolateWholeSchema(apiClient.schema, data);
+            deferred.resolve(apiClient);
+          });
+        }, function() {
         });
-      }, function() {
       });
       return deferred.promise;
     };
     /**
-     * Performing an HTTP METHOD to a given rel/link using params for interpolation,
+     * Interpolate data across entire schema: useful for dynamic titles, and non link dynamism
+     * @param schema
+     * @param data
+     */
+    apiClient.interpolateWholeSchema = function(schema, data) {
+      flatSchema = JSON.stringify(schema);
+      flatSchemaInterpolator = $interpolate(flatSchema);
+      flatSchema = flatSchemaInterpolator(data);
+      apiClient.schema = JSON.parse(flatSchema);
+    };
+    /**
+     * Performing an HTTP METHOD to a given link using params for interpolation,
      * but not updating the schema (as traverse does)
-     * @param rel
+     * @param link
      * @param params
      * @param addHeaders
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
-    apiClient.link = function(rel, params, addHeaders) {
+    apiClient.link = function(link, params, addHeaders) {
       var deferred = $q.defer();
       // Setting up link
-      apiClient.findRelLink(rel, apiClient.links).then(function(link) {
-        var eLink = angular.copy(link)
-          , flatLink = JSON.stringify(eLink)
-          , flatLinkInterpolater = $interpolate(flatLink);
-        flatLink = flatLinkInterpolater(params);
-        eLink = JSON.parse(flatLink);
-        var method = eLink._link.method ? eLink._link.method : 'GET'
-          , methods = {}
-          , defaults = {}
-          , headers = {
-            'Content-Type': 'application/json'
-          };
-        // Validate against link schema
-        var payload = {};
-        angular.forEach(eLink._link.properties, function(propertyConfig, propertyName) {
-          payload[propertyName] = params[propertyName];
-        });
-        angular.extend(headers, apiClient.staticHeaders, addHeaders);
-        methods[method] = {
-          method: method,
-          headers: headers
+      var eLink = angular.copy(link);
+      var method = eLink._link.method ? eLink._link.method : 'GET'
+        , methods = {}
+        , defaults = {}
+        , headers = {
+          'Content-Type': 'application/json'
         };
-        angular.forEach(eLink._link.properties, function(config, prop) {
-          defaults[prop] = angular.isDefined(config.default) ? config.default : null;
-        });
-        // Now doing the link traversal
-        apiClient.resourceURLTraverse(eLink._link.href, defaults, methods, method, payload, eLink._link.target).then(
-          function(response) {
-            if (eLink.target !== 'nofollow') {
-              deferred.resolve(response);
-            } else {
-              deferred.reject();
-            }
-          });
+      // Validate against link schema
+      var payload = {};
+      angular.forEach(eLink._link.properties, function(propertyConfig, propertyName) {
+        payload[propertyName] = params[propertyName];
       });
+      angular.extend(headers, apiClient.staticHeaders, addHeaders);
+      methods[method] = {
+        method: method,
+        headers: headers
+      };
+      angular.forEach(eLink._link.properties, function(config, prop) {
+        defaults[prop] = angular.isDefined(config.default) ? config.default : null;
+      });
+      // Now doing the link traversal
+      apiClient.resourceURLTraverse(eLink._link.href, defaults, methods, method, payload, eLink._link.target).then(
+        function(response) {
+          deferred.resolve(response);
+        });
       return deferred.promise;
     }
     /**
@@ -372,7 +382,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
       } else {
         var resource = $resource(url, defaults, methods);
         resource[method](payload, function(response) {
-          if (target !== 'nofollow') {
+          if (target !== 'nofollow' && target !== 'refresh') {
             $location.path(url);
             apiClient.url = url;
           }

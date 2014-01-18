@@ -35,7 +35,8 @@
                 "description": "{{type}}",
                 "rel": "assign_{{_id}}",
                 "importance": "toggle",
-                "state": "{{(applications | filter: data.applicationId).length}}",
+                "target": "refresh",
+                "state": "{{(applications | filter: applicationId).length}}",
                 "template": "/templates/api/v1/card/admissions/schools",
                 "method": "PUT",
                 "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/assign"
@@ -55,18 +56,7 @@
         "type": {
           "type": "string"
         }
-      },
-      "links": [
-        {
-          "title": "{{type}}",
-          "description": "{{type}}",
-          "rel": "full_{{_id}}",
-          "importance": "applications",
-          "template": "/templates/api/v1/card/admissions/applications",
-          "method": "GET",
-          "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
-        }
-      ]
+      }
     }
   },
   "links": [
