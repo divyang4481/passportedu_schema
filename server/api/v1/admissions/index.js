@@ -19,7 +19,7 @@ api.use(function(req, res, next) {
   var authToken = req.get('Token')
     , authHeader = req.get('Authorization');
   if (authHeader) {
-    authenticate.login(req, authHeader, function(err, authorization) {
+    authenticate.login(req, res, authHeader, function(err, authorization) {
       if (err && req.originalUrl === '/api/v1/admissions') {
         next();
         return;
@@ -29,14 +29,21 @@ api.use(function(req, res, next) {
         res.send(401);
         return;
       }
-      req.admissionsId = authorization.user.userId.toString();
-      req.username = authorization.user.username;
-      req.token = authorization.user.token; // Token needs to be sent back and forth always
-      next();
-      return;
+      user.count({schools: {$in: authorization.user.schools}}, function(err, countApplicants) {
+        req.admissionsId = authorization.user.userId.toString();
+        req.username = authorization.user.username;
+        req.token = authorization.user.token; // Token needs to be sent back and forth always
+        res.header('X-Intercom-Custom', JSON.stringify({
+          "userType": authorization.user.userType,
+          "schools": authorization.user.schools.length,
+          "applications": authorization.user.applications.length,
+          "applicants": countApplicants
+        }));
+        next();
+      });
     })
   } else if (authToken) {
-    authenticate.auth(req, authToken, function(err, authorization) {
+    authenticate.auth(req, res, authToken, function(err, authorization) {
       // Allowing unauthenticated users to remain in public students area...landing page
       if (err && req.originalUrl === '/api/v1/admissions') {
         next();
@@ -47,11 +54,18 @@ api.use(function(req, res, next) {
         res.send(401);
         return;
       }
-      req.admissionsId = authorization.user.userId.toString();
-      req.username = authorization.user.username;
-      req.token = authorization.user.token; // Token needs to be sent back and forth always
-      next();
-      return;
+      user.count({schools: {$in: authorization.user.schools}}, function(err, countApplicants) {
+        req.admissionsId = authorization.user.userId.toString();
+        req.username = authorization.user.username;
+        req.token = authorization.user.token; // Token needs to be sent back and forth always
+        res.header('X-Intercom-Custom', JSON.stringify({
+          "userType": authorization.user.userType,
+          "schools": authorization.user.schools.length,
+          "applications": authorization.user.applications.length,
+          "applicants": countApplicants
+        }));
+        next();
+      });
     });
   } else {
     if (req.originalUrl === '/api/v1/admissions') {
@@ -60,9 +74,7 @@ api.use(function(req, res, next) {
     }
     res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
     res.send(401);
-    return;
   }
-  return;
 });
 /**
  * Admissions Area
@@ -145,6 +157,67 @@ api.get('/:admissionsId/schools/:schoolId', function(req, res) {
 /**
  *
  */
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/csv', function(req, res) {
+  var schoolId = req.params.schoolId
+    , admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId;
+  getApplicationCards(admissionsId, applicationId).then(function(application) {
+    user.find({schools: schoolId, userPerms: 'students'})
+      .populate({'path': 'cards', options: {sort: {'order': 1}}})
+      .exec(function(err, Applicants) {
+        var applications = flattenApplicationFields(Applicants, application.cards);
+        res.set('Content-Type', 'text/csv');
+        res.send(applications);
+      });
+  });
+});
+/**
+ * generate a single row per applicant, csv formatted
+ */
+var mustache = require('mustache')
+  , fs = require('fs')
+  , path = require('path');
+var flattenApplicationFields = function(Applicants, Cards) {
+  var cardCache = {};
+  for(var c = 0; c < Cards.length; c++) {
+    var appCard = Cards[c].toObject()
+      , csvTemplateFile = path.normalize(__dirname + '/../../../../templates/api/v1/card/' + appCard.type + '/index.csv')
+      , csvTemplate = fs.readFileSync(csvTemplateFile).toString()
+      , csvHeaderTemplateFile = path.normalize(__dirname + '/../../../../templates/api/v1/card/' + appCard.type + '/header.csv')
+      , csvHeaderTemplate = fs.readFileSync(csvHeaderTemplateFile).toString()
+    cardCache[appCard.type] = {
+      card: appCard,
+      template: csvTemplate,
+      header: csvHeaderTemplate
+    };
+  }
+  var rows = [];
+  // Put each applicant on a row, and then put all the applicants cards in their row
+  for(var c = 0; c < Cards.length; c++) {
+    var appCard = Cards[c].toObject()
+      , csvTemplate = cardCache[appCard.type].template;
+    if (_.isUndefined(rows[0])) {
+      rows[0] = [];
+    }
+    rows[0].push(cardCache[appCard.type].header);
+    for(var a = 0; a < Applicants.length; a++) {
+      var Applicant = Applicants[a]
+        , Card = Applicant.cards[c].toObject();
+      var cardCSV = mustache.render(csvTemplate, Card);
+      if (_.isUndefined(rows[a])) {
+        rows[a] = [];
+      }
+      rows[a].push(cardCSV);
+    }
+  }
+  for(var r = 0; r < rows.length; r++) {
+    rows[r] = rows[r].join(",");
+  }
+  return rows.join("\n");
+};
+/**
+ *
+ */
 api.delete('/:admissionsId/schools/:schoolId', function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
@@ -221,14 +294,16 @@ api.get('/:admissionsId/applications', function(req, res) {
  */
 api.post('/:admissionsId/applications', function(req, res) {
   var admissionsId = req.params.admissionsId;
-  var app = new application({
+  var app = {
     admissionsId: admissionsId,
     type: req.body.type,
     mediaType: req.body.mediaType,
     data: req.body.data
-  });
-  app.save(function(err) {
-    var applicationId = app._id.toString();
+  }
+  application.create(app, function(err, App) {
+    var applicationId = App._id.toString();
+    user.update({_id: admissionsId}, {$addToSet: {applications: applicationId}}, function(err) {
+    });
     res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
     res.send(300);
   });
@@ -242,14 +317,16 @@ api.post('/:admissionsId/applications', function(req, res) {
 var getApplicationCards = function(admissionsId, applicationId) {
   var deferred = q.defer();
   application.findById(applicationId).exec(function(err, App) {
-    card.find({"owners.applications": applicationId}, function(err, Cards) {
-      deferred.resolve({
-        admissionsId: admissionsId,
-        applicationId: applicationId,
-        application: _.omit(App, ['_id']),
-        cards: Cards
+    card.find({"owners.applications": applicationId})
+      .sort({'order': 1})
+      .exec(function(err, Cards) {
+        deferred.resolve({
+          admissionsId: admissionsId,
+          applicationId: applicationId,
+          application: _.omit(App, ['_id']),
+          cards: Cards
+        });
       });
-    });
   });
   return deferred.promise;
 };

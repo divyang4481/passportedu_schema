@@ -9,11 +9,11 @@
     "school": {
       "type": "object",
       "properties": {
-        "id": {
-          "title": "id ",
-          "description": "id ",
-          "identity": false,
-          "readonly": false,
+        "_id": {
+          "title": "_id ",
+          "description": "_id ",
+          "identity": true,
+          "readonly": true,
           "type": "string"
         },
         "data.unitId": {
@@ -240,26 +240,12 @@
           "readonly": false,
           "type": ""
         },
-        "mediaTypes": {
-          "title": "mediaTypes ",
-          "description": "mediaTypes ",
-          "identity": false,
-          "readonly": false,
-          "type": ""
-        },
-        "cardIds": {
+        "cards": {
           "title": "cardIds ",
           "description": "cardIds ",
           "identity": false,
           "readonly": false,
           "type": ""
-        },
-        "_id": {
-          "title": "_id ",
-          "description": "_id ",
-          "identity": true,
-          "readonly": true,
-          "type": "string"
         }
       },
       "links": [

@@ -126,19 +126,8 @@
   </div>
 </nav>
 
-<!--Search Results-->
+<!--Search-->
 <div ng-show="(client.links | semantics: {importance: 'search'}).length" class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      <!--Paging-->
-      <ul class="pagination">
-        <li ng-repeat='link in client.links | semantics: {importance: "paging"}'
-          ng-click="traverse()" ng-class="{'active': link._link.rel == 'self'}">
-          <a ng-bind="link._link.title"></a>
-        </li>
-      </ul>
-    </div>
-  </div>
   <div class="row">
     <div class="col-md-12">
       <!--Search Form-->
@@ -149,22 +138,16 @@
             <!--Primary Search Field-->
             <div class="input-group">
               <input ng-repeat='(propName, property) in (link._link.properties | filterObjectBy:{importance:"mainSearchString"})'
-                type="text" class="form-control"
-                ng-model="link[propName]"
-                placeholder="{{property.title}}">
+                type="text" class="form-control" ng-model="link[propName]" placeholder="{{property.title}}">
 
               <div class="input-group-btn">
-                <button ng-click="traverse()"
-                  type="submit"
-                  class="btn btn-primary">
+                <button ng-click="traverse()" class="btn btn-primary">
                   <i class="glyphicon glyphicon-white glyphicon-search"></i> Search
                 </button>
                 <!--Advanced Search-->
-                <button type="button"
-                  class="btn btn-info"
-                  data-toggle="collapse"
+                <button type="button" class="btn btn-info" data-toggle="collapse"
                   data-target="#advancedSearch">
-                  advanced search
+                  Advanced
                 </button>
               </div>
             </div>
@@ -196,6 +179,17 @@
           </div>
         </div>
       </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <!--Paging-->
+      <ul class="pagination">
+        <li ng-repeat='link in client.links | semantics: {importance: "paging"}'
+          ng-click="traverse()" ng-class="{'active': link._link.rel == 'self'}">
+          <a ng-bind="link._link.title"></a>
+        </li>
+      </ul>
     </div>
   </div>
   <!--Search Results-->
@@ -248,7 +242,7 @@
           </div>
           <div class="form-group">
             <label class="col-md-7 col-sm-7"></label>
-            <button class="btn btn-primary" ng-click="submitRegisterApp()">Save Application & Register</button>
+            <button class="btn btn-primary" ng-click="traverse()">Save Application & Register</button>
           </div>
         </form>
       </div>

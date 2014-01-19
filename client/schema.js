@@ -374,6 +374,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
      * @param target
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
+    apiClient.responseHeaders = {};
     apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload, target) {
       var deferred = $q.defer();
       if (target === 'new') {
@@ -381,7 +382,9 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
         deferred.reject({});
       } else {
         var resource = $resource(url, defaults, methods);
-        resource[method](payload, function(response) {
+        resource[method](payload, function(response, headersFunc) {
+          var headers = headersFunc();
+          apiClient.responseHeaders = headers;
           if (target !== 'nofollow' && target !== 'refresh') {
             $location.path(url);
             apiClient.url = url;

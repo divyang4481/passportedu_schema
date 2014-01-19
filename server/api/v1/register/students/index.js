@@ -18,6 +18,7 @@ api.post('/', function(req, res) {
   var student = req.body;
   var Student = new user(student);
   Student.userPerms = ['students'];
+  Student.created = Math.round(new Date().getTime() / 1000);
   Student.save(function(err) {
     if (err) {
       res.json({

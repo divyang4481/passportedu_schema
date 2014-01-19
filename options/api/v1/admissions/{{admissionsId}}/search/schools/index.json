@@ -336,6 +336,7 @@
       "title": "Search Schools",
       "rel": "search",
       "importance": "search",
+      "target": "refresh",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools",
       "properties": {
         "data.institutionName*": {
@@ -352,13 +353,6 @@
           "identity": false,
           "readonly": false,
           "type": "string"
-        },
-        "data.financesRequired<": {
-          "title": "minimum finances required",
-          "description": "amount required for acceptance",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
         },
         "data.diplomaRequired": {
           "title": "is diploma required?",

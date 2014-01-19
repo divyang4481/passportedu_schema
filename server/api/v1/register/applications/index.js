@@ -22,6 +22,7 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
   student.userPerms = ['students'];
   student.applications = [req.params.applicationId];
   student.schools = [req.params.schoolId];
+  student.created = Math.round(new Date().getTime() / 1000);
   user.create(student, function(err, Student) {
     var studentId = Student._id.toString();
     _.each(cards, function(postCard) {
@@ -30,7 +31,11 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
       Card.owners = postCard.owners;
       Card.type = postCard._link.type;
       Card.owners.students = studentId;
-      card.create(Card);
+      card.create(Card, function(err, newCard) {
+        Student.cards.push(newCard._id.toString());
+        Student.save();
+      });
+
     });
     if (err) {
       res.json({

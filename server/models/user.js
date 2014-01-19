@@ -23,7 +23,11 @@ var UserSchema = new mongoose.Schema({
   ],
   schools: [
     {type: String, ref: "School"}
-  ]
+  ],
+  cards: [
+    {type: String, ref: 'Card'}
+  ],
+  created: Number
 });
 UserSchema.pre('save', function(next) {
   var user = this;

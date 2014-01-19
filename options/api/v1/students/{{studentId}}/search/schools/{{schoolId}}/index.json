@@ -281,6 +281,7 @@
               {
                 "title": "Save {{type}} School for Later",
                 "description": "{{data.institutionName}}",
+                "target": "nofollow",
                 "rel": "saveSchool_{{_id}}",
                 "importance": "callToAction",
                 "method": "PUT",

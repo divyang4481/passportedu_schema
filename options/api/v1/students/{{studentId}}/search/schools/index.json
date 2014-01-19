@@ -265,29 +265,9 @@
             "title": "View Details",
             "description": "view more information about this school.",
             "rel": "full_{{_id}}",
-            "associated": {
-              "apply": "apply_{{_id}}",
-              "save": "save_{{_id}}"
-            },
             "template": "/templates/api/v1/card/{{cardType}}",
             "method": "GET",
-            "importance": "content",
-            "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
-          },
-          {
-            "title": "Apply Now",
-            "description": "Apply to this school now, and see the application.",
-            "rel": "apply_{{_id}}",
-            "template": "/templates/api/v1/card/{{cardType}}",
-            "method": "GET",
-            "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
-          },
-          {
-            "title": "Save",
-            "description": "Save this school for later.",
-            "rel": "save_{{_id}}",
-            "template": "/templates/api/v1/card/{{cardType}}",
-            "method": "GET",
+            "importance": "results",
             "href": "/api/v1/students/{{studentId}}/search/schools/{{_id}}"
           }
         ]
@@ -344,12 +324,14 @@
     {
       "title": "Search Schools",
       "rel": "search",
+      "target": "refresh",
       "importance": "search",
       "href": "/api/v1/students/{{studentId}}/search/schools",
       "properties": {
         "data.institutionName*": {
           "title": "Institution Name",
           "description": "contains",
+          "importance": "mainSearchString",
           "identity": false,
           "readonly": false,
           "type": "string"
@@ -360,13 +342,6 @@
           "identity": false,
           "readonly": false,
           "type": "string"
-        },
-        "data.financesRequired<": {
-          "title": "minimum finances required",
-          "description": "amount required for acceptance",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
         },
         "data.diplomaRequired": {
           "title": "is diploma required?",

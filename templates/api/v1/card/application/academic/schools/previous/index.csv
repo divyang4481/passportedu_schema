@@ -1,0 +1,1 @@
+"{{data.name}}", "{{data.level}}", "{{data.degree}}", "{{data.city}}", "{{data.country}}", "{{data.startedDate}}", "{{data.graduatedDate}}", {{data.gpa}}

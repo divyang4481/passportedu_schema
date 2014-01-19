@@ -3,7 +3,8 @@
  */
 var _ = require('underscore')
   , user = require('../models/user')
-  , uuid = require('node-uuid');
+  , uuid = require('node-uuid')
+  , crypto = require('crypto');
 // Secret code word :)
 var secret = 'Passport is your ticket to better colleges and students.';
 /**
@@ -41,7 +42,7 @@ var logout = function(req, callback) {
 /**
  * var authToken = req.get('Authorization');
  */
-var login = function(req, authHeader, callback) {
+var login = function(req, res, authHeader, callback) {
   if (_.isUndefined(authHeader)) {
     callback(null, {
       user: {
@@ -65,13 +66,25 @@ var login = function(req, authHeader, callback) {
     // Add token to user
     User.token = token;
     User.save(function(err, savedUser) {
+      var intercomHash = crypto.createHmac('sha256', 'c6cf7095d8d5a613876419716bd54e3cbeeca235').update(savedUser._id.toString()).digest('hex');
+      res.header('X-Intercom-Username', User.username);
+      res.header('X-Intercom-User-Id', User._id.toString());
+      res.header('X-Intercom-Email', User.email);
+      res.header('X-Intercom-Full-Name', User.fullName);
+      res.header('X-Intercom-Created-At', User.created);
+      res.header('X-Intercom-User-Hash', intercomHash);
+      res.header('X-Intercom-API', 'c6cf7095d8d5a613876419716bd54e3cbeeca235');
       callback(null, {
         user: {
-          userId: User._id,
+          userId: User._id.toString(),
           userType: User.userPerms[0],
           token: token,
           fullName: User.fullName,
-          username: User.username
+          username: User.username,
+          email: User.email,
+          schools: User.schools,
+          cards: User.cards,
+          applications: User.applications
         }
       });
     });
@@ -80,7 +93,7 @@ var login = function(req, authHeader, callback) {
 /**
  * Ongoing authorization of resources
  */
-var auth = function(req, authToken, callback) {
+var auth = function(req, res, authToken, callback) {
   if (_.isUndefined(authToken)) {
     callback(null, {
       user: {
@@ -96,13 +109,25 @@ var auth = function(req, authToken, callback) {
       callback({error: 'User not found'});
       return;
     }
+    var intercomHash = crypto.createHmac('sha256', 'c6cf7095d8d5a613876419716bd54e3cbeeca235').update(User._id.toString()).digest('hex');
+    res.header('X-Intercom-Username', User.username);
+    res.header('X-Intercom-User-Id', User._id.toString());
+    res.header('X-Intercom-Email', User.email);
+    res.header('X-Intercom-Full-Name', User.fullName);
+    res.header('X-Intercom-Created-At', User.created);
+    res.header('X-Intercom-User-Hash', intercomHash);
+    res.header('X-Intercom-API', 'c6cf7095d8d5a613876419716bd54e3cbeeca235');
     callback(null, {
       user: {
         userId: User._id,
         userType: User.userPerms[0],
         token: User.token,
         fullName: User.fullName,
-        username: User.username
+        username: User.username,
+        email: User.email,
+        schools: User.schools,
+        cards: User.cards,
+        applications: User.applications
       }
     });
   });

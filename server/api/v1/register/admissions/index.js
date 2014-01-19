@@ -17,6 +17,7 @@ api.get('/', function(req, res) {
 api.post('/', function(req, res) {
   var admissions = req.body;
   admissions.userPerms = ['admissions'];
+  admissions.created = Math.round(new Date().getTime() / 1000);
   user.create(admissions, function(err, Admissions) {
     if (err) {
       res.json({

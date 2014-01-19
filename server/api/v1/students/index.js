@@ -19,7 +19,7 @@ api.use(function(req, res, next) {
   var authToken = req.get('Token');
   var authHeader = req.get('Authorization');
   if (authHeader) {
-    authenticate.login(req, authHeader, function(err, authorization) {
+    authenticate.login(req, res, authHeader, function(err, authorization) {
       if (err && req.originalUrl === '/api/v1/students') {
         next();
         return;
@@ -32,11 +32,16 @@ api.use(function(req, res, next) {
       req.studentsId = authorization.user.userId;
       req.username = authorization.user.username;
       req.token = authorization.user.token; // Token needs to be sent back and forth always
+      res.header('X-Intercom-Custom', JSON.stringify({
+        "userType": authorization.user.userType,
+        "schools": authorization.user.schools.length,
+        "cards": authorization.user.cards.length
+      }));
       next();
       return;
     })
   } else if (authToken) {
-    authenticate.auth(req, authToken, function(err, authorization) {
+    authenticate.auth(req, res, authToken, function(err, authorization) {
       // Allowing unauthenticated users to remain in public students area...landing page
       if (err && req.originalUrl === '/api/v1/students') {
         next();
@@ -50,6 +55,11 @@ api.use(function(req, res, next) {
       req.studentsId = authorization.user.userId;
       req.username = authorization.user.username;
       req.token = authorization.user.token; // Token needs to be sent back and forth always
+      res.header('X-Intercom-Custom', JSON.stringify({
+        "userType": authorization.user.userType,
+        "schools": authorization.user.schools.length,
+        "cards": authorization.user.cards.length
+      }));
       next();
       return;
     });
@@ -196,8 +206,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', functio
     Student.applications = _.union(Student.applications, [applicationId]);
     addApplicationCardsToStudent(Student, applicationId);
     Student.save(function(err) {
-      res.set('Location', '/api/v1/students/' + studentId + '/search/schools/' + schoolId);
-      res.send(300, {username: req.username, token: req.token});
+      res.json({});
     });
   });
 });
@@ -228,10 +237,12 @@ var addApplicationCardsToStudent = function(Student, applicationId) {
             students: Student._id.toString()
           },
           type: Card.type,
+          order: Card.order,
           data: {}
         };
-        var C = new card(newCard);
         card.create(newCard, function(err, Card) {
+          Student.cards.push(Card._id.toString());
+          Student.save();
         });
       });
     });
