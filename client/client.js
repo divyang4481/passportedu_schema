@@ -81,6 +81,12 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
   .run(function() {
     setInterval(function() {
       window.Intercom('update', {
+        email: client.responseHeaders['x-intercom-email'],
+        name: client.responseHeaders['x-intercom-full-name'],
+        user_id: client.responseHeaders['x-intercom-user-id'],
+        created_at: client.responseHeaders['x-intercom-created-at'],
+        user_hash: client.responseHeaders['x-intercom-user-hash'],
+        app_id: client.responseHeaders['x-intercom-api'],
         "increments": {
           "time": 1
         }
