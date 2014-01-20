@@ -95,7 +95,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
       }
     };
   })
-  .run(function() {
+  .run(function($scope) {
     setInterval(function() {
       var client = $scope.client;
       if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
