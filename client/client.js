@@ -5,9 +5,9 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
     };
   })
   .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema) {
-    $scope.client = {};
+    $rootScope.client = {};
     $scope.traverse = function() {
-      $scope.client.traverse(this.link._link.rel, this.link).then(function(client) {
+      $rootScope.client.traverse(this.link._link.rel, this.link).then(function(client) {
         if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
           var update = {
             email: client.responseHeaders['x-intercom-email'],
@@ -38,7 +38,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
      * @param drop
      */
     $scope.performDropLinkAction = function(drag, drop) {
-      $scope.client.traverse(drag._link.rel, {drag: drag, drop: drop});
+      $rootScope.client.traverse(drag._link.rel, {drag: drag, drop: drop});
     };
     /**
      * When hovering over drop with draggable
@@ -64,8 +64,8 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
     startURL = startURL ? startURL : '/api/v1';
     new jsonSchema(startURL).then(function(client) {
       var passport = client;
-      $scope.client = passport;
-      var client = $scope.client;
+      $rootScope.client = passport;
+      var client = $rootScope.client;
       if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
         var boot = {
           email: client.responseHeaders['x-intercom-email'],
@@ -95,10 +95,21 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
       }
     };
   })
+  .controller('AnonApplication', function($rootScope, $scope, $filter) {
+    $scope.cards = [];
+    $scope.student = {};
+    $scope.submitRegisterApp = function() {
+      var cards = $filter('semantics')($rootScope.client.links, {importance: "cards"});
+      $scope.client.traverse('register', {
+        student: $scope.student,
+        cards: cards
+      });
+    };
+  })
   .run(function($rootScope) {
     setInterval(function() {
       var client = $rootScope.client;
-      if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
+      if (angular.isDefined(client) && angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
         var update = {
           email: client.responseHeaders['x-intercom-email'],
           name: client.responseHeaders['x-intercom-full-name'],

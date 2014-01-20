@@ -33,7 +33,7 @@
       "title": "Application Cards",
       "type": "array",
       "items": {
-        "title": "Card {{}}",
+        "title": "Card",
         "type": "object",
         "properties": {
           "type": {
@@ -61,7 +61,6 @@
       "title": "Home",
       "description": "Home Page",
       "rel": "home",
-      "importance": "navigation",
       "method": "GET",
       "href": "/api/v1"
     },
@@ -86,6 +85,9 @@
               },
               "owners": {
                 "type": "string"
+              },
+              "order": {
+                "type": "number"
               }
             }
           }

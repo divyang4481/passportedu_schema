@@ -28,7 +28,8 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
     _.each(cards, function(postCard) {
       var Card = {};
       Card.data = postCard.data;
-      Card.owners = postCard.owners;
+      Card.owners = {students: studentId};
+      Card.order = postCard.order;
       Card.type = postCard._link.type;
       Card.owners.students = studentId;
       card.create(Card, function(err, newCard) {
