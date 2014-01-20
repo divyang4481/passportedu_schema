@@ -65,6 +65,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
     new jsonSchema(startURL).then(function(client) {
       var passport = client;
       $scope.client = passport;
+      var client = $scope.client;
       if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
         var boot = {
           email: client.responseHeaders['x-intercom-email'],
@@ -96,6 +97,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
   })
   .run(function() {
     setInterval(function() {
+      var client = $scope.client;
       if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
         var update = {
           email: client.responseHeaders['x-intercom-email'],
