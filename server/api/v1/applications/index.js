@@ -15,7 +15,7 @@ api.get('/:applicationId/schools/:schoolId', function(req, res) {
   application.findById(applicationId, function(err, Application) {
     card.find({"owners.applications": applicationId}, function(err, Cards) {
       res.json({
-        applicationId: Application._id,
+        applicationId: Application._id.toString(),
         application: Application,
         schoolId: schoolId,
         cards: Cards

@@ -8,7 +8,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
     $scope.client = {};
     $scope.traverse = function() {
       $scope.client.traverse(this.link._link.rel, this.link).then(function(client) {
-        if (angular.isDefined(client.responseHeaders['x-intercom-email'])) {
+        if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
           var update = {
             email: client.responseHeaders['x-intercom-email'],
             name: client.responseHeaders['x-intercom-full-name'],
@@ -65,7 +65,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
     new jsonSchema(startURL).then(function(client) {
       var passport = client;
       $scope.client = passport;
-      if (angular.isDefined(client.responseHeaders['x-intercom-email'])) {
+      if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
         var boot = {
           email: client.responseHeaders['x-intercom-email'],
           name: client.responseHeaders['x-intercom-full-name'],
@@ -96,7 +96,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
   })
   .run(function() {
     setInterval(function() {
-      if (angular.isDefined(client.responseHeaders['x-intercom-email'])) {
+      if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
         var update = {
           email: client.responseHeaders['x-intercom-email'],
           name: client.responseHeaders['x-intercom-full-name'],
