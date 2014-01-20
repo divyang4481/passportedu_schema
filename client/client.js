@@ -7,8 +7,22 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
   .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema) {
     $scope.client = {};
     $scope.traverse = function() {
-      $scope.client.traverse(this.link._link.rel, this.link).then(function(apiClient) {
-        window.Intercom('update');
+      $scope.client.traverse(this.link._link.rel, this.link).then(function(client) {
+        if (angular.isDefined(client.responseHeaders)) {
+          var update = {
+            email: client.responseHeaders['x-intercom-email'],
+            name: client.responseHeaders['x-intercom-full-name'],
+            user_id: client.responseHeaders['x-intercom-user-id'],
+            created_at: client.responseHeaders['x-intercom-created-at'],
+            user_hash: client.responseHeaders['x-intercom-user-hash'],
+            app_id: client.responseHeaders['x-intercom-api'],
+            "increments": {
+              "time": 1
+            }
+          };
+          angular.extend(update, JSON.parse(client.responseHeaders['x-intercom-custom']));
+          window.Intercom('update', update);
+        }
       });
     };
     /**
@@ -51,16 +65,18 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
     new jsonSchema(startURL).then(function(client) {
       var passport = client;
       $scope.client = passport;
-      var boot = {
-        email: client.responseHeaders['x-intercom-email'],
-        name: client.responseHeaders['x-intercom-full-name'],
-        user_id: client.responseHeaders['x-intercom-user-id'],
-        created_at: client.responseHeaders['x-intercom-created-at'],
-        user_hash: client.responseHeaders['x-intercom-user-hash'],
-        app_id: client.responseHeaders['x-intercom-api']
-      };
-      angular.extend(boot, JSON.parse(client.responseHeaders['x-intercom-custom']));
-      window.Intercom('boot', boot);
+      if (angular.isDefined(client.responseHeaders)) {
+        var boot = {
+          email: client.responseHeaders['x-intercom-email'],
+          name: client.responseHeaders['x-intercom-full-name'],
+          user_id: client.responseHeaders['x-intercom-user-id'],
+          created_at: client.responseHeaders['x-intercom-created-at'],
+          user_hash: client.responseHeaders['x-intercom-user-hash'],
+          app_id: client.responseHeaders['x-intercom-api']
+        };
+        angular.extend(boot, JSON.parse(client.responseHeaders['x-intercom-custom']));
+        window.Intercom('boot', boot);
+      }
     });
   })
   .directive('autoSaveCard', function(debounce) {
@@ -80,16 +96,20 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
   })
   .run(function() {
     setInterval(function() {
-      window.Intercom('update', {
-        email: client.responseHeaders['x-intercom-email'],
-        name: client.responseHeaders['x-intercom-full-name'],
-        user_id: client.responseHeaders['x-intercom-user-id'],
-        created_at: client.responseHeaders['x-intercom-created-at'],
-        user_hash: client.responseHeaders['x-intercom-user-hash'],
-        app_id: client.responseHeaders['x-intercom-api'],
-        "increments": {
-          "time": 1
-        }
-      });
+      if (angular.isDefined(client.responseHeaders)) {
+        var update = {
+          email: client.responseHeaders['x-intercom-email'],
+          name: client.responseHeaders['x-intercom-full-name'],
+          user_id: client.responseHeaders['x-intercom-user-id'],
+          created_at: client.responseHeaders['x-intercom-created-at'],
+          user_hash: client.responseHeaders['x-intercom-user-hash'],
+          app_id: client.responseHeaders['x-intercom-api'],
+          "increments": {
+            "time": 1
+          }
+        };
+        angular.extend(update, JSON.parse(client.responseHeaders['x-intercom-custom']));
+        window.Intercom('update', update);
+      }
     }, 5000);
   });

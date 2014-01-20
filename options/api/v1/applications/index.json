@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "{{application.type}}",
   "type": "object",
-  "description": "Fill out an Application for",
+  "description": "Fill out an Application for {{application.type}}",
   "properties": {
     "applicationId": {
       "title": "Unique ID of this Application",
@@ -66,7 +66,7 @@
       "href": "/api/v1"
     },
     {
-      "title": "Save Application",
+      "title": "Save Application & Register",
       "rel": "register",
       "importance": "modal",
       "href": "/api/v1/register/applications/{{applicationId}}/schools/{{schoolId}}",
@@ -74,6 +74,7 @@
       "properties": {
         "cards": {
           "type": "array",
+          "display": false,
           "items": {
             "type": "object",
             "properties": {
@@ -92,25 +93,20 @@
         "student": {
           "type": "object",
           "properties": {
-            "username": {
-              "title": "Your username",
-              "description": "Your email address or username",
-              "type": "string"
-            },
-            "password": {
-              "title": "Your password",
-              "description": "Your password",
-              "type": "password"
-            },
             "fullName": {
               "title": "Your Full Name",
               "description": "Your first name and last name",
               "type": "string"
             },
-            "email": {
-              "title": "Your Email Address",
-              "description": "A valid email address where we can contact you.",
+            "username": {
+              "title": "Your email address",
+              "description": "Your email address / username",
               "type": "email"
+            },
+            "password": {
+              "title": "Your password",
+              "description": "Your password",
+              "type": "password"
             }
           },
           "required": ["username", "password", "email", "fullName"]
@@ -118,7 +114,7 @@
       }
     },
     {
-      "title": "Save Application",
+      "title": "Save Application & Register",
       "rel": "register",
       "importance": "modalOpen"
     }
