@@ -92,7 +92,7 @@
     {
       "title": "Create a New Application Type",
       "rel": "create",
-      "importance": "callToAction",
+      "importance": "alsoCall",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/new"
     }

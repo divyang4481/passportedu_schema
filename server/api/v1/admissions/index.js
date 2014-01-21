@@ -59,7 +59,7 @@ api.post('/login', function(req, res) {
 /**
  *
  */
-api.use(function(req, res, next) {
+var auth = function(req, res, next) {
   // All deeper URL's require authentication
   var authToken = req.get('Token');
   if (authToken) {
@@ -86,7 +86,10 @@ api.use(function(req, res, next) {
     res.set('Location', '/api/v1/admissions/login');
     res.send(300);
   }
-});
+};
+/**
+ *
+ */
 api.get('/logout', function(req, res) {
   authenticate.logout(req, function(err, auth) {
     res.set('Location', '/api/v1/admissions/login');
@@ -96,7 +99,7 @@ api.get('/logout', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId', function(req, res) {
+api.get('/:admissionsId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId;
   var response = {
     admissionsId: admissionsId
@@ -112,7 +115,7 @@ api.get('/:admissionsId', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId/schools/:schoolId', function(req, res) {
+api.get('/:admissionsId/schools/:schoolId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   school.findById(schoolId)
@@ -134,7 +137,7 @@ api.get('/:admissionsId/schools/:schoolId', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/csv', function(req, res) {
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/csv', auth, function(req, res) {
   var schoolId = req.params.schoolId
     , admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
@@ -149,7 +152,8 @@ api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/csv', func
   });
 });
 /**
- * generate a single row per applicant, csv formatted
+ * Generate a header row
+ * Generate a single row per applicant, csv formatted
  */
 var mustache = require('mustache')
   , fs = require('fs')
@@ -178,13 +182,14 @@ var flattenApplicationFields = function(Applicants, Cards) {
     }
     rows[0].push(cardCache[appCard.type].header);
     for(var a = 0; a < Applicants.length; a++) {
-      var Applicant = Applicants[a]
-        , Card = Applicant.cards[c].toObject();
+      var Applicant = Applicants[a];
+      var Card = Applicant.cards[c];
+      Card = _.isUndefined(Card) ? {} : Card.toObject();
       var cardCSV = mustache.render(csvTemplate, Card);
-      if (_.isUndefined(rows[a])) {
-        rows[a] = [];
+      if (_.isUndefined(rows[a + 1])) {
+        rows[a + 1] = [];
       }
-      rows[a].push(cardCSV);
+      rows[a + 1].push(cardCSV);
     }
   }
   for(var r = 0; r < rows.length; r++) {
@@ -195,7 +200,7 @@ var flattenApplicationFields = function(Applicants, Cards) {
 /**
  *
  */
-api.delete('/:admissionsId/schools/:schoolId', function(req, res) {
+api.delete('/:admissionsId/schools/:schoolId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   user.findById(admissionsId, function(err, Admissions) {
@@ -211,7 +216,7 @@ api.delete('/:admissionsId/schools/:schoolId', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId/schools/:schoolId/applicants/:applicantId', function(req, res) {
+api.get('/:admissionsId/schools/:schoolId/applicants/:applicantId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicantId = req.params.applicantId;
@@ -233,7 +238,7 @@ api.get('/:admissionsId/schools/:schoolId/applicants/:applicantId', function(req
 /**
  *
  */
-api.get('/:admissionsId/search/schools', function(req, res) {
+api.get('/:admissionsId/search/schools', auth, function(req, res) {
   queryM(school)(req, function(err, response) {
     response.admissionsId = req.params.admissionsId;
     res.json(response);
@@ -242,7 +247,7 @@ api.get('/:admissionsId/search/schools', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId/search/schools/:schoolId', function(req, res) {
+api.get('/:admissionsId/search/schools/:schoolId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   school.findById(schoolId).populate('applications').exec(function(err, School) {
@@ -257,7 +262,7 @@ api.get('/:admissionsId/search/schools/:schoolId', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId/applications', function(req, res) {
+api.get('/:admissionsId/applications', auth, function(req, res) {
   var admissionsId = req.params.admissionsId;
   application.find({admissionsId: admissionsId}, function(err, Applications) {
     res.json({
@@ -269,7 +274,7 @@ api.get('/:admissionsId/applications', function(req, res) {
 /**
  *
  */
-api.post('/:admissionsId/applications', function(req, res) {
+api.post('/:admissionsId/applications', auth, function(req, res) {
   var admissionsId = req.params.admissionsId;
   var app = {
     admissionsId: admissionsId,
@@ -310,7 +315,7 @@ var getApplicationCards = function(admissionsId, applicationId) {
 /**
  *
  */
-api.get('/:admissionsId/applications/:applicationId', function(req, res) {
+api.get('/:admissionsId/applications/:applicationId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   getApplicationCards(admissionsId, applicationId).then(function(response) {
@@ -320,7 +325,7 @@ api.get('/:admissionsId/applications/:applicationId', function(req, res) {
 /**
  *
  */
-api.put('/:admissionsId/applications/:applicationId', function(req, res) {
+api.put('/:admissionsId/applications/:applicationId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , appPost = req.body;
@@ -332,7 +337,7 @@ api.put('/:admissionsId/applications/:applicationId', function(req, res) {
 /**
  *
  */
-api.delete('/:admissionsId/applications/:applicationId', function(req, res) {
+api.delete('/:admissionsId/applications/:applicationId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   application.remove({_id: applicationId}, function(err) {
@@ -351,7 +356,7 @@ api.delete('/:admissionsId/applications/:applicationId', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId/applications/:applicationId/removeCards', function(req, res) {
+api.get('/:admissionsId/applications/:applicationId/removeCards', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   getApplicationCards(admissionsId, applicationId).then(function(response) {
@@ -361,7 +366,7 @@ api.get('/:admissionsId/applications/:applicationId/removeCards', function(req, 
 /**
  *
  */
-api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, res) {
+api.post('/:admissionsId/applications/:applicationId/addCards/*', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardBody = req.body;
@@ -384,7 +389,7 @@ api.post('/:admissionsId/applications/:applicationId/addCards/*', function(req, 
 /**
  *
  */
-api.get('/:admissionsId/applications/:applicationId/addCards', function(req, res) {
+api.get('/:admissionsId/applications/:applicationId/addCards', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   getCardsAndApp(admissionsId, applicationId).then(function(response) {
@@ -429,7 +434,7 @@ var getCardsAndApp = function(admissionsId, applicationId) {
 /**
  *
  */
-api.get('/:admissionsId/applications/:applicationId/assign', function(req, res) {
+api.get('/:admissionsId/applications/:applicationId/assign', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   user.findById(admissionsId).populate("schools").exec(function(err, Admissions) {
@@ -446,7 +451,7 @@ api.get('/:admissionsId/applications/:applicationId/assign', function(req, res) 
 /**
  *
  */
-api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', function(req, res) {
+api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
@@ -469,13 +474,12 @@ api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', f
 /**
  *
  */
-api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', function(req, res) {
+api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
     School.applications = _.without(School.applications, applicationId);
-    console.log(School.applications, applicationId);
     School.save(function(err, Sc) {
       user.findById(admissionsId).populate("schools").exec(function(err, Admissions) {
         application.findById(applicationId, function(err, Application) {
@@ -493,7 +497,7 @@ api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign'
 /**
  *
  */
-api.get('/:admissionsId/applications/:applicationId/cards/:cardId', function(req, res) {
+api.get('/:admissionsId/applications/:applicationId/cards/:cardId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
@@ -512,7 +516,7 @@ api.get('/:admissionsId/applications/:applicationId/cards/:cardId', function(req
 /**
  *
  */
-api.get('/:admissionsId/applications/:applicationId/arrange', function(req, res) {
+api.get('/:admissionsId/applications/:applicationId/arrange', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId;
   getApplicationCards(admissionsId, applicationId).then(function(response) {
@@ -522,7 +526,7 @@ api.get('/:admissionsId/applications/:applicationId/arrange', function(req, res)
 /**
  *
  */
-api.put('/:admissionsId/applications/:applicationId/cards/:cardId/arrange', function(req, res) {
+api.put('/:admissionsId/applications/:applicationId/cards/:cardId/arrange', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId
@@ -576,7 +580,7 @@ var reArrangeCards = function(cardId, Cards, dragAndDrop) {
 /**
  *
  */
-api.put('/:admissionsId/applications/:applicationId/cards/:cardId', function(req, res) {
+api.put('/:admissionsId/applications/:applicationId/cards/:cardId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId
@@ -590,7 +594,7 @@ api.put('/:admissionsId/applications/:applicationId/cards/:cardId', function(req
 /**
  *
  */
-api.delete('/:admissionsId/applications/:applicationId/cards/:cardId', function(req, res) {
+api.delete('/:admissionsId/applications/:applicationId/cards/:cardId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
@@ -603,7 +607,7 @@ api.delete('/:admissionsId/applications/:applicationId/cards/:cardId', function(
 /**
  *
  */
-api.get('/:admissionsId/search/schools', function(req, res) {
+api.get('/:admissionsId/search/schools', auth, function(req, res) {
   queryM(school)(req, function(err, response) {
     response.admissionsId = req.params.admissionsId;
     response.cardType = 'search/results/schools';
@@ -613,7 +617,7 @@ api.get('/:admissionsId/search/schools', function(req, res) {
 /**
  *
  */
-api.get('/:admissionsId/search/schools/:schoolId', function(req, res) {
+api.get('/:admissionsId/search/schools/:schoolId', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   school.findById(schoolId).exec().then(function(School) {
@@ -628,7 +632,7 @@ api.get('/:admissionsId/search/schools/:schoolId', function(req, res) {
 /**
  *
  */
-api.put('/:admissionsId/search/schools/:schoolId/claim', function(req, res) {
+api.put('/:admissionsId/search/schools/:schoolId/claim', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   user.findById(admissionsId).exec(function(err, Admissions) {
@@ -642,7 +646,7 @@ api.put('/:admissionsId/search/schools/:schoolId/claim', function(req, res) {
 /**
  *
  */
-api.delete('/:admissionsId/search/schools/:schoolId/claim', function(req, res) {
+api.delete('/:admissionsId/search/schools/:schoolId/claim', auth, function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   user.findById(admissionsId).exec(function(err, Admissions) {

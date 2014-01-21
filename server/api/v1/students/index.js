@@ -58,9 +58,9 @@ api.post('/login', function(req, res) {
   });
 });
 /**
- *
+ * Authentication Middleware
  */
-api.use(function(req, res, next) {
+var auth = function(req, res, next) {
   // All deeper URL's require authentication
   var authToken = req.get('Token');
   if (authToken) {
@@ -87,7 +87,7 @@ api.use(function(req, res, next) {
     res.set('Location', '/api/v1/students/login');
     res.send(300);
   }
-});
+};
 api.get('/logout', function(req, res) {
   authenticate.logout(req, function(err, auth) {
     res.set('Location', '/api/v1/students/login');
@@ -97,7 +97,7 @@ api.get('/logout', function(req, res) {
 /**
  *
  */
-api.get('/:studentId', function(req, res) {
+api.get('/:studentId', auth, function(req, res) {
   var studentId = req.params.studentId;
   var response = {
     studentId: studentId
@@ -115,7 +115,7 @@ api.get('/:studentId', function(req, res) {
 /**
  *
  */
-api.get('/:studentId/schools/:schoolId', function(req, res) {
+api.get('/:studentId/schools/:schoolId', auth, function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   school.findById(schoolId).exec().then(function(School) {
@@ -132,7 +132,7 @@ api.get('/:studentId/schools/:schoolId', function(req, res) {
 /**
  *
  */
-api.delete('/:studentId/schools/:schoolId', function(req, res) {
+api.delete('/:studentId/schools/:schoolId', auth, function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   user.findById(studentId, function(err, Student) {
@@ -148,7 +148,7 @@ api.delete('/:studentId/schools/:schoolId', function(req, res) {
 /**
  *
  */
-api.get('/:studentId/search/schools', function(req, res) {
+api.get('/:studentId/search/schools', auth, function(req, res) {
   queryM(school)(req, function(err, response) {
     response.studentId = req.params.studentId;
     response.cardType = 'search/results/schools';
@@ -160,7 +160,7 @@ api.get('/:studentId/search/schools', function(req, res) {
 /**
  *
  */
-api.get('/:studentId/search/schools/:schoolId', function(req, res) {
+api.get('/:studentId/search/schools/:schoolId', auth, function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   school.findById(schoolId).populate("applications").exec(function(err, School) {
@@ -177,7 +177,7 @@ api.get('/:studentId/search/schools/:schoolId', function(req, res) {
 /**
  *
  */
-api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', function(req, res) {
+api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', auth, function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
@@ -194,7 +194,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', functi
 /**
  *
  */
-api.put('/:studentId/schools/:schoolId/application/:applicationId/save', function(req, res) {
+api.put('/:studentId/schools/:schoolId/application/:applicationId/save', auth, function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
@@ -261,7 +261,7 @@ var getApplication = function(studentId) {
 /**
  *
  */
-api.get('/:studentId/application', function(req, res) {
+api.get('/:studentId/application', auth, function(req, res) {
   var studentId = req.params.studentId;
   getApplication(studentId).then(function(response) {
     response.username = req.username;
@@ -272,7 +272,7 @@ api.get('/:studentId/application', function(req, res) {
 /**
  *
  */
-api.get('/:studentId/application/cards/:cardId', function(req, res) {
+api.get('/:studentId/application/cards/:cardId', auth, function(req, res) {
   var studentId = req.params.studentId
     , cardId = req.params.cardId;
   card.findById(cardId).exec(function(err, Card) {
@@ -289,7 +289,7 @@ api.get('/:studentId/application/cards/:cardId', function(req, res) {
 /**
  *
  */
-api.put('/:studentId/application/cards/:cardId', function(req, res) {
+api.put('/:studentId/application/cards/:cardId', auth, function(req, res) {
   var studentId = req.params.studentId
     , cardId = req.params.cardId
     , cardPost = _.omit(req.body, '_id');
@@ -304,7 +304,7 @@ api.put('/:studentId/application/cards/:cardId', function(req, res) {
 /**
  *
  */
-api.delete('/:studentId/application/cards/:cardId', function(req, res) {
+api.delete('/:studentId/application/cards/:cardId', auth, function(req, res) {
   var studentId = req.params.studentId
     , cardId = req.params.cardId;
   card.findOneAndRemove({_id: cardId}, function(err) {

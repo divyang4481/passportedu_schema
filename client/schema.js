@@ -20,7 +20,9 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
             && angular.isDefined(response.headers()['x-token'])) {
             var client = jsonClient();
             client.setHeader('Authorization', null);
-            client.setHeader('Token', base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']));
+            var token = base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']);
+            client.setHeader('Token', token);
+            sessionStorage.token = token;
           }
           return response;
         };
@@ -32,7 +34,9 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
             if (angular.isDefined(response.headers()['x-username'])
               && angular.isDefined(response.headers()['x-token'])) {
               client.setHeader('Authorization', null);
-              client.setHeader('Token', base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']));
+              var token = base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']);
+              client.setHeader('Token', token);
+              sessionStorage.token = token;
             }
             client.buildClient(url);
           }
@@ -127,7 +131,6 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
         return $timeout(later, timeout, apply);
       };
     }
-
     return debounce;
   }])
   .factory('jsonSchema', function($resource, $interpolate, $q, $http, $location, jsonClient) {
@@ -147,6 +150,10 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
       });
       return deferred.promise;
     }
+    apiClient.setCredentials = function(username, token) {
+      apiClient.setHeader('Authorization', null);
+      apiClient.setHeader('Token', base64.encode(username + ':' + token));
+    };
     /**
      * Traversing schemas/sub-schemas to compile and interpolate curied links and links
      * @param root
@@ -242,11 +249,12 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
     apiClient.buildClient = function(url) {
       var def = $q.defer();
       apiClient.data = {};
+      apiClient.setHeader('Token', sessionStorage.token);
       apiClient.resolveSchema(url).then(function(schema) {
         apiClient.schema = schema;
         apiClient.origSchema = angular.copy(schema);
         apiClient.links = schema.links;
-        apiClient.resourceURLTraverse(url, {}, {'GET': {method: 'GET'}}, 'GET', {}).then(function(data) {
+        apiClient.resourceURLTraverse(url, {}, {'GET': {method: 'GET', headers: apiClient.staticHeaders}}, 'GET', {}).then(function(data) {
           apiClient.data = data;
           apiClient.links = [];
           apiClient.resolveEmbeddedLinks(apiClient, apiClient.schema);

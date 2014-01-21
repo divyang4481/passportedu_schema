@@ -103,7 +103,7 @@ var auth = function(req, res, authToken, callback) {
       callback({error: 'User not found'});
       return;
     }
-    var intercomHash = crypto.createHmac('sha256', 'c6cf7095d8d5a613876419716bd54e3cbeeca235').update(User._id.toString()).digest('hex');
+    var intercomHash = crypto.createHmac('sha256', '3g9MJTJkPkdLgc5yBwvZtAl1QJ--TAAS4zAuUNGy').update(User._id.toString()).digest('hex');
     res.header('X-Intercom-Username', User.username);
     res.header('X-Intercom-User-Id', User._id.toString());
     res.header('X-Intercom-Email', User.email);
