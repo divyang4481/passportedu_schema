@@ -295,19 +295,6 @@
   },
   "links": [
     {
-      "title": "Home",
-      "description": "The root resource for Passport EDU",
-      "rel": "home",
-      "importance": "navigation",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Students",
-      "rel": "students",
-      "importance": "navigation",
-      "href": "/api/v1/students"
-    },
-    {
       "title": "My Dashboard",
       "rel": "dashboard",
       "importance": "navigation",
@@ -333,6 +320,12 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/students/{{studentId}}/search/schools/{{school._id}}"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/students/logout"
     }
   ]
 }

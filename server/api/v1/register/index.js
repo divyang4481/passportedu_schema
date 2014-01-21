@@ -13,16 +13,6 @@ api.get('/', function(req, res) {
 /**
  *
  */
-var students = require('./students');
-api.use('/students/', students);
-/**
- *
- */
-var admissions = require('./admissions');
-api.use('/admissions/', admissions);
-/**
- *
- */
 var applications = require('./applications');
 api.use('/applications/', applications);
 /**

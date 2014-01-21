@@ -262,19 +262,6 @@
   },
   "links": [
     {
-      "title": "Home",
-      "description": "Home",
-      "rel": "home",
-      "importance": "navigation",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Students",
-      "rel": "students",
-      "importance": "navigation",
-      "href": "/api/v1/students"
-    },
-    {
       "title": "My Dashboard",
       "rel": "dashboard",
       "importance": "navigation",
@@ -298,6 +285,12 @@
       "rel": "self",
       "importance": "navigation",
       "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/students/logout"
     }
   ]
 }

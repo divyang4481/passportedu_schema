@@ -1,9 +1,9 @@
 {
-  "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
+  "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/removeCards",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Arrange Cards",
+  "title": "Remove Cards from {{application.type}} Application",
   "type": "object",
-  "description": "Arrange card order for {{application.type}} application type",
+  "description": "Remove cards from {{application.type}} Application Type",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -21,16 +21,7 @@
         "type": {
           "type": "string"
         }
-      },
-      "links": [
-        {
-          "title": "{{type}}",
-          "rel": "self",
-          "importance": "navigation",
-          "method": "GET",
-          "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
-        }
-      ]
+      }
     },
     "cards": {
       "title": "Application Cards",
@@ -47,20 +38,33 @@
         },
         "links": [
           {
-            "rel": "arrange_{{_id}}",
-            "importance": "arrangeCards",
-            "method": "PUT",
+            "rel": "{{_id}}",
+            "importance": "cards",
             "target": "refresh",
             "template": "/templates/api/v1/card/{{type}}",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}/arrange",
-            "properties": {
-              "drag": {
-                "type": "object"
-              },
-              "drop": {
-                "type": "object"
-              }
-            }
+            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
+            "method": "DELETE"
+          }
+        ]
+      }
+    },
+    "errors": {
+      "title": "Errors",
+      "type":"array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "title": "Try Again",
+            "rel": "Try Again",
+            "method": "GET",
+            "importance": "content",
+            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
           }
         ]
       }
@@ -88,12 +92,24 @@
       "href": "/api/v1/admissions/logout"
     },
     {
+      "title": "Remove Cards",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/removeCards"
+    },
+    {
       "title": "Back to Application",
-      "description": "{{application.type}}",
-      "rel": "application",
+      "rel": "cards",
       "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+    },
+    {
+      "title": "Drop Cards Here",
+      "description": "to remove them from this Application",
+      "rel": "addToApp",
+      "importance": "drop"
     }
   ]
 }

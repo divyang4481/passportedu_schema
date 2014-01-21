@@ -30,9 +30,9 @@
 </nav>
 <div class="jumbotron">
   <!--Heading and Description-->
-  <h1 ng-bind="client.schema.title"></h1>
+  <h2 ng-bind="client.schema.title"></h2>
 
-  <h2 ng-bind="client.schema.description"></h2>
+  <h4 ng-bind="client.schema.description"></h4>
   <!-- Calls To Action-->
   <div class="btn-group">
     <button ng-repeat='link in client.links | semantics: {importance: "callToAction"}'

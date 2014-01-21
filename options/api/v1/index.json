@@ -15,7 +15,7 @@
       "href": "/api/v1"
     },
     {
-      "title": "Students",
+      "title": "Student Area",
       "rel": "students",
       "importance": "navigation",
       "method": "GET",

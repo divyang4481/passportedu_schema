@@ -21,14 +21,14 @@
       "href": "/api/v1"
     },
     {
-      "title": "Students",
+      "title": "Students Area",
       "rel": "self",
       "importance": "navigation",
       "href": "/api/v1/students"
     },
     {
-      "title": "My Dashboard",
-      "rel": "apps",
+      "title": "Sign in",
+      "rel": "login",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/students/login"
@@ -38,7 +38,7 @@
       "rel": "register",
       "importance": "content",
       "template": "/templates/api/v1/card/admissions/register",
-      "href": "/api/v1/register/students",
+      "href": "/api/v1/students/register",
       "method": "POST",
       "properties": {
         "username": {

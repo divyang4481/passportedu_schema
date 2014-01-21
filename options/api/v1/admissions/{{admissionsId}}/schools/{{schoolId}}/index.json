@@ -270,93 +270,68 @@
         {
           "title": "Un-claim this School",
           "description": "{{data.institutionName}}",
-          "rel": "claim",
+          "rel": "unclaim",
           "importance": "administrative",
           "method": "DELETE",
           "href": "/api/v1/admissions/{{admissionsId}}/search/schools/{{_id}}/claim"
+        },
+        {
+          "title": "{{data.institutionName}}",
+          "description": "{{data.institutionName}}",
+          "rel": "self",
+          "importance": "navigation",
+          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
         }
       ]
     },
     "applicants": {
-      "type": "object",
-      "properties": {
-        "result": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "_id": {
-                "type": "string"
-              },
-              "fullName": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
-              }
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
           }
         },
-        "meta": {
-          "links": [
-            {
-              "title": "{{page}}",
-              "rel": "{{rel}}",
-              "method": "GET",
-              "importance": "paging",
-              "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}?{{query}}"
-            }
-          ]
-        }
-      },
-      "links": [
-        {
-          "title": "{{page}}",
-          "rel": "{{rel}}",
-          "method": "GET",
-          "importance": "cards",
-          "template": "/templates/api/v1/card/admissions/applicant",
-          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applicants/{{_id}}"
-        }
-      ]
+        "links": [
+          {
+            "title": "{{page}}",
+            "rel": "{{_id}}",
+            "method": "GET",
+            "importance": "cards",
+            "template": "/templates/api/v1/card/admissions/applicant",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applicants/{{_id}}"
+          }
+        ]
+      }
     }
   },
   "links": [
     {
-      "title": "Home",
-      "description": "The root resource for Passport EDU",
-      "rel": "home",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
-    },
-    {
       "title": "My Dashboard",
-      "rel": "self",
+      "rel": "dashboard",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}"
     },
     {
-      "title": "Application Types",
-      "rel": "applications",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
-    },
-    {
-      "title": "Claim a School",
+      "title": "Claim another School",
       "rel": "search",
-      "importance": "navigation",
+      "importance": "alsoCall",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
     },
     {
       "title": "Back",

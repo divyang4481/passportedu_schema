@@ -29,7 +29,16 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "links": [
+        {
+          "title": "{{type}}",
+          "rel": "self",
+          "importance": "navigation",
+          "method": "GET",
+          "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
+        }
+      ]
     },
     "cards": {
       "title": "Application Cards",
@@ -60,21 +69,6 @@
   },
   "links": [
     {
-      "title": "Home",
-      "description": "The root resource for Passport EDU",
-      "rel": "home",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
-    },
-    {
       "title": "My Dashboard",
       "rel": "myHome",
       "importance": "navigation",
@@ -87,6 +81,12 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
     },
     {
       "title": "Back To Application",

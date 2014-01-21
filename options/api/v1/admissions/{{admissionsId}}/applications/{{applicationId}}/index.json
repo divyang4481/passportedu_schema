@@ -21,7 +21,15 @@
         "type": {
           "type": "string"
         }
-      }
+      },
+      "links": [
+        {
+          "title": "{{type}}",
+          "rel": "self",
+          "importance": "navigation",
+          "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}"
+        }
+      ]
     },
     "cards": {
       "title": "Application Cards",
@@ -43,49 +51,13 @@
             "target": "refresh",
             "template": "/templates/api/v1/card/{{type}}",
             "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
-            "method": "DELETE"
-          }
-        ]
-      }
-    },
-    "errors": {
-      "title": "Errors",
-      "type":"array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        },
-        "links": [
-          {
-            "title": "Try Again",
-            "rel": "Try Again",
-            "method": "GET",
-            "importance": "content",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+            "method": "GET"
           }
         ]
       }
     }
   },
   "links": [
-    {
-      "title": "Home",
-      "description": "Home Page",
-      "rel": "home",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
-    },
     {
       "title": "My Dashboard",
       "rel": "myHome",
@@ -95,17 +67,16 @@
     },
     {
       "title": "Application Types",
-      "rel": "self",
+      "rel": "types",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
     },
     {
-      "title": "Claim a School",
-      "rel": "search",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
     },
     {
       "title": "Preview",
@@ -117,19 +88,26 @@
       "href": "/api/v1/applications/{{application._id}}/schools/1234"
     },
     {
+      "title": "Assign to Schools",
+      "description": "{{application.type}}",
+      "rel": "assign",
+      "importance": "callToAction",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/assign"
+    },
+    {
       "title": "Add Cards",
-      "rel": "cards",
+      "rel": "addCards",
       "importance": "alsoCall",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/addCards"
     },
     {
-      "title": "Add to Schools",
-      "description": "{{application.type}}",
-      "rel": "assign",
+      "title": "Remove Cards",
+      "rel": "removeCards",
       "importance": "alsoCall",
       "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/assign"
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}/removeCards"
     },
     {
       "title": "Arrange Cards",
@@ -146,12 +124,6 @@
       "importance": "administrative",
       "method": "DELETE",
       "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
-    },
-    {
-      "title": "Drop Cards Here",
-      "description": "to remove them from this Application",
-      "rel": "addToApp",
-      "importance": "drop"
     }
   ]
 }

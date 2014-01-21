@@ -12,46 +12,61 @@ var express = require('express')
   , queryM = require('../../../verbs/query')
   , q = require('q');
 /**
+ * Register and Login Package
+ */
+api.get('/', function(req, res) {
+  res.json({});
+});
+api.get('/register', function(req, res) {
+  res.json({});
+});
+api.post('/register', function(req, res) {
+  var admissions = req.body;
+  admissions.userPerms = ['admissions'];
+  admissions.created = Math.round(new Date().getTime() / 1000);
+  user.create(admissions, function(err, Admissions) {
+    if (err) {
+      res.json({
+        error: err
+      });
+    } else {
+      authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
+        if (err || authorization.user.userType !== 'admissions') {
+          res.set('Location', '/api/v1/admissions/register');
+          res.send(300);
+          return;
+        }
+        res.set('Location', '/api/v1/admissions/' + authorization.user.userId);
+        res.send(300);
+      });
+    }
+  });
+});
+api.get('/login', function(req, res) {
+  res.json({});
+});
+api.post('/login', function(req, res) {
+  authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
+    if (err || authorization.user.userType !== 'admissions') {
+      res.set('Location', '/api/v1/admissions/register');
+      res.send(300);
+      return;
+    }
+    res.set('Location', '/api/v1/admissions/' + authorization.user.userId);
+    res.send(300);
+  });
+});
+/**
  *
  */
 api.use(function(req, res, next) {
   // All deeper URL's require authentication
-  var authToken = req.get('Token')
-    , authHeader = req.get('Authorization');
-  if (authHeader) {
-    authenticate.login(req, res, authHeader, function(err, authorization) {
-      if (err && req.originalUrl === '/api/v1/admissions') {
-        next();
-        return;
-      }
-      if ((err) || (authorization.user.userType !== 'admissions')) {
-        res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
-        res.send(401);
-        return;
-      }
-      user.count({schools: {$in: authorization.user.schools}}, function(err, countApplicants) {
-        req.admissionsId = authorization.user.userId.toString();
-        req.username = authorization.user.username;
-        req.token = authorization.user.token; // Token needs to be sent back and forth always
-        res.header('X-Intercom-Custom', JSON.stringify({
-          "userType": authorization.user.userType,
-          "schools": authorization.user.schools.length,
-          "applications": authorization.user.applications.length,
-          "applicants": countApplicants
-        }));
-        next();
-      });
-    })
-  } else if (authToken) {
+  var authToken = req.get('Token');
+  if (authToken) {
     authenticate.auth(req, res, authToken, function(err, authorization) {
-      // Allowing unauthenticated users to remain in public students area...landing page
-      if (err && req.originalUrl === '/api/v1/admissions') {
-        next();
-        return;
-      }
       if ((err) || (authorization.user.userType !== 'admissions')) {
-        res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
-        res.send(401);
+        res.set('Location', '/api/v1/admissions/login');
+        res.send(300);
         return;
       }
       user.count({schools: {$in: authorization.user.schools}}, function(err, countApplicants) {
@@ -68,52 +83,14 @@ api.use(function(req, res, next) {
       });
     });
   } else {
-    if (req.originalUrl === '/api/v1/admissions') {
-      next();
-      return;
-    }
-    res.set('WWW-Authenticate', 'Basic realm="/api/v1/admissions"');
-    res.send(401);
-  }
-});
-/**
- * Admissions Area
- */
-api.get('/', function(req, res) {
-  if (_.isUndefined(req.admissionsId)) {
-    res.json({});
-  } else {
-    res.set('Location', '/api/v1/admissions/' + req.admissionsId);
+    res.set('Location', '/api/v1/admissions/login');
     res.send(300);
   }
 });
-/**
- * Admissions Area
- */
-api.get('/login', function(req, res) {
-  if (_.isUndefined(req.admissionsId)) {
-    res.set('Location', '/api/v1/admissions');
-    res.send(300);
-  } else {
-    res.set('Location', '/api/v1/admissions/' + req.admissionsId);
-    res.send(300);
-  }
-});
-/**
- * Admissions Area
- */
 api.get('/logout', function(req, res) {
   authenticate.logout(req, function(err, auth) {
-    if (auth.user.userType !== 'admissions') {
-      res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
-      res.send(401);
-      return;
-    }
-    if (auth.user.userType !== 'students') {
-      res.set('WWW-Authenticate', 'Basic realm="/api/v1/student"');
-      res.send(401);
-      return;
-    }
+    res.set('Location', '/api/v1/admissions/login');
+    res.send(300);
   });
 });
 /**
@@ -369,6 +346,16 @@ api.delete('/:admissionsId/applications/:applicationId', function(req, res) {
     }
     res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications');
     res.send(300);
+  });
+});
+/**
+ *
+ */
+api.get('/:admissionsId/applications/:applicationId/removeCards', function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , applicationId = req.params.applicationId;
+  getApplicationCards(admissionsId, applicationId).then(function(response) {
+    res.json(response);
   });
 });
 /**

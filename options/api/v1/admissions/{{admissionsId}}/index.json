@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "My Dashboard",
   "type": "object",
-  "description": "Dashboard for Your Admissions Team",
+  "description": "My Schools, where I can accept applications online.",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -65,7 +65,7 @@
             "title": "{{data.institutionName}}",
             "rel": "full_{{_id}}",
             "importance": "content",
-            "template": "/templates/api/v1/card/search/results/schools",
+            "template": "/templates/api/v1/card/admissions/schools/view",
             "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
           }
         ]
@@ -73,21 +73,6 @@
     }
   },
   "links": [
-    {
-      "title": "Home",
-      "description": "The root resource for Passport EDU",
-      "rel": "home",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
-    },
     {
       "title": "My Dashboard",
       "rel": "self",
@@ -105,9 +90,15 @@
     {
       "title": "Claim a School",
       "rel": "search",
-      "importance": "navigation",
+      "importance": "alsoCall",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
     }
   ]
 }

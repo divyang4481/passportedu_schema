@@ -1,10 +1,16 @@
 {
-  "id": "/api/v1/admissions",
+  "id": "/api/v1/students",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Welcome, Admissions Teams",
+  "title": "Get Started",
   "type": "object",
-  "description": "",
+  "description": "Welcome to PassportEDU",
   "properties": {
+    "meta": {
+      "title": "Student ID",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    }
   },
   "links": [
     {
@@ -12,52 +18,51 @@
       "description": "The root resource for Passport EDU",
       "rel": "home",
       "importance": "navigation",
-      "method": "GET",
       "href": "/api/v1"
     },
     {
-      "title": "Admissions",
+      "title": "Student Area",
+      "rel": "students",
+      "importance": "navigation",
+      "href": "/api/v1/students"
+    },
+    {
+      "title": "Register",
       "rel": "self",
       "importance": "navigation",
       "method": "GET",
-      "href": "/api/v1/admissions"
-    },
-    {
-      "title": "Sign In",
-      "rel": "login",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/login"
+      "href": "/api/v1/students/register"
     },
     {
       "title": "Register",
       "rel": "register",
       "importance": "content",
       "template": "/templates/api/v1/card/admissions/register",
-      "href": "/api/v1/register/admissions",
+      "href": "/api/v1/students/register",
       "method": "POST",
       "properties": {
-        "password": {
-          "title": "Your password",
-          "type": "password"
-        },
-        "fullName": {
-          "title": "Your Full Name",
-          "description": "First name and last name",
-          "type": "string"
-        },
-        "email": {
-          "title": "Your Email Address",
-          "description": "A valid email address",
-          "type": "email"
-        },
         "username": {
           "title": "Your username",
           "description": "Your email address or username",
           "type": "string"
+        },
+        "password": {
+          "title": "Your password",
+          "description": "Your password",
+          "type": "password"
+        },
+        "fullName": {
+          "title": "Your Full Name",
+          "description": "Your first name and last name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Your Email Address",
+          "description": "A valid email address where we can contact you.",
+          "type": "email"
         }
       },
-      "required": ["username", "password", "email"]
+      "required": ["username", "password", "email", "fullName"]
     }
   ]
 }

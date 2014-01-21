@@ -16,26 +16,29 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
           }
         });
         var success = function(response) {
-          if (angular.isDefined(response.data.token) && angular.isDefined(response.data.username)) {
+          if (angular.isDefined(response.headers()['x-username'])
+            && angular.isDefined(response.headers()['x-token'])) {
             var client = jsonClient();
-            client.staticHeaders = {
-              'Authorization': null,
-              'Token': base64.encode(response.data.username + ':' + response.data.token)
-            };
+            client.setHeader('Authorization', null);
+            client.setHeader('Token', base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']));
           }
           return response;
         };
         var error = function(response) {
           var status = response.status;
           if (status == 300) {
+            var client = jsonClient();
             var url = response.headers().location;
-            jsonClient().buildClient(url);
+            if (angular.isDefined(response.headers()['x-username'])
+              && angular.isDefined(response.headers()['x-token'])) {
+              client.setHeader('Authorization', null);
+              client.setHeader('Token', base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']));
+            }
+            client.buildClient(url);
           }
           if (status == 415) {
             apiClient.errors = [
-              {
-                message: 'Please choose the correct mediaType and resubmit'
-              }
+              {message: 'Please choose the correct mediaType and resubmit'}
             ];
           }
           // otherwise
@@ -235,9 +238,9 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
      * @param url
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
+    apiClient.staticHeaders = {};
     apiClient.buildClient = function(url) {
       var def = $q.defer();
-      apiClient.staticHeaders = {};
       apiClient.data = {};
       apiClient.resolveSchema(url).then(function(schema) {
         apiClient.schema = schema;

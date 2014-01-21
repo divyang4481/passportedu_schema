@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Welcome, Admissions Teams",
   "type": "object",
-  "description": "",
+  "description": "Please register to receive an account with us and manage your school.",
   "properties": {
   },
   "links": [
@@ -34,27 +34,22 @@
       "rel": "register",
       "importance": "content",
       "template": "/templates/api/v1/card/admissions/register",
-      "href": "/api/v1/register/admissions",
+      "href": "/api/v1/admissions/register",
       "method": "POST",
       "properties": {
-        "password": {
-          "title": "Your password",
-          "type": "password"
-        },
         "fullName": {
           "title": "Your Full Name",
           "description": "First name and last name",
           "type": "string"
         },
-        "email": {
+        "username": {
           "title": "Your Email Address",
           "description": "A valid email address",
           "type": "email"
         },
-        "username": {
-          "title": "Your username",
-          "description": "Your email address or username",
-          "type": "string"
+        "password": {
+          "title": "Your password",
+          "type": "password"
         }
       },
       "required": ["username", "password", "email"]

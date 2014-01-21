@@ -1,0 +1,53 @@
+{
+  "id": "/api/v1/admissions/login",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Log In",
+  "type": "object",
+  "description": "Welcome, Admissions Teams, Please Log In",
+  "properties": {
+  },
+  "links": [
+    {
+      "title": "Home",
+      "description": "The root resource for Passport EDU",
+      "rel": "home",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1"
+    },
+    {
+      "title": "Admissions",
+      "rel": "admissions",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions"
+    },
+    {
+      "title": "Sign In",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/login"
+    },
+    {
+      "title": "Login",
+      "rel": "login",
+      "importance": "content",
+      "template": "/templates/api/v1/card/admissions/login",
+      "href": "/api/v1/admissions/login",
+      "method": "POST",
+      "properties": {
+        "username": {
+          "title": "Your Email Address / Username",
+          "description": "the email address you used to sign up with PassportEDU",
+          "type": "email"
+        },
+        "password": {
+          "title": "Your password",
+          "type": "password"
+        }
+      },
+      "required": ["username", "password"]
+    }
+  ]
+}

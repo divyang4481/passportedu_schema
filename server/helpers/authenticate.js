@@ -29,6 +29,8 @@ var logout = function(req, callback) {
       callback({error: 'User not found'});
       return;
     }
+    res.header('X-username', '');
+    res.header('X-token', '');
     callback(null, {
       user: {
         userId: User._id,
@@ -42,18 +44,8 @@ var logout = function(req, callback) {
 /**
  * var authToken = req.get('Authorization');
  */
-var login = function(req, res, authHeader, callback) {
-  if (_.isUndefined(authHeader)) {
-    callback(null, {
-      user: {
-        userType: 'public'
-      }
-    });
-    return;
-  }
-  authHeader = new Buffer(authHeader.replace(/Basic /, ''), 'base64').toString();
-  var credentials = authHeader.split(':');
-  user.login(credentials[0], credentials[1], function(err, match, User) {
+var login = function(req, res, username, password, callback) {
+  user.login(username, password, function(err, match, User) {
     if (!match) {
       callback({
         error: {
@@ -74,6 +66,8 @@ var login = function(req, res, authHeader, callback) {
       res.header('X-Intercom-Created-At', User.created);
       res.header('X-Intercom-User-Hash', intercomHash);
       res.header('X-Intercom-API', 'c6cf7095d8d5a613876419716bd54e3cbeeca235');
+      res.header('X-username', User.username);
+      res.header('X-token', User.token);
       callback(null, {
         user: {
           userId: User._id.toString(),

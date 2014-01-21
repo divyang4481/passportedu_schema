@@ -297,24 +297,16 @@
   },
   "links": [
     {
-      "title": "Home",
-      "description": "The root resource for Passport EDU",
-      "rel": "home",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
-    },
-    {
       "title": "My Dashboard",
       "rel": "dashboard",
       "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Back to My Dashboard",
+      "rel": "dashboard",
+      "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}"
     },
@@ -331,6 +323,12 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
     },
     {
       "title": "Search Schools",

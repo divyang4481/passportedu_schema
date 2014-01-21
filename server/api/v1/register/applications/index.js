@@ -5,6 +5,7 @@ var express = require('express')
   , api = express()
   , _ = require('underscore')
   , user = require('../../../../models/user')
+  , authenticate = require('../../../../helpers/authenticate')
   , application = require('../../../../models/application')
   , card = require('../../../../models/card')
 /**
@@ -36,15 +37,21 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
         Student.cards.push(newCard._id.toString());
         Student.save();
       });
-
     });
     if (err) {
       res.json({
         error: err
       });
     } else {
-      res.set('Location', '/api/v1/students/' + studentId);
-      res.send(300);
+      authenticate.login(req, res, req.body.student.username, req.body.student.password, function(err, authorization) {
+        if (err || authorization.user.userType !== 'students') {
+          res.set('Location', '/api/v1/students/register');
+          res.send(300);
+          return;
+        }
+        res.set('Location', '/api/v1/students/' + authorization.user.userId);
+        res.send(300);
+      });
     }
   });
 });

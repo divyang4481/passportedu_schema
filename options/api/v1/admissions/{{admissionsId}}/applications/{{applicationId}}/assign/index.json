@@ -11,6 +11,27 @@
       "identity": true,
       "type": "string"
     },
+    "application": {
+      "title": "{{type}}",
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "links": [
+        {
+          "title": "{{type}}",
+          "rel": "self",
+          "importance": "navigation",
+          "method": "GET",
+          "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
+        }
+      ]
+    },
     "admissions": {
       "type": "object",
       "properties": {
@@ -45,36 +66,9 @@
           }
         }
       }
-    },
-    "application": {
-      "title": "{{type}}",
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        }
-      }
     }
   },
   "links": [
-    {
-      "title": "Home",
-      "description": "The root resource for Passport EDU",
-      "rel": "home",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
-    },
     {
       "title": "My Dashboard",
       "rel": "myHome",
@@ -84,7 +78,7 @@
     },
     {
       "title": "Application Types",
-      "rel": "self",
+      "rel": "types",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
@@ -92,9 +86,15 @@
     {
       "title": "Claim a School",
       "rel": "search",
-      "importance": "navigation",
+      "importance": "alsoCall",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
     },
     {
       "title": "Back to Application",

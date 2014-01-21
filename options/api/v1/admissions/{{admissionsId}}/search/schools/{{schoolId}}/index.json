@@ -271,7 +271,8 @@
           "title": "Claim this School",
           "description": "{{data.institutionName}}",
           "rel": "claim",
-          "importance": "callToAction",
+          "importance": "content",
+          "template": "/templates/api/v1/card/admissions/schools/claim",
           "method": "PUT",
           "href": "/api/v1/admissions/{{admissionsId}}/search/schools/{{_id}}/claim"
         }
@@ -280,19 +281,11 @@
   },
   "links": [
     {
-      "title": "Home",
-      "description": "The root resource for Passport EDU",
-      "rel": "home",
-      "importance": "navigation",
+      "title": "Back to My Dashboard",
+      "rel": "dashboard",
+      "importance": "callToAction",
       "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
+      "href": "/api/v1/admissions/{{admissionsId}}"
     },
     {
       "title": "My Dashboard",
@@ -314,6 +307,12 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
     }
   ]
 }
