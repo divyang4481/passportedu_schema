@@ -17,7 +17,7 @@
           required ng-minlength="4" ng-pattern="/[a-zA-Z_]*/">
       </div>
       <div ng-show="form.username.$dirty && form.username.$invalid">
-        <span ng-show="form.username.$error.required" class="alert-warning">Tell us your email.</span>
+        <span ng-show="form.username.$error.required" class="alert-warning">Your email will be your username.</span>
         <span ng-show="form.username.$error.email" class="alert-danger">This is not a valid email.</span>
       </div>
       <div class="form-group"

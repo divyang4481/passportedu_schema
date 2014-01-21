@@ -1,25 +1,37 @@
-<nav ng-cloak class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav ng-cloak
+  class="navbar navbar-default navbar-fixed-top"
+  role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+      <button type="button"
+        class="navbar-toggle"
+        data-toggle="collapse"
+        data-target="#navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" ng-click="traverse('home');">PassportEDU</a>
+      <a class="navbar-brand"
+        ng-click="traverse('home');">PassportEDU</a>
     </div>
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <magic-link ng-repeat='link in client.links | semantics: {importance: "navigation"}' click="traverse" link="link" ng-cloak></magic-link>
+        <magic-link ng-repeat='link in client.links | semantics: {importance: "navigation"}'
+          click="traverse"
+          link="link"
+          ng-cloak></magic-link>
       </ul>
-      <ul class="nav navbar-nav navbar-right" ng-show='(client.links | semantics: {importance:"administrative"}).length'>
+      <ul class="nav navbar-nav navbar-right"
+        ng-show='(client.links | semantics: {importance:"administrative"}).length'>
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown">
+          <a class="dropdown-toggle"
+            data-toggle="dropdown">
             <i class="glyphicon glyphicon-cog"></i>
           </a>
           <ul class="dropdown-menu">
-            <li ng-click="traverse()" ng-repeat='link in client.links | semantics: {importance:"administrative"}'>
+            <li ng-click="traverse()"
+              ng-repeat='link in client.links | semantics: {importance:"administrative"}'>
               <a ng-bind="link._link.title"></a>
             </li>
           </ul>
@@ -36,7 +48,10 @@
   <!--Modal Actions-->
   <div class="btn-group pull-right">
     <a ng-repeat='link in client.links | semantics: {importance: "modalOpen"}'
-      data-target="#{{link._link.rel}}" role="button" class="btn btn-primary" data-toggle="modal">
+      data-target="#{{link._link.rel}}"
+      role="button"
+      class="btn btn-primary"
+      data-toggle="modal">
       <i class="glyphicon glyphicon-tags"></i>&nbsp;
       <span ng-bind="link._link.title"></span>
     </a>
@@ -44,14 +59,18 @@
 </div>
 <!--Cards-->
 <div ng-controller="AnonApplication">
-  <div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length == 0" class="pinColumns">
+  <div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length == 0"
+    class="pinColumns">
     <div ng-repeat='link in client.links | semantics: {importance: "cards"} | orderBy:"order"'
       ng-include="link._link.template"
       class="pin">
     </div>
   </div>
   <!--Modals-->
-  <div id="register" class="modal fade" tabindex="-1" role="dialog">
+  <div id="register"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -63,22 +82,66 @@
             ng-bind="link._link.title"></h4>
         </div>
         <div class="modal-body">
-          <form class="form-horizontal well">
-            <div class="form-group">
+          <form name="form"
+            class="form css-form"
+            role="form"
+            novalidate>
+            <div class="form-group"
+              ng-class="{
+              'has-error': form.fullName.$invalid && form.fullName.$dirty,
+              'has-warning': form.fullName.$dirty,
+              'has-success': form.fullName.$valid
+              }">
               <label class="control-label">What is your name?</label>
-              <input ng-model="student.fullName" type="text" class="form-control" placeholder="Your Name">
+              <input name="fullName"
+                ng-model="student.fullName"
+                type="text"
+                class="form-control"
+                placeholder="Your Name"
+                required ng-minlength="4" ng-pattern="/^(?=.* )(?=.*[A-Z][a-z]{1,20})/">
             </div>
-            <div class="form-group">
-              <label class="control-label">An email address where we can reach you</label>
-              <input ng-model="student.username" type="email" class="form-control" placeholder="Email Address">
+            <div class="form-group"
+              ng-class="{
+            'has-error': form.username.$invalid && form.username.$dirty,
+            'has-warning': form.username.$dirty,
+            'has-success': form.username.$valid
+            }">
+              <label class="control-label">Your email address</label>
+              <input name="username"
+                ng-model="student.username"
+                type="email"
+                class="form-control"
+                placeholder="Email Address / Username"
+                required
+                ng-minlength="4"
+                ng-pattern="/[a-zA-Z_]*/">
             </div>
-            <div class="form-group">
+            <div ng-show="form.username.$dirty && form.username.$invalid">
+              <span ng-show="form.username.$error.required"
+                class="alert-warning">Your email will be your username.</span>
+              <span ng-show="form.username.$error.email"
+                class="alert-danger">Please enter a valid email.</span>
+            </div>
+            <div class="form-group"
+              ng-class="{
+            'has-error': form.password.$invalid && form.password.$dirty,
+            'has-warning': form.password.$dirty,
+            'has-success': form.password.$valid
+            }">
               <label class="control-label">Choose a password</label>
-              <input ng-model="student.password" type="password" class="form-control" placeholder="Password">
+              <input name="password"
+                ng-model="student.password"
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                required
+                ng-minlength="4"
+                ng-pattern="/[a-zA-Z]*/">
             </div>
             <div class="form-group">
               <label class="col-md-7 col-sm-7"></label>
-              <button class="btn btn-primary" ng-click="submitRegisterApp()">Save Application & Register</button>
+              <button class="btn btn-primary"
+                ng-click="submitRegisterApp()">Save Application & Register</button>
             </div>
           </form>
         </div>

@@ -16,11 +16,12 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
           }
         });
         var success = function(response) {
-          if (angular.isDefined(response.headers()['x-username'])
-            && angular.isDefined(response.headers()['x-token'])) {
-            var client = jsonClient();
+          var client = jsonClient();
+          var headers = response.headers();
+          if (angular.isDefined(headers['x-username'])
+            && angular.isDefined(headers['x-token'])) {
             client.setHeader('Authorization', null);
-            var token = base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']);
+            var token = base64.encode(headers['x-username'] + ':' + headers['x-token']);
             client.setHeader('Token', token);
             sessionStorage.token = token;
           }
@@ -30,20 +31,16 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
           var status = response.status;
           if (status == 300) {
             var client = jsonClient();
-            var url = response.headers().location;
-            if (angular.isDefined(response.headers()['x-username'])
-              && angular.isDefined(response.headers()['x-token'])) {
+            var headers = response.headers();
+            var url = headers.location;
+            if (angular.isDefined(headers['x-username'])
+              && angular.isDefined(headers['x-token'])) {
               client.setHeader('Authorization', null);
-              var token = base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']);
+              var token = base64.encode(headers['x-username'] + ':' + headers['x-token']);
               client.setHeader('Token', token);
               sessionStorage.token = token;
             }
             client.buildClient(url);
-          }
-          if (status == 415) {
-            apiClient.errors = [
-              {message: 'Please choose the correct mediaType and resubmit'}
-            ];
           }
           // otherwise
           return $q.reject(response);
@@ -131,6 +128,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
         return $timeout(later, timeout, apply);
       };
     }
+
     return debounce;
   }])
   .factory('jsonSchema', function($resource, $interpolate, $q, $http, $location, jsonClient) {
@@ -395,6 +393,13 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
         var resource = $resource(url, defaults, methods);
         resource[method](payload, function(response, headersFunc) {
           var headers = headersFunc();
+          if (angular.isDefined(headers['x-username'])
+            && angular.isDefined(headers['x-token'])) {
+            apiClient.setHeader('Authorization', null);
+            var token = base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']);
+            apiClient.setHeader('Token', token);
+            sessionStorage.token = token;
+          }
           apiClient.responseHeaders = headers;
           if (target !== 'nofollow' && target !== 'refresh') {
             $location.path(url);

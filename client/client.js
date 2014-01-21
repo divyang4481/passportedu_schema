@@ -6,27 +6,15 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
   })
   .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema) {
     $rootScope.client = {};
+    $scope.$watch('client.url', function() {
+      angular.element('.modal-backdrop').remove();
+    });
     /**
      * Traverse a link to a new URL, given the rel and the link params/data
      */
     $scope.traverse = function() {
       $rootScope.client.traverse(this.link._link.rel, this.link)
         .then(function(client) {
-          if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
-            var update = {
-              email: client.responseHeaders['x-intercom-email'],
-              name: client.responseHeaders['x-intercom-full-name'],
-              user_id: client.responseHeaders['x-intercom-user-id'],
-              created_at: client.responseHeaders['x-intercom-created-at'],
-              user_hash: client.responseHeaders['x-intercom-user-hash'],
-              app_id: client.responseHeaders['x-intercom-api'],
-              "increments": {
-                "time": 1
-              }
-            };
-            angular.extend(update, JSON.parse(client.responseHeaders['x-intercom-custom']));
-            window.Intercom('update', update);
-          }
         });
     };
     /**
@@ -69,38 +57,8 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
     new jsonSchema(startURL).then(function(client) {
       var passport = client;
       $rootScope.client = passport;
-      var client = $rootScope.client;
-      if (angular.isDefined(client.responseHeaders) && angular.isDefined(client.responseHeaders['x-intercom-email'])) {
-        var boot = {
-          email: client.responseHeaders['x-intercom-email'],
-          name: client.responseHeaders['x-intercom-full-name'],
-          user_id: client.responseHeaders['x-intercom-user-id'],
-          created_at: client.responseHeaders['x-intercom-created-at'],
-          user_hash: client.responseHeaders['x-intercom-user-hash'],
-          app_id: client.responseHeaders['x-intercom-api']
-        };
-        angular.extend(boot, JSON.parse(client.responseHeaders['x-intercom-custom']));
-        window.Intercom('boot', boot);
-      }
     });
   })
-  .factory('userService', ['$rootScope', function ($rootScope) {
-    var service = {
-      model: {
-        username: '',
-        token: ''
-      },
-      SaveState: function () {
-        sessionStorage.userService = angular.toJson(service.model);
-      },
-      RestoreState: function () {
-        service.model = angular.fromJson(sessionStorage.userService);
-      }
-    }
-    $rootScope.$on("savestate", service.SaveState);
-    $rootScope.$on("restorestate", service.RestoreState);
-    return service;
-  }])
   .directive('autoSaveCard', function(debounce) {
     return {
       restrict: 'A',
@@ -116,15 +74,22 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
       }
     };
   })
-  .controller('AnonApplication', function($rootScope, $scope, $filter) {
+  .controller('AnonApplication', function($rootScope, $scope, $filter, base64) {
     $scope.cards = [];
     $scope.student = {};
     $scope.submitRegisterApp = function() {
       var cards = $filter('semantics')($rootScope.client.links, {importance: "cards"});
+      $scope.client.setHeader('Authorization', base64.encode($scope.student.username + ':' + $scope.student.password));
+      $scope.$watch('client.url', function() {
+        angular.element('.modal-backdrop').remove();
+      });
+      $scope.client.setHeader('Token', null);
       $scope.client.traverse('register', {
         student: $scope.student,
         cards: cards
-      });
+      }).then(function() {
+          angular.element('.modal-backdrop').remove();
+        });
     };
   })
   .run(function($rootScope) {
@@ -146,7 +111,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
           }
         };
         angular.extend(update, JSON.parse(client.responseHeaders['x-intercom-custom']));
-        if(angular.isDefined(window.Intercom.isInitialized)) {
+        if (angular.isDefined(window.Intercom.isInitialized)) {
           window.Intercom('update', update);
         } else {
           window.Intercom('boot', update);

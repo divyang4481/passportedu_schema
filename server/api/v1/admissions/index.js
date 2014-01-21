@@ -17,9 +17,15 @@ var express = require('express')
 api.get('/', function(req, res) {
   res.json({});
 });
+/**
+ *
+ */
 api.get('/register', function(req, res) {
   res.json({});
 });
+/**
+ *
+ */
 api.post('/register', function(req, res) {
   var admissions = req.body;
   admissions.userPerms = ['admissions'];
@@ -42,9 +48,15 @@ api.post('/register', function(req, res) {
     }
   });
 });
+/**
+ *
+ */
 api.get('/login', function(req, res) {
   res.json({});
 });
+/**
+ *
+ */
 api.post('/login', function(req, res) {
   authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
     if (err || authorization.user.userType !== 'admissions') {
