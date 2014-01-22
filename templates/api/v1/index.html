@@ -73,21 +73,21 @@
 <!--Basic Content-->
 <div class="pinColumns">
   <div ng-repeat='link in client.links | semantics: {importance: "content"}'
-    ng-include="link._link.template"
+    ng-include="'http://static.psprt.com' + link._link.template"
     class="pin">
   </div>
 </div>
 <!--Cards-->
 <div ng-show="(client.links | semantics: {importance: 'cards'}).length && (client.links | semantics: {importance: 'drop'}).length == 0" class="pinColumns">
   <div ng-repeat='link in client.links | semantics: {importance: "cards"} | orderBy:"order"'
-    ng-include="link._link.template"
+    ng-include="'http://static.psprt.com' + link._link.template"
     class="pin">
   </div>
 </div>
 <!--Auto Cards (They auto traverse on change)-->
 <div class="pinColumns">
   <div ng-repeat='link in client.links | semantics: {importance: "autoCards"} | orderBy:"order"'
-    ng-include="link._link.template"
+    ng-include="'http://static.psprt.com' + link._link.template"
     class="pin"
     ng-model="link"
     auto-save-card>
@@ -101,7 +101,8 @@
       drop="performDropLinkAction" class="panel panel-default dropCard"
       enter="enterDrop" leave="leaveDrop"
       ng-class="{'alert-success': link._dropOver}"></div>
-    <div ng-include="link._link.template" ng-class="{'alert alert-success': link._dropping}" ng-model="link" drag>
+    <div ng-include="'http://static.psprt.com' + link._link.template"
+      ng-class="{'alert alert-success': link._dropping}" ng-model="link" drag>
     </div>
   </div>
 </div>
@@ -109,7 +110,9 @@
 <div ng-show="(client.links | semantics: {importance: 'cards'}).length  && (client.links | semantics: {importance: 'drop'}).length"
   class="pinColumns">
   <div ng-repeat='link in client.links | semantics: {importance: "cards"} | orderBy:"order"'
-    ng-model="link" ng-include="link._link.template" class="pin" drag>
+    ng-model="link"
+    ng-include="'http://static.psprt.com' + link._link.template"
+    class="pin" drag>
   </div>
 </div>
 <!--Droppable Area-->
@@ -195,7 +198,7 @@
   <!--Search Results-->
   <div class="pinColumns">
     <div ng-repeat='link in client.links | semantics: {importance: "results"}'
-      ng-include="link._link.template"
+      ng-include="'http://static.psprt.com' + link._link.template"
       class="pin"></div>
   </div>
 </div>

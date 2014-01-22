@@ -14,21 +14,6 @@
   },
   "links": [
     {
-      "title": "Home",
-      "description": "Home Page",
-      "rel": "home",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1"
-    },
-    {
-      "title": "Admissions",
-      "rel": "admissions",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions"
-    },
-    {
       "title": "My Dashboard",
       "rel": "myHome",
       "importance": "navigation",
@@ -41,6 +26,13 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/applications"
+    },
+    {
+      "title": "Application Types",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications/new"
     },
     {
       "title": "Create a New Application Type",
