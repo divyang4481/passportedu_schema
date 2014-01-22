@@ -131,7 +131,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
 
     return debounce;
   }])
-  .factory('jsonSchema', function($resource, $interpolate, $q, $http, $location, jsonClient) {
+  .factory('jsonSchema', function($resource, $interpolate, $q, $http, $location, jsonClient, base64) {
     var apiClient = jsonClient();
     /**
      * Finding the link object identified by the rel from an array of link objects
@@ -367,7 +367,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
         defaults[prop] = angular.isDefined(config.default) ? config.default : null;
       });
       // Now doing the link traversal
-      apiClient.resourceURLTraverse(eLink._link.href, defaults, methods, method, payload, eLink._link.target).then(
+      apiClient.resourceURLTraverse(eLink._link.href, defaults, methods, method, payload, eLink._link.target, eLink._link.mime).then(
         function(response) {
           deferred.resolve(response);
         });
@@ -384,9 +384,19 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
     apiClient.responseHeaders = {};
-    apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload, target) {
+    apiClient.resourceURLTraverse = function(url, defaults, methods, method, payload, target, mime) {
       var deferred = $q.defer();
-      if (target === 'new') {
+      if (target === "data") {
+        $http({
+          method: methods[method].method,
+          headers: methods[method].headers,
+          url: url
+        }).success(function(data) {
+            var encoded_data = base64.encode(data);
+            window.location.href = "data:" + mime + encoded_data;
+          });
+      }
+      else if (target === 'new') {
         window.open('#' + url);
         deferred.reject({});
       } else {

@@ -204,9 +204,9 @@
 </div>
 <!--Toggle Links-->
 <div ng-repeat='link in client.links | semantics: {importance: "toggle"}'
-  ng-class="{'alert-info': dragging}" class="well panel panel-default">
+  ng-class="{'alert-info': dragging}" class="well panel panel-default extraSmallCard">
   <div class="panel-heading">
-    <h3 ng-bind="link._link.title"></h3>
+    <h4 ng-bind="link._link.title"></h4>
   </div>
   <div class="panel-body">
     <button type="button" class="btn btn-primary"

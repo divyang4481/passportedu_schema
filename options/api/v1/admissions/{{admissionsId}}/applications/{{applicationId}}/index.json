@@ -88,7 +88,7 @@
       "href": "/api/v1/applications/{{application._id}}/schools/1234"
     },
     {
-      "title": "Assign to Schools",
+      "title": "Manage Schools",
       "description": "{{application.type}}",
       "rel": "assign",
       "importance": "callToAction",
