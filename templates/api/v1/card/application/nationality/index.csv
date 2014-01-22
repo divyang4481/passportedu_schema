@@ -1,1 +1,1 @@
-"{{data.citizenship}}", "{{data.passport}}", "{{data.birthCountry}}", "{{data.birthCity}}"
+{{data.citizenship}}, {{data.passport}}, {{data.birthCountry}}, {{data.birthCity}}

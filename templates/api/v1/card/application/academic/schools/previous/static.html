@@ -1,0 +1,23 @@
+<div class="panel panel-default mediumCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Previous School</h3>
+  </div>
+  <div class="panel-body">
+    <label class="control-label">Level</label>
+
+    <div ng-bind="link.data.level"></div>
+    <label class="control-label">Degree</label>
+
+    <div ng-bind="link.data.degree"></div>
+    <label class="control-label">City</label>
+
+    <div ng-bind="link.data.city + ', ' + link.data.country"></div>
+    <label class="control-label">Started Date</label>
+
+    <div ng-bind="link.data.startedDate + ' - ' + link.data.graduatedDate"></div>
+
+    <label class="control-label">GPA</label>
+
+    <div ng-bind="link.data.gpa"></div>
+  </div>
+</div>

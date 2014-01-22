@@ -1,1 +1,1 @@
-"{{data.firstName}}", "{{data.lastName}}", "{{data.email}}", "{{data.mobile}}"
+{{data.firstName}}, {{data.lastName}}, {{data.email}}, {{data.mobile}}

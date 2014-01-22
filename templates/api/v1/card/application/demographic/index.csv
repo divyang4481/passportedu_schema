@@ -1,1 +1,1 @@
-"{{data.dob}}", "{{data.gender}}"
+{{data.dob}}, {{data.gender}}

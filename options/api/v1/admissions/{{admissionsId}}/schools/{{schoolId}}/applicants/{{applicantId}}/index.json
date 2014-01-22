@@ -305,7 +305,16 @@
             }
           }
         }
-      }
+      },
+      "links": [
+        {
+          "title": "{{fullName}}",
+          "rel": "self",
+          "importance": "navigation",
+          "method": "GET",
+          "href": "/api/v1/admissions/{{admissionsId}}/applications/schools/{{schoolId}}/applicants/{{_id}}"
+        }
+      ]
     },
     "cards": {
       "title": "Application Cards",
@@ -350,7 +359,7 @@
   "links": [
     {
       "title": "My Dashboard",
-      "rel": "self",
+      "rel": "dashboard",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}"
