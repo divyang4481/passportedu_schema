@@ -34,6 +34,7 @@ var user = require('./server/models/user');
 var application = require('./server/models/application');
 var school = require('./server/models/school');
 var rest = require('./server/rest');
+
 /**
  *
  */

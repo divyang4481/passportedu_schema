@@ -1,4 +1,3 @@
-
 /**
  * Main method
  */
@@ -10,6 +9,16 @@ var rest = function(model) {
    */
   api.use(express.json());
   api.use(express.urlencoded());
+  var admin = function(req, res, next) {
+    var authToken = req.get('Token');
+    console.log(authToken);
+    if (authToken == 'poopie') {
+      next();
+    } else {
+      res.set('Location', '/api/v1');
+      res.send(300);
+    }
+  };
   /*
    VERB modules
    */
@@ -24,18 +33,18 @@ var rest = function(model) {
     , models_path = "/"
     , model_path_id = "/:id";
   // Models
-  api.options(models_path, optionsMs(models_path, model));
-  api.get(models_path, function(req, res) {
+  api.options(models_path, admin, optionsMs(models_path, model));
+  api.get(models_path, admin, function(req, res) {
     queryM(model)(req, function(err, data) {
       res.json(data);
     });
   });
-  api.post(models_path, postM(model));
+  api.post(models_path, admin, postM(model));
   // Individual model
-  api.options(model_path_id, optionsM(model_path_id, model));
-  api.get(model_path_id, getM(model));
-  api.put(model_path_id, putM(model));
-  api.delete(model_path_id, deleteM(model));
+  api.options(model_path_id, admin, optionsM(model_path_id, model));
+  api.get(model_path_id, admin, getM(model));
+  api.put(model_path_id, admin, putM(model));
+  api.delete(model_path_id, admin, deleteM(model));
   //      api.head('*', headM(models));
   return api;
 };
