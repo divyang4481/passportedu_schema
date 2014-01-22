@@ -77,7 +77,7 @@ function loadPath(startPath, remaining, bestFile, callback) {
   });
 }
 module.exports = function(req, res) {
-  var optionPath = req.originalUrl.replace('templates/', '').replace(/\?.*$/, '').split('/');
+  var optionPath = req.originalUrl.replace('templates/', '').replace('.html', '').replace(/\?.*$/, '').split('/');
   optionPath = _.filter(optionPath, function(val) {
     return val !== "";
   });
