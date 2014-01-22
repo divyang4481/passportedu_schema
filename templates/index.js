@@ -84,6 +84,7 @@ module.exports = function(req, res) {
   var bestFile = '/index.html';
   loadPath(__dirname, optionPath, bestFile, function(options) {
     res.set('Content-Type', 'text/html');
+    res.header("Access-Control-Allow-Origin", "*");
     res.send(options);
   });
 };
