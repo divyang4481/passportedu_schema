@@ -7,6 +7,8 @@
       <div class="form-group">
         <label for="inputPassport" class="control-label">Passport Document</label>
         <input ng-model="link.data.passport" type="file" class="form-control" id="inputPassport" accept="image/*" image="link.data.image">
+        <label class="control-label">Issuing Country</label>
+        <country-select value="link.data.country" type="text" class="form-control"></country-select>
       </div>
     </form>
     <img ng-show="link.data.image" border="1" width="100%" ng-src="{{link.data.image.url}}" type="{{link.data.image.file.type}}"/>

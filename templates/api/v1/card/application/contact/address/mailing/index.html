@@ -19,8 +19,8 @@
         <input ng-model="link.data.state" type="text" class="form-control col" id="inputState" placeholder="State/Province">
         <label for="inputZip" class="control-label sr-only">Zip</label>
         <input ng-model="link.data.zip" type="text" class="form-control col col-lg-3" id="inputZip" placeholder="Zip">
-        <label for="inputCountry" class="control-label sr-only">Country</label>
-        <input ng-model="link.data.country" type="text" class="form-control" id="inputCountry" placeholder="Country">
+        <label class="control-label sr-only">Country</label>
+        <country-select value="link.data.country" type="text" class="form-control"></country-select>
       </div>
     </form>
   </div>

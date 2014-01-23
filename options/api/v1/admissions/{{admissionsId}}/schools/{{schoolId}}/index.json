@@ -258,12 +258,37 @@
           "readonly": false,
           "type": "string"
         },
-        "cardIds": {
+        "cards": {
           "title": "cardIds ",
           "description": "cardIds ",
           "identity": false,
           "readonly": false,
           "type": "string"
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "links": [
+              {
+                "title": "CSV for {{type}} {{data.institutionName}}",
+                "description": "{{type}}",
+                "rel": "csv_{{_id}}",
+                "importance": "callToAction",
+                "target": "data",
+                "mime": "text/csv;;base64,",
+                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{school._id}}/applications/{{_id}}/csv"
+              }
+            ]
+          }
         }
       },
       "links": [

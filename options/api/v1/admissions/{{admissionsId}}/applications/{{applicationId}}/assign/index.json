@@ -61,15 +61,6 @@
                 "template": "/templates/api/v1/card/admissions/schools",
                 "method": "PUT",
                 "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/assign"
-              },
-              {
-                "title": "CSV for {{data.institutionName}}",
-                "description": "{{type}}",
-                "rel": "csv_{{_id}}",
-                "importance": "callToAction",
-                "target": "data",
-                "mime": "text/csv;;base64,",
-                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/csv"
               }
             ]
           }

@@ -173,3 +173,7 @@ and (orientation: portrait) {
 .dropBottom {
     position: relative;
 }
+
+.buttonSpace {
+    margin: 5px;
+}
