@@ -21,25 +21,25 @@ body {
 }
 
 .extraSmallCard {
-    width: 320px;
+    width: 310px;
     height: 200px;
     margin: 10px;
 }
 
 .smallCard {
-    width: 320px;
+    width: 310px;
     height: 250px;
     margin: 10px;
 }
 
 .mediumCard {
-    width: 320px;
+    width: 310px;
     height: 360px;
     margin: 10px;
 }
 
 .largeCard {
-    width: 320px;
+    width: 310px;
     height: 520px;
     margin: 10px;
 }
@@ -82,7 +82,7 @@ body {
 }
 
 @media only screen
-and (min-device-width: 320px)
+and (min-device-width: 310px)
 and (max-device-width: 568px)
 and (orientation: portrait) {
     .container {
