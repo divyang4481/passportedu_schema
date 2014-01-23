@@ -1,0 +1,31 @@
+<div class="panel panel-default mediumCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Upload Passport Document</h3>
+  </div>
+  <div class="panel-body">
+    <form class="form" role="form">
+      <div class="form-group">
+        <label for="inputPassport" class="control-label">Passport Document</label>
+        <input ng-model="link.data.passport" type="file" class="form-control" id="inputPassport" accept="image/*" image="link.data.image">
+        <label class="control-label">Issuing Country</label>
+        <country-select value="link.data.country" type="text" class="form-control"></country-select>
+      </div>
+    </form>
+    <img ng-show="link.data.image" border="1" width="100%" ng-src="{{link.data.image.url}}" type="{{link.data.image.file.type}}"/>
+    <form action="https://s3-bucket.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="key" value="uploads/${filename}">
+      <input type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY">
+      <input type="hidden" name="acl" value="private">
+      <input type="hidden" name="success_action_redirect" value="http://localhost/">
+      <input type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
+      <input type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
+      <input type="hidden" name="Content-Type" value="image/jpeg">
+      <!-- Include any additional input fields here -->
+
+      File to upload to S3:
+      <input name="file" type="file">
+      <br>
+      <input type="submit" value="Upload File to S3">
+    </form>
+  </div>
+</div>

@@ -1,10 +1,10 @@
 {
   "id": "/api/v1/students/{{studentId}}/search/schools/{{schoolId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Apply to a School",
+  "title": "{{school.data.institutionName}}",
   "type": "object",
   "name": "Found a School?",
-  "description": "Add this school to your application, so you can apply.",
+  "description": "",
   "properties": {
     "school": {
       "type": "object",
@@ -279,7 +279,7 @@
                 "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/apply"
               },
               {
-                "title": "Save {{type}} School for Later",
+                "title": "Apply to {{type}} Later",
                 "description": "{{data.institutionName}}",
                 "target": "nofollow",
                 "rel": "saveSchool_{{_id}}",
@@ -315,7 +315,7 @@
       "href": "/api/v1/students/{{studentId}}/search/schools"
     },
     {
-      "title": "{{school.data.institutionName}}",
+      "title": "{{school.data.institutionName | limitTo: 20}}...",
       "rel": "self",
       "importance": "navigation",
       "method": "GET",

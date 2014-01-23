@@ -175,5 +175,22 @@ and (orientation: portrait) {
 }
 
 .buttonSpace {
-    margin: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.passLogoDesktop {
+    height: 20px;
+}
+
+.passLogoMobile {
+     height: 70px;
+     position: absolute;
+     top: 0px;
+     left: 10px;
+     z-index: 100;
+ }
+
+.logoHolder {
+    width: 100px;
 }

@@ -1,0 +1,25 @@
+<div class="panel panel-default mediumCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Nationality Information</h3>
+  </div>
+  <div class="panel-body">
+    <form class="form" role="form">
+      <div class="form-group">
+        <label class="control-label">Citizenship</label>
+        <country-select value="link.data.citizenship" type="text" class="form-control"></country-select>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Passport Issuing Country</label>
+        <country-select value="link.data.passport" type="text" class="form-control"></country-select>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Country of Birth</label>
+        <country-select value="link.data.birthCountry" type="text" class="form-control"></country-select>
+      </div>
+      <div class="form-group">
+        <label for="birthCity" class="control-label">City of Birth</label>
+        <input ng-model="link.data.birthCity" type="text" class="form-control" id="birthCity" placeholder="City of Birth">
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+{{data.citizenship}}, {{data.passport}}, {{data.birthCountry}}, {{data.birthCity}}

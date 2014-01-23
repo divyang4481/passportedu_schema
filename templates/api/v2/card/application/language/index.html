@@ -1,0 +1,30 @@
+<div class="panel panel-default mediumCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Language Information</h3>
+  </div>
+  <div class="panel-body">
+    <form class="form" role="form">
+      <div class="form-group">
+        <label for="inputLanguage" class="control-label">Native Language</label>
+        <input ng-model="link.data.language" id="inputLanguage" type="text" class="form-control" placeholder="Native Language">
+      </div>
+      <div class="form-group">
+        <label for="inputTest" class="control-label">English Language Proficiency</label>
+        <select ng-model="link.data.englishTest" id="inputTest" class="form-control">
+          <option value="">-- choose test --</option>
+          <option value="TOEFL iBT">TOEFL iBT</option>
+          <option value="IELTS">IELTS</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="inputScore" class="control-label">Score</label>
+        <input ng-model="link.data.testScore" type="text" id="inputScore" class="form-control" placeholder="Score">
+      </div>
+      <div class="form-group">
+        <label for="inputScoreDate" class="control-label">Latest Date Taken</label>
+        <input ng-model="link.data.testScoreDate" type="date" id="inputScoreDate" class="form-control">
+      </div>
+  </div>
+  </form>
+</div>
+</div>

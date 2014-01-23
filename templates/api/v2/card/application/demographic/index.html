@@ -1,0 +1,27 @@
+<div class="panel panel-default extraSmallCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Demographic Information</h3>
+  </div>
+  <div class="panel-body">
+    <form class="form" role="form">
+      <div class="form-group">
+        <label for="inputDateOfBirth" class="control-label">Date of Birth</label>
+        <input ng-model="link.data.dob" id="inputDateOfBirth" type="date" class="form-control">
+      </div>
+      <div class="form-group">
+        <div>
+          <label class="control-label">Gender</label>
+        </div>
+        <label class="radio-inline">
+          <input ng-model="link.data.gender" type="radio" value="male"> Male
+        </label>
+        <label class="radio-inline">
+          <input ng-model="link.data.gender" type="radio" value="female"> Female
+        </label>
+        <label class="radio-inline">
+          <input ng-model="link.data.gender" type="radio" value="rather not say"> Rather Not Say
+        </label>
+      </div>
+    </form>
+  </div>
+</div>
