@@ -5,6 +5,32 @@
   "name": "PassportEDU",
   "type": "object",
   "description": "Bringing global students together with global schools.",
+  "properties": {
+    "featuredSchools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "institutionName": {
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "title": "Apply Now",
+            "description": "{{institutionName}}",
+            "rel": "cards_{{_id}}",
+            "importance": "cards",
+            "method": "GET",
+            "href": "/api/v1/students/search/schools/{{_id}}"
+          }
+        ]
+      }
+    }
+  },
   "links": [
     {
       "title": "Home",

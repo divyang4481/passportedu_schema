@@ -27,42 +27,31 @@
       "href": "/api/v1/students"
     },
     {
-      "title": "Sign in",
-      "rel": "login",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/students/login"
-    },
-    {
       "title": "Register",
       "rel": "register",
+      "importance": "alsoCall",
+      "method": "GET",
+      "href": "/api/v1/students/register"
+    },
+    {
+      "title": "Login",
+      "rel": "login",
       "importance": "content",
-      "template": "/templates/api/v1/card/admissions/register",
-      "href": "/api/v1/students/register",
+      "template": "/templates/api/v1/card/students/login",
+      "href": "/api/v1/students/login",
       "method": "POST",
       "properties": {
         "username": {
-          "title": "Your username",
-          "description": "Your email address or username",
-          "type": "string"
+          "title": "Your Email Address / Username",
+          "description": "the email address you used to sign up with PassportEDU",
+          "type": "email"
         },
         "password": {
           "title": "Your password",
-          "description": "Your password",
           "type": "password"
-        },
-        "fullName": {
-          "title": "Your Full Name",
-          "description": "Your first name and last name",
-          "type": "string"
-        },
-        "email": {
-          "title": "Your Email Address",
-          "description": "A valid email address where we can contact you.",
-          "type": "email"
         }
       },
-      "required": ["username", "password", "email", "fullName"]
+      "required": ["username", "password"]
     }
   ]
 }

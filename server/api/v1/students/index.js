@@ -17,9 +17,15 @@ var express = require('express')
 api.get('/', function(req, res) {
   res.json({});
 });
+/**
+ *
+ */
 api.get('/register', function(req, res) {
   res.json({});
 });
+/**
+ *
+ */
 api.post('/register', function(req, res) {
   var students = req.body;
   students.userPerms = ['students'];
@@ -42,11 +48,16 @@ api.post('/register', function(req, res) {
     }
   });
 });
+/**
+ *
+ */
 api.get('/login', function(req, res) {
   res.json({});
 });
+/**
+ *
+ */
 api.post('/login', function(req, res) {
-  console.log(req.body.username, req.body.password);
   authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
     if (err || authorization.user.userType !== 'students') {
       res.set('Location', '/api/v1/students/register');
@@ -65,7 +76,10 @@ var auth = function(req, res, next) {
   var authToken = req.get('Token');
   if (authToken) {
     authenticate.auth(req, res, authToken, function(err, authorization) {
-      if ((err) || (authorization.user.userType !== 'students')) {
+      var studentId = req.params.studentId;
+      if ((err)
+        || (authorization.user.userType !== 'students')
+        || (!_.isUndefined(studentId) && studentId !== authorization.user.userId.toString())) {
         res.set('Location', '/api/v1/students/login');
         res.send(300);
         return;
@@ -312,6 +326,40 @@ api.delete('/:studentId/application/cards/:cardId', auth, function(req, res) {
     res.send(300, {username: req.username, token: req.token});
   });
 });
+/**
+ *
+ */
+api.get('/search/schools', function(req, res) {
+  queryM(school)(req, function(err, response) {
+    response.studentId = req.params.studentId;
+    response.cardType = 'search/results/schools';
+    response.username = req.username;
+    response.token = req.token;
+    res.json(response);
+  });
+});
+/**
+ *
+ */
+api.get('/search/schools/:schoolId', function(req, res) {
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId).populate("applications").exec(function(err, School) {
+    var response = {
+      studentId: studentId,
+      schoolId: schoolId,
+      school: School
+    };
+    response.username = req.username;
+    response.token = req.token;
+    res.json(response);
+  });
+});
+/**
+ * AWS Signing Server
+ */
+var signingServer = require('../../../../servers/aws-signing-server.js');
+api.get('/:studentId/aws/signature*', signingServer);
 /**
  *
  */

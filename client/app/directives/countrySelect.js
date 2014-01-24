@@ -1,4 +1,4 @@
-angular.module('psprtDirectives', [])
+psprtDirectives
   .factory('Countries', function($resource) {
     return $resource('/flatFiles/countries.json', {}, {
       query: {

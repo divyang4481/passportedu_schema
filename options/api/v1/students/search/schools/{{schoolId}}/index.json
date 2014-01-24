@@ -1,22 +1,11 @@
 {
-  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}",
+  "id": "/api/v1/students/{{studentId}}/search/schools/{{schoolId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "My Dashboard",
+  "title": "{{school.data.institutionName}}",
   "type": "object",
-  "description": "Your School {{school.data.institutionName}}",
+  "name": "Found a School?",
+  "description": "",
   "properties": {
-    "admissionsId": {
-      "title": "Unique ID of an Admissions Agent",
-      "readonly": true,
-      "identity": true,
-      "type": "string"
-    },
-    "schoolId": {
-      "title": "Unique ID of a School",
-      "readonly": true,
-      "identity": true,
-      "type": "string"
-    },
     "school": {
       "type": "object",
       "properties": {
@@ -85,14 +74,14 @@
         },
         "data.percentInternationalStudents": {
           "title": "Percentage International Students",
-          "description": "Percentage of admissions body arriving from foreign countries",
+          "description": "Percentage of student body arriving from foreign countries",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.percentFemaleStudent": {
           "title": "Percentage Female Students",
-          "description": "Percentage of admissions body identifying as female",
+          "description": "Percentage of student body identifying as female",
           "identity": false,
           "readonly": false,
           "type": "number"
@@ -106,21 +95,21 @@
         },
         "data.normalFeesTuition": {
           "title": "Normal Fees & Tuition",
-          "description": "The cost of attending for an in-State admissions",
+          "description": "The cost of attending for an in-State student",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.outOfStateTuition": {
           "title": "Out Of State Tuition",
-          "description": "The cost of tuition for an international admissions",
+          "description": "The cost of tuition for an international student",
           "identity": false,
           "readonly": false,
           "type": "number"
         },
         "data.outOfStateFees": {
           "title": "Out Of State Fees ",
-          "description": "The fees for an international admissions",
+          "description": "The fees for an international student",
           "identity": false,
           "readonly": false,
           "type": "number"
@@ -259,81 +248,48 @@
           "type": "string"
         },
         "cards": {
-          "title": "cardIds ",
+          "title": "Cards",
           "description": "cardIds ",
           "identity": false,
           "readonly": false,
           "type": "string"
         },
         "applications": {
+          "title": "Applications",
+          "description": "Applications accepted",
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "_id": {
-                "type": "string"
-              },
               "type": {
                 "type": "string"
+              },
+              "_id": {
+                "type": "string",
+                "identity": false
               }
             },
             "links": [
               {
-                "title": "CSV for {{type}} {{data.institutionName}}",
-                "description": "{{type}}",
-                "rel": "csv_{{_id}}",
+                "title": "Apply to {{type}}",
+                "description": "{{data.institutionName}}",
+                "rel": "addSchool_{{_id}}",
                 "importance": "callToAction",
-                "target": "data",
-                "mime": "text/csv;;base64,",
-                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{school._id}}/applications/{{_id}}/csv"
+                "method": "PUT",
+                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/apply"
+              },
+              {
+                "title": "Apply to {{type}} Later",
+                "description": "{{data.institutionName}}",
+                "target": "nofollow",
+                "rel": "saveSchool_{{_id}}",
+                "importance": "callToAction",
+                "method": "PUT",
+                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/save"
               }
             ]
           }
         }
-      },
-      "links": [
-        {
-          "title": "Un-claim this School",
-          "description": "{{data.institutionName}}",
-          "rel": "unclaim",
-          "importance": "administrative",
-          "method": "DELETE",
-          "href": "/api/v1/admissions/{{admissionsId}}/search/schools/{{_id}}/claim"
-        },
-        {
-          "title": "{{data.institutionName}}",
-          "description": "{{data.institutionName}}",
-          "rel": "self",
-          "importance": "navigation",
-          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
-        }
-      ]
-    },
-    "applicants": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "fullName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          }
-        },
-        "links": [
-          {
-            "title": "{{page}}",
-            "rel": "{{_id}}",
-            "method": "GET",
-            "importance": "cards",
-            "template": "/templates/api/v1/card/admissions/applicant",
-            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applicants/{{_id}}"
-          }
-        ]
       }
     }
   },
@@ -343,20 +299,33 @@
       "rel": "dashboard",
       "importance": "navigation",
       "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}"
+      "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "My Application",
+      "rel": "application",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/application"
+    },
+    {
+      "title": "Search Schools",
+      "rel": "search",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}/search/schools"
+    },
+    {
+      "title": "{{school.data.institutionName | limitTo: 20}}...",
+      "rel": "self",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}/search/schools/{{school._id}}"
     },
     {
       "title": "Sign out",
       "rel": "logout",
       "importance": "administrative",
-      "href": "/api/v1/admissions/logout"
-    },
-    {
-      "title": "Back",
-      "rel": "back",
-      "importance": "callToAction",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}"
+      "href": "/api/v1/students/logout"
     }
   ]
 }

@@ -21,7 +21,7 @@
       "href": "/api/v1"
     },
     {
-      "title": "Student Area",
+      "title": "Students Area",
       "rel": "students",
       "importance": "navigation",
       "href": "/api/v1/students"
@@ -33,6 +33,7 @@
       "method": "GET",
       "href": "/api/v1/students/register"
     },
+
     {
       "title": "Register",
       "rel": "register",

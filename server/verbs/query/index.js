@@ -13,18 +13,18 @@ module.exports = function(model) {
     var parentRoute = req.app.route
       , queryVars = _.extend(req.query, req.restrictQuery)
       , query = model.find();
+    if (_.isUndefined(queryVars.limit)) {
+      queryVars.limit = 12;
+    }
+    if (_.isUndefined(queryVars.offset)) {
+      queryVars.offset = 0;
+    }
     advancedQueries(query, queryVars);
+    // Handle limit and offset
     var pagelessQuery = query.toConstructor()
       , limit = queryVars.limit
       , offset = queryVars.offset;
-    // Later is now, handle limit and offset
-    if (_.isUndefined(limit)) {
-      queryVars.limit = limit = 10;
-    }
     query.limit(limit);
-    if (_.isUndefined(offset)) {
-      queryVars.offset = offset = 0;
-    }
     query.skip(offset);
     query.sort('field _id');
     query.exec(function(err, result) {

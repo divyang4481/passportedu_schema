@@ -90,7 +90,7 @@
     {
       "title": "Claim a School",
       "rel": "search",
-      "importance": "alsoCall",
+      "importance": "administrative",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}/search/schools"
     },

@@ -76,7 +76,10 @@ var auth = function(req, res, next) {
   var authToken = req.get('Token');
   if (authToken) {
     authenticate.auth(req, res, authToken, function(err, authorization) {
-      if ((err) || (authorization.user.userType !== 'admissions')) {
+      var admissionsId = req.params.admissionsId;
+      if ((err)
+        || (authorization.user.userType !== 'admissions')
+        || (!_.isUndefined(admissionsId) && admissionsId !== authorization.user.userId.toString())) {
         res.set('Location', '/api/v1/admissions/login');
         res.send(300);
         return;
@@ -669,6 +672,11 @@ api.delete('/:admissionsId/search/schools/:schoolId/claim', auth, function(req, 
     });
   });
 });
+/**
+ * AWS Signing Server
+ */
+var signingServer = require('../../../../servers/aws-signing-server.js');
+api.get('/:admissionsId/aws/signature*', auth, signingServer);
 /**
  *
  */

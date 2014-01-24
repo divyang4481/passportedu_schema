@@ -17,17 +17,17 @@
     },
     {
       "title": "Admissions",
-      "rel": "self",
+      "rel": "admissions",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions"
     },
     {
-      "title": "Sign In",
-      "rel": "login",
+      "title": "Register",
+      "rel": "self",
       "importance": "navigation",
       "method": "GET",
-      "href": "/api/v1/admissions/login"
+      "href": "/api/v1/admissions/register"
     },
     {
       "title": "Register",
@@ -37,19 +37,24 @@
       "href": "/api/v1/admissions/register",
       "method": "POST",
       "properties": {
+        "password": {
+          "title": "Your password",
+          "type": "password"
+        },
         "fullName": {
           "title": "Your Full Name",
           "description": "First name and last name",
           "type": "string"
         },
-        "username": {
+        "email": {
           "title": "Your Email Address",
           "description": "A valid email address",
           "type": "email"
         },
-        "password": {
-          "title": "Your password",
-          "type": "password"
+        "username": {
+          "title": "Your username",
+          "description": "Your email address or username",
+          "type": "string"
         }
       },
       "required": ["username", "password", "email"]
