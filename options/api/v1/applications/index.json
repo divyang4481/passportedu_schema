@@ -1,7 +1,7 @@
 {
   "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "{{application.type}}",
+  "title": "{{school.data.institutionName}}",
   "type": "object",
   "description": "Fill out an Application for {{application.type}}",
   "properties": {

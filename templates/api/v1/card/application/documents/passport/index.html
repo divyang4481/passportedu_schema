@@ -13,9 +13,9 @@
     </form>
     <img width="100%" ng-src="{{link.data.file}}">
     <div class="progress">
-      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{link.progress}}"
+      <div ng-show="link.progress > 0" class="progress-bar progress-bar-success" role="progressbar"
         aria-valuemin="0" aria-valuemax="100" style="width: {{link.progress}}%">
-        <span class="sr-only"><span ng-bind="link.progress"></span>% Complete (success)</span>
+        <span class=""><span ng-bind="link.progress"></span>% Complete (success)</span>
       </div>
     </div>
   </div>

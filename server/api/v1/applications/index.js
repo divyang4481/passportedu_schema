@@ -4,6 +4,7 @@
 var express = require('express')
   , api = express()
   , _ = require('underscore')
+  , school = require('../../../models/school')
   , application = require('../../../models/application')
   , card = require('../../../models/card');
 /**
@@ -12,13 +13,23 @@ var express = require('express')
 api.get('/:applicationId/schools/:schoolId', function(req, res) {
   var applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
-  application.findById(applicationId, function(err, Application) {
-    card.find({"owners.applications": applicationId}, function(err, Cards) {
+  school.findById(schoolId).exec(function(err, School) {
+    console.log(School);
+    if (!_.contains(School.applications, applicationId)) {
       res.json({
-        applicationId: Application._id.toString(),
-        application: Application,
-        schoolId: schoolId,
-        cards: Cards
+
+      });
+      return;
+    }
+    application.findById(applicationId, function(err, Application) {
+      card.find({"owners.applications": applicationId}, function(err, Cards) {
+        res.json({
+          applicationId: applicationId,
+          application: Application,
+          schoolId: schoolId,
+          school: School,
+          cards: Cards
+        });
       });
     });
   });
