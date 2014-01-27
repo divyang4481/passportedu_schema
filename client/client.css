@@ -22,25 +22,25 @@ body {
 
 .extraSmallCard {
     width: 310px;
-    height: 200px;
+    /*height: 200px;*/
     margin: 10px;
 }
 
 .smallCard {
     width: 310px;
-    height: 250px;
+    /*height: 250px;*/
     margin: 10px;
 }
 
 .mediumCard {
     width: 310px;
-    height: 360px;
+    /*height: 360px;*/
     margin: 10px;
 }
 
 .largeCard {
     width: 310px;
-    height: 520px;
+    /*height: 520px;*/
     margin: 10px;
 }
 

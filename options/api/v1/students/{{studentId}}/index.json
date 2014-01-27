@@ -276,11 +276,11 @@
             },
             "links": [
               {
-                "title": "View Details",
+                "title": "View Application",
                 "description": "{{data.institutionName}}",
                 "rel": "full_{{_id}}",
                 "template": "/templates/api/v1/card/students/school",
-                "method": "DELETE",
+                "method": "GET",
                 "card": "extraSmallCard",
                 "importance": "content",
                 "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"

@@ -5,13 +5,29 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , io = require('socket.io');
 // Mongoose
 mongoose.connect('mongodb://localhost/psprt');
 /**
  * Express
  */
 var app = express();
+/**
+ * Create the server
+ */
+var server = http.createServer(app);
+/**
+ * Add a Socket IO Listener
+ */
+io = io.listen(server);
+/**
+ * For other modules to hook in
+ * @type {*|exports}
+ */
+module.exports = {
+  io: io
+};
 app.set('port', 8081);
 //app.use(express.logger());
 /**
@@ -51,6 +67,6 @@ app.get('/templates*', templates);
 /**
  * Start Server
  */
-http.createServer(app).listen(app.get('port'), function() {
+server.listen(app.get('port'), function() {
   console.log('Listening on port ' + app.get('port'));
 });

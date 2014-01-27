@@ -10,7 +10,8 @@ var express = require('express')
   , application = require('../../../models/application')
   , school = require('../../../models/school')
   , queryM = require('../../../verbs/query')
-  , q = require('q');
+  , q = require('q')
+  , awsUpload = require('../../../../servers/aws-upload');
 /**
  * Register and Login Package
  */
@@ -36,15 +37,16 @@ api.post('/register', function(req, res) {
         error: err
       });
     } else {
-      authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
-        if (err || authorization.user.userType !== 'students') {
-          res.set('Location', '/api/v1/students/register');
+      authenticate.login(req, res, req.body.username, req.body.password,
+        function(err, authorization) {
+          if (err || authorization.user.userType !== 'students') {
+            res.set('Location', '/api/v1/students/register');
+            res.send(300);
+            return;
+          }
+          res.set('Location', '/api/v1/students/' + authorization.user.userId);
           res.send(300);
-          return;
-        }
-        res.set('Location', '/api/v1/students/' + authorization.user.userId);
-        res.send(300);
-      });
+        });
     }
   });
 });
@@ -58,15 +60,16 @@ api.get('/login', function(req, res) {
  *
  */
 api.post('/login', function(req, res) {
-  authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
-    if (err || authorization.user.userType !== 'students') {
-      res.set('Location', '/api/v1/students/register');
+  authenticate.login(req, res, req.body.username, req.body.password,
+    function(err, authorization) {
+      if (err || authorization.user.userType !== 'students') {
+        res.set('Location', '/api/v1/students/register');
+        res.send(300);
+        return;
+      }
+      res.set('Location', '/api/v1/students/' + authorization.user.userId);
       res.send(300);
-      return;
-    }
-    res.set('Location', '/api/v1/students/' + authorization.user.userId);
-    res.send(300);
-  });
+    });
 });
 /**
  * Authentication Middleware
@@ -84,18 +87,19 @@ var auth = function(req, res, next) {
         res.send(300);
         return;
       }
-      user.count({schools: {$in: authorization.user.schools}}, function(err, countApplicants) {
-        req.admissionsId = authorization.user.userId.toString();
-        req.username = authorization.user.username;
-        req.token = authorization.user.token; // Token needs to be sent back and forth always
-        res.header('X-Intercom-Custom', JSON.stringify({
-          "userType": authorization.user.userType,
-          "schools": authorization.user.schools.length,
-          "applications": authorization.user.applications.length,
-          "applicants": countApplicants
-        }));
-        next();
-      });
+      user.count({schools: {$in: authorization.user.schools}},
+        function(err, countApplicants) {
+          req.admissionsId = authorization.user.userId.toString();
+          req.username = authorization.user.username;
+          req.token = authorization.user.token; // Token needs to be sent back and forth always
+          res.header('X-Intercom-Custom', JSON.stringify({
+            "userType": authorization.user.userType,
+            "schools": authorization.user.schools.length,
+            "applications": authorization.user.applications.length,
+            "applicants": countApplicants
+          }));
+          next();
+        });
     });
   } else {
     res.set('Location', '/api/v1/students/login');
@@ -227,13 +231,24 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', auth, f
  * @param applicationId
  */
 var addApplicationCardsToStudent = function(Student, applicationId) {
+  /**
+   * Find students existing application cards
+   */
   card.find({"owners.students": Student._id.toString()}, function(err, studentCards) {
+    /**
+     * Find Cards for Application
+     */
     card.find({'owners.applications': applicationId}, function(err, appCards) {
       this.studentCardTypes = _.map(studentCards, function(card) {
         return card.type;
       });
+      this.applicationCardTypes = _.map(appCards, function(card) {
+        return card.type;
+      });
       this.Student = Student;
-      // Remove each instance of a card student already has from those being added
+      /**
+       * Remove each instance of a card student already has from those being added
+       */
       var addCards = _.reject(appCards, function(Card) {
         if (_.contains(this.studentCardTypes, Card.type)) {
           var index = _.indexOf(this.studentCardTypes, Card.type);
@@ -242,10 +257,39 @@ var addApplicationCardsToStudent = function(Student, applicationId) {
         }
         return false;
       }, this);
+      /**
+       * Update the cards that don't need to be added, but which require an update
+       */
+      var updateCards = _.filter(studentCards, function(Card) {
+        if (_.contains(this.applicationCardTypes, Card.type)) {
+          var index = _.indexOf(this.applicationCardTypes, Card.type);
+          this.applicationCardTypes.splice(index, 1);
+          return true;
+        }
+        return false;
+      }, this);
+      /**
+       * Add applicationId to owners
+       */
+      _.each(updateCards, function(Card) {
+        if (_.isArray(Card.owners.applications)) {
+          Card.owners.applications.push(applicationId);
+        } else {
+          Card.owners.applications = [applicationId];
+        }
+        Card.markModified('owners.applications');
+        Card.save(function(err, savedDoc) {
+          console.log(err, savedDoc);
+        });
+      });
+      /**
+       * Add nonexistent cards
+       */
       _.each(addCards, function(Card) {
         var newCard = {
           owners: {
-            students: Student._id.toString()
+            students: Student._id.toString(),
+            applications: [applicationId]
           },
           type: Card.type,
           order: Card.order,
@@ -307,13 +351,26 @@ api.put('/:studentId/application/cards/:cardId', auth, function(req, res) {
   var studentId = req.params.studentId
     , cardId = req.params.cardId
     , cardPost = _.omit(req.body, '_id');
-  card.update({_id: cardId}, cardPost, function(err, affected, Card) {
-    getApplication(studentId).then(function(response) {
-      response.username = req.username;
-      response.token = req.token;
-      res.json(response);
+  if (cardPost.data.file) {
+    awsUpload.uploadImage(cardPost.data.file, studentId).then(function(s3FilePath) {
+      cardPost.data.file = s3FilePath;
+      card.update({_id: cardId}, cardPost, function(err, affected, Card) {
+        getApplication(studentId).then(function(response) {
+          response.username = req.username;
+          response.token = req.token;
+          res.json(response);
+        });
+      });
     });
-  });
+  } else {
+    card.update({_id: cardId}, cardPost, function(err, affected, Card) {
+      getApplication(studentId).then(function(response) {
+        response.username = req.username;
+        response.token = req.token;
+        res.json(response);
+      });
+    });
+  }
 });
 /**
  *
@@ -355,11 +412,6 @@ api.get('/search/schools/:schoolId', function(req, res) {
     res.json(response);
   });
 });
-/**
- * AWS Signing Server
- */
-var signingServer = require('../../../../servers/aws-signing-server.js');
-api.get('/:studentId/aws/signature*', signingServer);
 /**
  *
  */

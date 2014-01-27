@@ -5,12 +5,18 @@
   <div class="panel-body">
     <form class="form" role="form">
       <div class="form-group">
-        <label for="inputGov" class="control-label">Government ID</label>
-        <input ng-model="link.data.governmentId" type="file" class="form-control" id="inputGov">
+        <label class="control-label">Government ID Photo</label>
+        <input fileread="link.data.file" progress="link.progress" type="file" class="form-control">
         <label class="control-label">Issuing Country</label>
-        <country-select value="link.data.country" type="text" class="form-control"></country-select>
+        <country-select value="link.data.country" class="form-control"></country-select>
       </div>
     </form>
-    <img width="100%" border="1" src="http://llnw.wbez.org/series/photo/2012-March/2012-03-16/many-passports.jpg">
+    <img width="100%" ng-src="{{link.data.file}}">
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{link.progress}}"
+        aria-valuemin="0" aria-valuemax="100" style="width: {{link.progress}}%">
+        <span class="sr-only"><span ng-bind="link.progress"></span>% Complete (success)</span>
+      </div>
+    </div>
   </div>
 </div>

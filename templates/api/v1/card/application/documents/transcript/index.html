@@ -1,13 +1,20 @@
-<div class="panel panel-default extraSmallCard">
+<div class="panel panel-default mediumCard">
   <div class="panel-heading">
-    <h3 class="panel-title">Upload Transcript</h3>
+    <h3 class="panel-title">Upload Government ID</h3>
   </div>
   <div class="panel-body">
     <form class="form" role="form">
       <div class="form-group">
-        <label for="inputTranscript" class="control-label">Transcript Copy</label>
-        <input ng-model="link.data.transcript" type="file" class="form-control" id="inputTranscript">
+        <label class="control-label">Government ID Photo</label>
+        <input fileread="link.data.file" progress="link.progress" type="file" class="form-control">
       </div>
     </form>
+    <img width="100%" ng-src="{{link.data.file}}">
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{link.progress}}"
+        aria-valuemin="0" aria-valuemax="100" style="width: {{link.progress}}%">
+        <span class="sr-only"><span ng-bind="link.progress"></span>% Complete (success)</span>
+      </div>
+    </div>
   </div>
 </div>

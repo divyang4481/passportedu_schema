@@ -300,9 +300,9 @@ api.post('/:admissionsId/applications', auth, function(req, res) {
   application.create(app, function(err, App) {
     var applicationId = App._id.toString();
     user.update({_id: admissionsId}, {$addToSet: {applications: applicationId}}, function(err) {
+      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
+      res.send(300);
     });
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
-    res.send(300);
   });
 });
 /**

@@ -92,6 +92,51 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'im
         });
     };
   })
+  .factory('socket', function($rootScope) {
+    var socket = io.connect();
+    return {
+      on: function(eventName, callback) {
+        socket.on(eventName, function() {
+          var args = arguments;
+          $rootScope.$apply(function() {
+            callback.apply(socket, args);
+          });
+        });
+      },
+      emit: function(eventName, data, callback) {
+        socket.emit(eventName, data, function() {
+          var args = arguments;
+          $rootScope.$apply(function() {
+            if (callback) {
+              callback.apply(socket, args);
+            }
+          });
+        })
+      }
+    };
+  })
+  .directive("fileread", ['socket', function(socket) {
+    return {
+      scope: {
+        fileread: "=",
+        progress: '='
+      },
+      link: function(scope, element, attributes) {
+        socket.on('progress:change', function(data) {
+          scope.progress = Math.ceil(100 * data.loaded / data.total);
+        });
+        element.bind("change", function(changeEvent) {
+          var reader = new FileReader();
+          reader.onload = function(loadEvent) {
+            scope.$apply(function() {
+              scope.fileread = loadEvent.target.result;
+            });
+          }
+          reader.readAsDataURL(changeEvent.target.files[0]);
+        });
+      }
+    }
+  }])
   .run(function($rootScope) {
     setInterval(function() {
       var client = $rootScope.client;

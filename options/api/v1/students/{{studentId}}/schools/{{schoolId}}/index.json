@@ -1,10 +1,10 @@
 {
   "id": "/api/v1/students/{{studentId}}/schools/{{schoolId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Apply to a School",
+  "title": "{{school.data.institutionName}}",
   "type": "object",
   "name": "Found a School?",
-  "description": "Add this school to your application, so you can apply.",
+  "description": "",
   "properties": {
     "school": {
       "type": "object",
@@ -250,10 +250,10 @@
       },
       "links": [
         {
-          "title": "Remove",
+          "title": "Cancel Application to {{school.data.institutionName}}",
           "description": "{{school.data.institutionName}}",
           "rel": "remove_{{_id}}",
-          "importance": "content",
+          "importance": "administrative",
           "method": "DELETE",
           "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
         }

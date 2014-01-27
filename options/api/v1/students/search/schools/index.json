@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/students/{{studentId}}/search/schools",
+  "id": "/api/v1/students/search/schools",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Search for Schools",
   "type": "object",

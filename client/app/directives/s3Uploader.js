@@ -38,6 +38,7 @@ psprtDirectives
           };
           fileToDataURL(files[i]).then(function(dataURL) {
             imageResult.dataURL = dataURL;
+            scope.upload();
           });
           if (scope.resizeMaxHeight || scope.resizeMaxWidth) { //resize image
             doResizing(imageResult, function(imageResult) {
@@ -48,7 +49,6 @@ psprtDirectives
             applyScope(imageResult);
           }
         }
-        scope.upload();
       });
       scope.upload = function() {
         var imageURI = scope.image.dataURL;
