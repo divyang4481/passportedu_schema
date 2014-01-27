@@ -1,0 +1,17 @@
+<div class="panel panel-default largeCard">
+  <div class="panel-heading">
+    IELTS Required
+  </div>
+  <div class="panel-body text-center">
+    <h4 class="circleNumber largeWord"
+      ng-bind="link.data.ielts"
+      ng-class="{
+      'lightGreenCircle': link.data.ielts > 3,
+      'blueCircle': link.data.ielts > 5,
+      'redCircle': link.data.ielts > 6
+      }">
+    </h4>
+
+    <p></p>
+  </div>
+</div>

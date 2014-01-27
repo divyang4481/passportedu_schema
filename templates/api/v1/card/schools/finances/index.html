@@ -1,0 +1,17 @@
+<div class="panel panel-default largeCard">
+  <div class="panel-heading">
+    Finances Required
+  </div>
+  <div class="panel-body text-center">
+    <h4 class="circleNumber"
+      ng-bind="link.data.finances | currency"
+      ng-class="{
+      'lightGreenCircle': link.data.finances > 10000,
+      'mediumGreenCircle': link.data.finances > 20000,
+      'darkGreenCircle': link.data.finances > 40000
+      }">
+    </h4>
+
+    <p>This is the minimum required amount you have to show in you or your guardian's bank account.</p>
+  </div>
+</div>

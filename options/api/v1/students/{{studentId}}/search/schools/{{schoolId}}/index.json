@@ -249,10 +249,25 @@
         },
         "cards": {
           "title": "Cards",
-          "description": "cardIds ",
+          "description": "Cards for this school",
           "identity": false,
           "readonly": false,
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+
+            },
+            "links": [
+              {
+                "rel": "{{_id}}",
+                "importance": "cards",
+                "template": "/templates/api/v1/card/{{type}}",
+                "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
+                "method": "GET"
+              }
+            ]
+          }
         },
         "applications": {
           "title": "Applications",
@@ -329,4 +344,3 @@
     }
   ]
 }
-

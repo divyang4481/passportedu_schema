@@ -15,14 +15,13 @@ var mongoose = require('mongoose')
     "application/academic/exams/sat",
     "application/academic/exams/gre",
     "application/academic/exams/gmat",
-    "application/academic/schools/previous"
+    "application/academic/schools/previous",
+    "schools/map"
   ];
 var CardSchema = new mongoose.Schema({
   owners: Schema.Types.Mixed,
   data: Schema.Types.Mixed,
-  type: {
-    type: String, enum: cardTypes
-  },
+  type: String,
   order: Number,
   updated: {
     type: Date, default: Date.now

@@ -184,13 +184,76 @@ and (orientation: portrait) {
 }
 
 .passLogoMobile {
-     height: 70px;
-     position: absolute;
-     top: 0px;
-     left: 10px;
-     z-index: 100;
- }
+    height: 70px;
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    z-index: 100;
+}
 
 .logoHolder {
     width: 100px;
+}
+
+.circleNumber {
+    border-radius: 60px;
+    -moz-border-radius: 60px;
+    -webkit-border-radius: 60px;
+    color: #ffffff;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 120px;
+    margin-right: 5px;
+    text-align: center;
+    width: 120px;
+}
+
+.lightGreenCircle {
+    background: lightgreen;
+}
+
+.mediumGreenCircle {
+    background: forestgreen;
+}
+
+.darkGreenCircle {
+    background: darkgreen;
+}
+
+.blueCircle {
+    background: steelblue;
+}
+
+.greenCircle {
+    background: forestgreen;
+}
+
+.orangeCircle {
+    background: darkorange;
+}
+
+.redCircle {
+    background: red;
+}
+
+.yellowCircle {
+    background: #ffff00;
+}
+
+.largeWord {
+    font-size: 4em;
+    font-weight: 900;
+}
+
+.largeYesNo {
+    font-size: 4em;
+    font-weight: 900;
+}
+
+.greenWord {
+    color: forestgreen;;
+}
+
+.redWord {
+    color: red;
 }

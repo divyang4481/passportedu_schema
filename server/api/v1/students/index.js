@@ -7,6 +7,7 @@ var express = require('express')
   , authenticate = require('../../../helpers/authenticate')
   , user = require('../../../models/user')
   , card = require('../../../models/card')
+  , card = require('../../../models/schoolCard')
   , application = require('../../../models/application')
   , school = require('../../../models/school')
   , queryM = require('../../../verbs/query')
@@ -181,7 +182,10 @@ api.get('/:studentId/search/schools', auth, function(req, res) {
 api.get('/:studentId/search/schools/:schoolId', auth, function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
-  school.findById(schoolId).populate("applications").exec(function(err, School) {
+  school.findById(schoolId)
+    .populate("applications")
+    .populate("cards")
+    .exec(function(err, School) {
     var response = {
       studentId: studentId,
       schoolId: schoolId,
@@ -401,7 +405,10 @@ api.get('/search/schools', function(req, res) {
 api.get('/search/schools/:schoolId', function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
-  school.findById(schoolId).populate("applications").exec(function(err, School) {
+  school.findById(schoolId)
+    .populate("applications")
+    .populate("cards")
+    .exec(function(err, School) {
     var response = {
       studentId: studentId,
       schoolId: schoolId,

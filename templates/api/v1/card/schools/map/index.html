@@ -1,0 +1,10 @@
+<div class="panel panel-default largeCard">
+  <div class="panel-heading">
+    <span ng-bind="link.data.city"></span>,
+    <span ng-bind="link.data.state"></span>
+  </div>
+  <div class="panel-body">
+
+    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{link.data.city}},{{link.data.state}}&zoom=4&size=280x300&markers=color:green%7C{{link.data.city}},{{link.data.state}}&sensor=false"/>
+  </div>
+</div>

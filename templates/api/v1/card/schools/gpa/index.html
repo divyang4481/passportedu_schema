@@ -1,0 +1,17 @@
+<div class="panel panel-default largeCard">
+  <div class="panel-heading">
+    GPA Required
+  </div>
+  <div class="panel-body text-center">
+    <h4 class="circleNumber largeWord"
+      ng-bind="link.data.gpa | number:1"
+      ng-class="{
+      'lightGreenCircle': link.data.gpa > 2,
+      'blueCircle': link.data.gpa > 3,
+      'redCircle': link.data.gpa > 3.5
+      }">
+    </h4>
+
+    <p></p>
+  </div>
+</div>

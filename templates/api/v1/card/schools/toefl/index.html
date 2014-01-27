@@ -1,0 +1,17 @@
+<div class="panel panel-default largeCard">
+  <div class="panel-heading">
+    TOEFL Required
+  </div>
+  <div class="panel-body text-center">
+    <h4 class="circleNumber largeWord"
+      ng-bind="link.data.toefl"
+      ng-class="{
+      'lightGreenCircle': link.data.toefl > 40,
+      'blueCircle': link.data.toefl > 60,
+      'redCircle': link.data.toefl > 80
+      }">
+    </h4>
+
+    <p></p>
+  </div>
+</div>
