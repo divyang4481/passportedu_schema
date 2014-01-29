@@ -673,11 +673,6 @@ api.delete('/:admissionsId/search/schools/:schoolId/claim', auth, function(req, 
   });
 });
 /**
- * AWS Signing Server
- */
-var signingServer = require('../../../../servers/aws-signing-server.js');
-api.get('/:admissionsId/aws/signature*', auth, signingServer);
-/**
  *
  */
 module.exports = api;
