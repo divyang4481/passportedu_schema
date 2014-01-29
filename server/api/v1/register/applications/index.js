@@ -19,23 +19,33 @@ api.get('/', function(req, res) {
  */
 api.post('/:applicationId/schools/:schoolId', function(req, res) {
   var student = req.body.student
-    , cards = req.body.cards;
+    , cards = req.body.cards
+    , applicationId = req.params.applicationId;
   student.userPerms = ['students'];
-  student.applications = [req.params.applicationId];
+  student.applications = [applicationId];
   student.schools = [req.params.schoolId];
   student.created = Math.round(new Date().getTime() / 1000);
   user.create(student, function(err, Student) {
+    if (err) {
+      res.json({
+        error: err
+      });
+      return;
+    };
     var studentId = Student._id.toString();
     _.each(cards, function(postCard) {
       var Card = {};
       Card.data = postCard.data;
-      Card.owners = {students: studentId};
+      Card.owners = {
+        students: studentId
+      };
       Card.order = postCard.order;
       Card.type = postCard._link.type;
-      Card.owners.students = studentId;
       card.create(Card, function(err, newCard) {
         Student.cards.push(newCard._id.toString());
-        Student.save();
+        Student.save(function(err) {
+          console.log(err, newCard, Student);
+        });
       });
     });
     if (err) {
@@ -43,15 +53,16 @@ api.post('/:applicationId/schools/:schoolId', function(req, res) {
         error: err
       });
     } else {
-      authenticate.login(req, res, req.body.student.username, req.body.student.password, function(err, authorization) {
-        if (err || authorization.user.userType !== 'students') {
-          res.set('Location', '/api/v1/students/register');
+      authenticate.login(req, res, req.body.student.username, req.body.student.password,
+        function(err, authorization) {
+          if (err || authorization.user.userType !== 'students') {
+            res.set('Location', '/api/v1/students/register');
+            res.send(300);
+            return;
+          }
+          res.set('Location', '/api/v1/students/' + authorization.user.userId);
           res.send(300);
-          return;
-        }
-        res.set('Location', '/api/v1/students/' + authorization.user.userId);
-        res.send(300);
-      });
+        });
     }
   });
 });

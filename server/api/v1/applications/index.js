@@ -14,11 +14,8 @@ api.get('/:applicationId/schools/:schoolId', function(req, res) {
   var applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
   school.findById(schoolId).exec(function(err, School) {
-    console.log(School);
     if (!_.contains(School.applications, applicationId)) {
-      res.json({
-
-      });
+      res.json({});
       return;
     }
     application.findById(applicationId, function(err, Application) {

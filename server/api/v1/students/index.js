@@ -186,15 +186,15 @@ api.get('/:studentId/search/schools/:schoolId', auth, function(req, res) {
     .populate("applications")
     .populate("cards")
     .exec(function(err, School) {
-    var response = {
-      studentId: studentId,
-      schoolId: schoolId,
-      school: School
-    };
-    response.username = req.username;
-    response.token = req.token;
-    res.json(response);
-  });
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School
+      };
+      response.username = req.username;
+      response.token = req.token;
+      res.json(response);
+    });
 });
 /**
  *
@@ -204,6 +204,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', auth, 
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
   user.findById(studentId).exec(function(err, Student) {
+    console.log(Student)
     Student.schools = _.union(Student.schools, [schoolId]);
     Student.applications = _.union(Student.applications, [applicationId]);
     addApplicationCardsToStudent(Student, applicationId);
@@ -287,13 +288,12 @@ var addApplicationCardsToStudent = function(Student, applicationId) {
         });
       });
       /**
-       * Add nonexistent cards
+       * Add non-existent cards
        */
       _.each(addCards, function(Card) {
         var newCard = {
           owners: {
-            students: Student._id.toString(),
-            applications: [applicationId]
+            students: Student._id.toString()
           },
           type: Card.type,
           order: Card.order,
@@ -301,7 +301,9 @@ var addApplicationCardsToStudent = function(Student, applicationId) {
         };
         card.create(newCard, function(err, Card) {
           Student.cards.push(Card._id.toString());
-          Student.save();
+          Student.save(function(err) {
+            console.log(err);
+          });
         });
       });
     });
@@ -312,14 +314,14 @@ var addApplicationCardsToStudent = function(Student, applicationId) {
  */
 var getApplication = function(studentId) {
   var deferred = q.defer();
-  card.find({"owners.students": studentId}, function(err, Cards) {
+  user.findById(studentId).populate('cards').exec(function(err, Student) {
     deferred.resolve({
       studentId: studentId,
-      cards: Cards
-    });
+      cards: Student.cards
+    })
   });
   return deferred.promise;
-}
+};
 /**
  *
  */
@@ -409,15 +411,15 @@ api.get('/search/schools/:schoolId', function(req, res) {
     .populate("applications")
     .populate("cards")
     .exec(function(err, School) {
-    var response = {
-      studentId: studentId,
-      schoolId: schoolId,
-      school: School
-    };
-    response.username = req.username;
-    response.token = req.token;
-    res.json(response);
-  });
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School
+      };
+      response.username = req.username;
+      response.token = req.token;
+      res.json(response);
+    });
 });
 /**
  *

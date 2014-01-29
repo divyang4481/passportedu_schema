@@ -1,4 +1,4 @@
-var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'imageUpload', 'psprtDirectives'])
+var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'psprtDirectives'])
   .filter('fieldName', function() {
     return function(input) {
       return input.replace(/[^a-zA-Z0-9]/g, '_');
