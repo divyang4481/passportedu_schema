@@ -24,7 +24,7 @@
     },
     {
       "title": "Register",
-      "rel": "login",
+      "rel": "register",
       "importance": "alsoCall",
       "method": "GET",
       "href": "/api/v1/admissions/register"
