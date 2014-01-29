@@ -7,7 +7,7 @@ var express = require('express')
   , authenticate = require('../../../helpers/authenticate')
   , user = require('../../../models/user')
   , card = require('../../../models/card')
-  , card = require('../../../models/schoolCard')
+  , schoolCard = require('../../../models/schoolCard')
   , application = require('../../../models/application')
   , school = require('../../../models/school')
   , queryM = require('../../../verbs/query')
@@ -207,8 +207,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', auth, 
     console.log(Student)
     Student.schools = _.union(Student.schools, [schoolId]);
     Student.applications = _.union(Student.applications, [applicationId]);
-    addApplicationCardsToStudent(Student, applicationId);
-    Student.save(function(err) {
+    addApplicationCardsToStudent(Student, applicationId).then(function() {
       res.set('Location', '/api/v1/students/' + studentId + '/application');
       res.send(300, {username: req.username, token: req.token});
     });
@@ -224,8 +223,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', auth, f
   user.findById(studentId).exec(function(err, Student) {
     Student.schools = _.union(Student.schools, [schoolId]);
     Student.applications = _.union(Student.applications, [applicationId]);
-    addApplicationCardsToStudent(Student, applicationId);
-    Student.save(function(err) {
+    addApplicationCardsToStudent(Student, applicationId).then(function() {
       res.json({});
     });
   });
@@ -236,6 +234,7 @@ api.put('/:studentId/schools/:schoolId/application/:applicationId/save', auth, f
  * @param applicationId
  */
 var addApplicationCardsToStudent = function(Student, applicationId) {
+  var deferred = q.defer();
   /**
    * Find students existing application cards
    */
@@ -306,8 +305,10 @@ var addApplicationCardsToStudent = function(Student, applicationId) {
           });
         });
       });
+      deferred.resolve();
     });
   });
+  return deferred.promise;
 };
 /**
  *
