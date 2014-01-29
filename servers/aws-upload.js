@@ -13,7 +13,7 @@ io.sockets.on('connection', function(socket) {
   /**
    * Configure AWS S3
    */
-  AWS.config.loadFromPath('./config.json');
+  AWS.config.loadFromPath('../../config.json');
   /**
    * Upload file to S3
    */
