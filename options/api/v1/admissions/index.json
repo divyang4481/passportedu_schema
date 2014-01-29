@@ -23,13 +23,6 @@
       "href": "/api/v1/admissions"
     },
     {
-      "title": "Register",
-      "rel": "register",
-      "importance": "alsoCall",
-      "method": "GET",
-      "href": "/api/v1/admissions/register"
-    },
-    {
       "title": "Login",
       "rel": "login",
       "importance": "content",
