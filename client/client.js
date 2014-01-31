@@ -52,7 +52,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'ps
     /**
      * Get the Schema Client
      */
-    var startURL = $location.path();
+    var startURL = $location.url();
     startURL = startURL ? startURL : '/api/v1';
     new jsonSchema(startURL).then(function(client) {
       var passport = client;

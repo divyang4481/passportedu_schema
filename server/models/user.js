@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
   , _ = require('underscore')
+  , Schema = mongoose.Schema
   , bcrypt = require('bcrypt')
   , SALT_WORK_FACTOR = 10;
 /**
@@ -15,6 +16,7 @@ var UserSchema = new mongoose.Schema({
   fullName: String,
   email: String,
   token: String,
+  stripe: Schema.Types.Mixed,
   userPerms: [
     { type: String, enum: userPerms }
   ],

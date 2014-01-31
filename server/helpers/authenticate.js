@@ -69,6 +69,7 @@ var login = function(req, res, username, password, callback) {
       res.header('X-username', User.username);
       res.header('X-token', User.token);
       callback(null, {
+        userObj: User,
         user: {
           userId: User._id.toString(),
           userType: User.userPerms[0],
@@ -112,6 +113,7 @@ var auth = function(req, res, authToken, callback) {
     res.header('X-Intercom-User-Hash', intercomHash);
     res.header('X-Intercom-API', 'c6cf7095d8d5a613876419716bd54e3cbeeca235');
     callback(null, {
+      userObj: User,
       user: {
         userId: User._id,
         userType: User.userPerms[0],

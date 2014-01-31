@@ -40,6 +40,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
               client.setHeader('Token', token);
               sessionStorage.token = token;
             }
+            $location.url(url);
             client.buildClient(url);
           }
           // otherwise
@@ -396,6 +397,10 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
             window.location.href = "data:" + mime + encoded_data;
           });
       }
+      else if (target === 'external') {
+        window.open(url);
+        deferred.reject({});
+      }
       else if (target === 'new') {
         window.open('#' + url);
         deferred.reject({});
@@ -412,7 +417,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
           }
           apiClient.responseHeaders = headers;
           if (target !== 'nofollow' && target !== 'refresh') {
-            $location.path(url);
+            $location.url(url);
             apiClient.url = url;
           }
           deferred.resolve(response);

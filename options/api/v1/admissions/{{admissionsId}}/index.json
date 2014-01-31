@@ -99,6 +99,13 @@
       "rel": "logout",
       "importance": "administrative",
       "href": "/api/v1/admissions/logout"
+    },
+    {
+      "title": "Accept Payments",
+      "rel": "stripe",
+      "importance": "callToAction",
+      "target": "external",
+      "href": "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_3PP3DsOtbvbsA4JfUHJRVTdUyiS8YxeU"
     }
   ]
 }

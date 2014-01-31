@@ -56,6 +56,11 @@ var rest = require('./server/rest');
 //app.use('/api/v1/resources/schools', rest(school));
 //app.use('/api/v1/resources/applications', rest(application));
 /**
+ * Stripe Server
+ */
+var stripeServer = require('./servers/stripe-server');
+app.use('/api/v1/stripe', stripeServer);
+/**
  * Hypermedia API
  */
 app.use('/api/v1', require('./server/api/v1'));

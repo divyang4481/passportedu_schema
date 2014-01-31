@@ -1,12 +1,12 @@
 var AWS = require('aws-sdk')
   , fs = require('fs')
   , Q = require('q')
-  , path = require('path');
-var io = require('../index.js').io;
+  , path = require('path')
+  , io = require('../index.js').io;
 /**
  * Configure AWS S3
  */
-AWS.config.loadFromPath(__dirname + '/config.json');
+AWS.config.loadFromPath(__dirname + '/aws-config.json');
 var uploadImage = uploadImage = function(file, userId) {
   var deferredMain = Q.defer()
     , fileInfo = file.match(/^data:image\/(\w+);base64,/, "")

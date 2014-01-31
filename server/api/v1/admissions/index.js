@@ -59,8 +59,7 @@ api.get('/login', function(req, res) {
  */
 api.post('/login', function(req, res) {
   authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
-    console.log(err, authorization);
-    if (err || authorization.user.userType !== 'admissions') {
+    if (err || authorization.user.userType != 'admissions') {
       res.set('Location', '/api/v1/admissions/register');
       res.send(300);
       return;
@@ -121,7 +120,7 @@ api.get('/:admissionsId', auth, function(req, res) {
     admissionsId: admissionsId
   };
   user.findById(admissionsId, function(err, Admissions) {
-    response.student = Admissions;
+    response.admissions = Admissions;
     school.find({_id: { $in: Admissions.schools}}, function(err, Schools) {
       response.schools = Schools;
       res.json(response);
