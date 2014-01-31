@@ -1,6 +1,4 @@
-*-config.json
-stripe-dev-config.json
-stripe-config.json
+*.config.json
 .idea
 apiary.apib
 node_modules
