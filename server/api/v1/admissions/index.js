@@ -427,6 +427,7 @@ var getCardsAndApp = function(admissionsId, applicationId) {
       application: _.omit(App, ['_id']),
       cards: [
         {type: "application/attendance/term"},
+        {type: "application/attendance/period"},
         {type: "application/documents/transcript"},
         {type: "application/documents/passport"},
         {type: "application/documents/government"},
