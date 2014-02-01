@@ -3,8 +3,8 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
     /**
      * Intercept location changes so updating api endpoint
      */
-    var interceptor = ['$rootScope', '$q', '$location', 'jsonClient', 'base64',
-      function(rootScope, $q, $location, jsonClient, base64) {
+    var interceptor = ['$rootScope', '$q', '$window', '$location', 'jsonClient', 'base64',
+      function(rootScope, $q, $window, $location, jsonClient, base64) {
         rootScope.$on('$locationChangeSuccess', function() {
           rootScope.actualLocation = $location.path();
         });
@@ -15,39 +15,36 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
             jsonClient().buildClient(newLocation);
           }
         });
-        var success = function(response) {
+        var useHeaders = function(response) {
           var client = jsonClient();
           var headers = response.headers();
-          if (angular.isDefined(headers['x-username'])
-            && angular.isDefined(headers['x-token'])) {
+          if (angular.isDefined(headers['x-username']) && angular.isDefined(headers['x-token'])) {
             client.setHeader('Authorization', null);
             var token = base64.encode(headers['x-username'] + ':' + headers['x-token']);
             client.setHeader('Token', token);
             sessionStorage.token = token;
           }
+        }
+        var success = function(response) {
+          useHeaders(response);
           return response;
         };
-        var error = function(response) {
-          var status = response.status;
+        var other = function(response) {
+          var client = jsonClient()
+            , headers = response.headers()
+            , url = headers.location
+            , status = response.status;
           if (status == 300) {
-            var client = jsonClient();
-            var headers = response.headers();
-            var url = headers.location;
-            if (angular.isDefined(headers['x-username'])
-              && angular.isDefined(headers['x-token'])) {
-              client.setHeader('Authorization', null);
-              var token = base64.encode(headers['x-username'] + ':' + headers['x-token']);
-              client.setHeader('Token', token);
-              sessionStorage.token = token;
-            }
-            $location.url(url);
-            client.buildClient(url);
+            useHeaders(response)
+            client.buildClient(url).then(function() {
+              client.url = url;
+            });
           }
-          // otherwise
-          return $q.reject(response);
+//          return $q.reject(response);
+          return response;
         };
         return function(promise) {
-          return promise.then(success, error);
+          return promise.then(success, other);
         }
       }];
     $httpProvider.responseInterceptors.push(interceptor);
@@ -64,12 +61,6 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
       });
       return filtered;
     };
-  })
-  .factory('jsonClient', function() {
-    var apiClient = {};
-    return function() {
-      return apiClient;
-    }
   })
   .filter('orderObjectBy', function() {
     return function(items, field, reverse) {
@@ -103,6 +94,12 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
       return filtered;
     };
   })
+  .factory('jsonClient', function() {
+    var apiClient = {};
+    return function() {
+      return apiClient;
+    }
+  })
   .factory('debounce', ['$timeout', function($timeout) {
     /**
      * calling fn once after timeout no matter how many calls made, within timeout
@@ -132,7 +129,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
 
     return debounce;
   }])
-  .factory('jsonSchema', function($resource, $interpolate, $q, $http, $location, jsonClient, base64) {
+  .factory('jsonSchema', function($resource, $interpolate, $q, $window, $http, $location, jsonClient, base64) {
     var apiClient = jsonClient();
     /**
      * Finding the link object identified by the rel from an array of link objects
@@ -238,13 +235,17 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
       return deferred.promise;
     }
     /**
+     * Static Headers that will be reused on each request
+     * @type {{}}
+     */
+    apiClient.staticHeaders = {};
+    /**
      * Building the client App:
      * Main method of this Service,
      * Crawling schema to build a dynamic client, conforming to schema descriptors
      * @param url
      * @returns {adapter.pending.promise|*|promise|Q.promise}
      */
-    apiClient.staticHeaders = {};
     apiClient.buildClient = function(url) {
       var def = $q.defer();
       apiClient.data = {};
@@ -398,7 +399,9 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
           });
       }
       else if (target === 'external') {
-        window.open(url);
+        $location.url(url);
+        apiClient.url = url;
+        $window.location.href = url;
         deferred.reject({});
       }
       else if (target === 'new') {

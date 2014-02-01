@@ -51,7 +51,7 @@ var rest = require('./server/rest');
 /**
  *
  */
-//app.use('/api/v1/resources/users', rest(user));
+app.use('/api/v1/resources/users', rest(user));
 //app.use('/api/v1/resources/cards', rest(card));
 //app.use('/api/v1/resources/schools', rest(school));
 //app.use('/api/v1/resources/applications', rest(application));

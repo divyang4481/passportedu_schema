@@ -11,6 +11,34 @@
       "identity": true,
       "type": "string"
     },
+    "admissions": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "userPerms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stripe": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "schools": {
       "title": "My Schools",
       "type": "array",
