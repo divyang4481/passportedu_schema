@@ -23,8 +23,8 @@ api.use('/register', register);
 /**
  *
  */
-var authenticate = require('./authenticate');
-api.use('/authenticate', authenticate);
+//var authenticate = require('./authenticate');
+//api.use('/authenticate', authenticate);
 /**
  *
  */

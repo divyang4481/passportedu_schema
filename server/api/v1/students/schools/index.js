@@ -18,16 +18,17 @@ var studentSchools = {
 studentSchools.school.get = function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
-  school.findById(schoolId).exec().then(function(School) {
-    var response = {
-      studentId: studentId,
-      schoolId: schoolId,
-      school: School
-    };
-    response.username = req.username;
-    response.token = req.token;
-    res.json(response);
-  });
+  school.findById(schoolId)
+    .exec(function(err, School) {
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School
+      };
+      response.username = req.username;
+      response.token = req.token;
+      res.json(response);
+    });
 };
 /**
  *

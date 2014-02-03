@@ -11,120 +11,27 @@ var express = require('express')
   , school = require('../../../models/school')
   , queryM = require('../../../verbs/query')
   , q = require('q');
+
+var root = require('./root')
+  , authorize = require('./authorize')
+  , auth = require('./authenticate')
+
 /**
  * Register and Login Package
  */
-api.get('/', function(req, res) {
-  res.json({});
-});
+api.get('/', root.get);
 /**
  *
  */
-api.get('/register', function(req, res) {
-  res.json({});
-});
+api.get('/register', authorize.register.get);
+api.post('/register', authorize.register.post);
+api.get('/login', authorize.login.get);
+api.post('/login', authorize.login.post);
+api.get('/logout', authorize.logout.get);
 /**
  *
  */
-api.post('/register', function(req, res) {
-  var admissions = req.body;
-  admissions.userPerms = ['admissions'];
-  admissions.created = Math.round(new Date().getTime() / 1000);
-  user.create(admissions, function(err, Admissions) {
-    if (err) {
-      res.json({
-        error: err
-      });
-    } else {
-      authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
-        if (err || authorization.user.userType !== 'admissions') {
-          res.set('Location', '/api/v1/admissions/register');
-          res.send(300);
-          return;
-        }
-        res.set('Location', '/api/v1/admissions/' + authorization.user.userId);
-        res.send(300);
-      });
-    }
-  });
-});
-/**
- *
- */
-api.get('/login', function(req, res) {
-  res.json({});
-});
-/**
- *
- */
-api.post('/login', function(req, res) {
-  authenticate.login(req, res, req.body.username, req.body.password, function(err, authorization) {
-    if (err || authorization.user.userType != 'admissions') {
-      res.set('Location', '/api/v1/admissions/register');
-      res.send(300);
-      return;
-    }
-    res.set('Location', '/api/v1/admissions/' + authorization.user.userId);
-    res.send(300);
-  });
-});
-/**
- *
- */
-var auth = function(req, res, next) {
-  // All deeper URL's require authentication
-  var authToken = req.get('Token');
-  if (authToken) {
-    authenticate.auth(req, res, authToken, function(err, authorization) {
-      var admissionsId = req.params.admissionsId;
-      if ((err)
-        || (authorization.user.userType !== 'admissions')
-        || (!_.isUndefined(admissionsId) && admissionsId !== authorization.user.userId.toString())) {
-        res.set('Location', '/api/v1/admissions');
-        res.send(300);
-        return;
-      }
-      user.count({schools: {$in: authorization.user.schools}}, function(err, countApplicants) {
-        req.admissionsId = authorization.user.userId.toString();
-        req.username = authorization.user.username;
-        req.token = authorization.user.token; // Token needs to be sent back and forth always
-        res.header('X-Intercom-Custom', JSON.stringify({
-          "userType": authorization.user.userType,
-          "schools": authorization.user.schools.length,
-          "applications": authorization.user.applications.length,
-          "applicants": countApplicants
-        }));
-        next();
-      });
-    });
-  } else {
-    res.set('Location', '/api/v1/admissions/login');
-    res.send(300);
-  }
-};
-/**
- *
- */
-api.get('/logout', function(req, res) {
-  authenticate.logout(req, function(err, auth) {
-    res.set('Location', '/api/v1/admissions/login');
-    res.send(300);
-  });
-});
-/**
- *
- */
-api.get('/:admissionsId', auth, function(req, res) {
-  var admissionsId = req.params.admissionsId;
-  var response = {
-    admissionsId: admissionsId
-  };
-  user.findById(admissionsId).populate('schools').populate('applications').exec(function(err, Admissions) {
-    response.admissions = Admissions;
-    response.schools = Admissions.schools;
-    res.json(response);
-  });
-});
+api.get('/:admissionsId', auth, root.admissions.get);
 /**
  *
  */

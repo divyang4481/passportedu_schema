@@ -3,12 +3,12 @@
  */
 var express = require('express')
   , api = express()
-  , auth = require('./authenticate');
-var root = require('./root');
-var authorize = require('./authorize');
-var studentApplication = require('./application');
-var studentSchools = require('./schools');
-var searchSchools = require('./search');
+  , auth = require('./authenticate')
+  , root = require('./root')
+  , authorize = require('./authorize')
+  , studentApplication = require('./application')
+  , studentSchools = require('./schools')
+  , searchSchools = require('./search')
 /**
  * Public Area
  */
