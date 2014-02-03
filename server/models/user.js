@@ -4,7 +4,7 @@ var mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
   , SALT_WORK_FACTOR = 10;
 /**
- *
+ * Possible permission types
  */
 var userPerms = 'school, admin, student'.split(', ');
 /**
@@ -31,6 +31,9 @@ var UserSchema = new mongoose.Schema({
   ],
   created: Number
 });
+/**
+ * Hash the password
+ */
 UserSchema.pre('save', function(next) {
   var user = this;
   // only hash the password if it has been modified (or is new)

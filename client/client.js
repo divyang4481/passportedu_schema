@@ -1,11 +1,11 @@
-var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'psprtDirectives'])
+var client = angular.module('client', ['schemaCrawler', 'MagicLink', 'dragAndDrop', 'psprtDirectives'])
   .filter('fieldName', function() {
     return function(input) {
       return input.replace(/[^a-zA-Z0-9]/g, '_');
     };
   })
-  .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema) {
-    $rootScope.client = {};
+  .controller('ClientArea', function($rootScope, $resource, $location, $filter, $scope, jsonSchema, jsonClient) {
+    $rootScope.client = jsonClient();
     $scope.$watch('client.url', function() {
       angular.element('.modal-backdrop').remove();
     });
@@ -54,10 +54,7 @@ var client = angular.module('client', ['schema', 'MagicLink', 'dragAndDrop', 'ps
      */
     var startURL = $location.url();
     startURL = startURL ? startURL : '/api/v1';
-    new jsonSchema(startURL).then(function(client) {
-      var passport = client;
-      $rootScope.client = passport;
-    });
+    new jsonSchema(startURL).then(function(client) {});
   })
   .directive('autoSaveCard', function(debounce) {
     return {

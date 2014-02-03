@@ -35,13 +35,14 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
             , url = headers.location
             , status = response.status;
           if (status == 300) {
-            useHeaders(response)
+            useHeaders(response);
             client.buildClient(url).then(function() {
               client.url = url;
+              $location.path(url);
             });
           }
-//          return $q.reject(response);
-          return response;
+//          return response;
+          return $q.reject(response);
         };
         return function(promise) {
           return promise.then(success, other);
@@ -399,8 +400,8 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
           });
       }
       else if (target === 'external') {
-        $location.url(url);
-        apiClient.url = url;
+//        $location.url(url);
+//        apiClient.url = url;
         $window.location.href = url;
         deferred.reject({});
       }
@@ -414,7 +415,7 @@ angular.module('schema', ['ngResource', 'clientUtilities'])
           if (angular.isDefined(headers['x-username'])
             && angular.isDefined(headers['x-token'])) {
             apiClient.setHeader('Authorization', null);
-            var token = base64.encode(response.headers()['x-username'] + ':' + response.headers()['x-token']);
+            var token = base64.encode(headers['x-username'] + ':' + headers['x-token']);
             apiClient.setHeader('Token', token);
             sessionStorage.token = token;
           }

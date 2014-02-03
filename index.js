@@ -30,6 +30,7 @@ module.exports = {
 };
 app.set('port', 8081);
 //app.use(express.logger());
+app.use(app.router);
 /**
  * Static resources
  */
@@ -44,6 +45,7 @@ app.use(express.urlencoded());
  * Resources
  */
 var card = require('./server/models/card');
+var schoolCard = require('./server/models/schoolCard');
 var user = require('./server/models/user');
 var application = require('./server/models/application');
 var school = require('./server/models/school');
@@ -52,9 +54,10 @@ var rest = require('./server/rest');
  *
  */
 app.use('/api/v1/resources/users', rest(user));
-//app.use('/api/v1/resources/cards', rest(card));
-//app.use('/api/v1/resources/schools', rest(school));
-//app.use('/api/v1/resources/applications', rest(application));
+app.use('/api/v1/resources/cards', rest(card));
+app.use('/api/v1/resources/schoolCards', rest(schoolCard));
+app.use('/api/v1/resources/schools', rest(school));
+app.use('/api/v1/resources/applications', rest(application));
 /**
  * Stripe Server
  */

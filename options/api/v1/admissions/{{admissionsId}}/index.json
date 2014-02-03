@@ -133,7 +133,7 @@
       "rel": "stripe",
       "importance": "callToAction",
       "target": "external",
-      "href": "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_3PP3DsOtbvbsA4JfUHJRVTdUyiS8YxeU"
+      "href": "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_3PP3DsOtbvbsA4JfUHJRVTdUyiS8YxeU&state=admissions/{{admissionsId}}"
     }
   ]
 }

@@ -79,15 +79,6 @@
       "href": "/api/v1/admissions/logout"
     },
     {
-      "title": "Preview",
-      "description": "{{application.type}}",
-      "rel": "preview",
-      "target": "new",
-      "importance": "callToAction",
-      "method": "GET",
-      "href": "/api/v1/applications/{{application._id}}/schools/1234"
-    },
-    {
       "title": "Manage Schools",
       "description": "{{application.type}}",
       "rel": "assign",

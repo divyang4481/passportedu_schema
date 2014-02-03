@@ -38,7 +38,7 @@
   <!--Heading and Description-->
   <h4 ng-bind="client.schema.title"></h4>
 
-  <p ng-bind="client.schema.description"></p>
+  <!--<p ng-bind="client.schema.description"></p>-->
   <!-- Calls To Action-->
   <div class="btn-group-vertical">
     <button ng-repeat='link in client.links | semantics: {importance: "callToAction"}'
@@ -54,7 +54,7 @@
     </button>
   </div>
   <!--Modal Actions-->
-  <div class="btn-group-vertical pull-right">
+  <div class="btn-group-vertical">
     <a ng-repeat='link in client.links | semantics: {importance: "modalOpen"}'
       data-target="#{{link._link.rel}}" role="button"
       class="btn btn-sm btn-primary" data-toggle="modal">
@@ -63,7 +63,7 @@
     </a>
   </div>
   <!--Also Call to Actions-->
-  <div class="btn-group-vertical pull-right">
+  <div class="btn-group-vertical">
     <button ng-repeat='link in client.links | semantics: {importance: "alsoCall"}'
       type="button" class="btn btn-sm btn-block" ng-click="traverse()" ng-class="{
         'btn-danger': link._link.method == 'DELETE',
@@ -98,7 +98,7 @@
     </button>
   </div>
   <!--Modal Actions-->
-  <div class="btn-group-vertical pull-right">
+  <div class="btn-group-vertical">
     <a ng-repeat='link in client.links | semantics: {importance: "modalOpen"}'
       data-target="#{{link._link.rel}}" role="button" class="btn btn-primary buttonSpace" data-toggle="modal">
       <i class="glyphicon glyphicon-tags"></i>&nbsp;
@@ -106,7 +106,7 @@
     </a>
   </div>
   <!--Also Call to Actions-->
-  <div class="btn-group-vertical pull-right">
+  <div class="btn-group-vertical">
     <button ng-repeat='link in client.links | semantics: {importance: "alsoCall"}'
       type="button" class="btn buttonSpace" ng-click="traverse()" ng-class="{
         'btn-danger': link._link.method == 'DELETE',

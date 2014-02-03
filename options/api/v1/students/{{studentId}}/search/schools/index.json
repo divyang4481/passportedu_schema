@@ -245,7 +245,7 @@
             "readonly": false,
             "type": ""
           },
-          "cardIds": {
+          "cards": {
             "title": "Card Ids",
             "description": "cardIds ",
             "identity": false,

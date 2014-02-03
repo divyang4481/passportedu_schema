@@ -1,5 +1,5 @@
 var SchoolModel = require('../../../server/models/school')
-  , card = require('../../../server/models/card')
+  , card = require('../../../server/models/schoolCard')
   , fs = require('fs')
   , lazy = require('lazy')
   , _ = require('underscore')

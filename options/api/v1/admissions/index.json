@@ -26,6 +26,7 @@
       "title": "Login",
       "rel": "login",
       "importance": "content",
+      "target": "nofollow",
       "template": "/templates/api/v1/card/admissions/login",
       "href": "/api/v1/admissions/login",
       "method": "POST",

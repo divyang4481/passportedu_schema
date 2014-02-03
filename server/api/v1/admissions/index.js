@@ -80,7 +80,7 @@ var auth = function(req, res, next) {
       if ((err)
         || (authorization.user.userType !== 'admissions')
         || (!_.isUndefined(admissionsId) && admissionsId !== authorization.user.userId.toString())) {
-        res.set('Location', '/api/v1/admissions/login');
+        res.set('Location', '/api/v1/admissions');
         res.send(300);
         return;
       }
@@ -119,12 +119,10 @@ api.get('/:admissionsId', auth, function(req, res) {
   var response = {
     admissionsId: admissionsId
   };
-  user.findById(admissionsId, function(err, Admissions) {
+  user.findById(admissionsId).populate('schools').populate('applications').exec(function(err, Admissions) {
     response.admissions = Admissions;
-    school.find({_id: { $in: Admissions.schools}}, function(err, Schools) {
-      response.schools = Schools;
-      res.json(response);
-    });
+    response.schools = Admissions.schools;
+    res.json(response);
   });
 });
 /**

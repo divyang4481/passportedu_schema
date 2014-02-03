@@ -279,13 +279,22 @@
             },
             "links": [
               {
-                "title": "CSV for {{type}} {{data.institutionName}}",
+                "title": "CSV of Applicants for {{type}} @ {{data.institutionName}}",
                 "description": "{{type}}",
                 "rel": "csv_{{_id}}",
                 "importance": "callToAction",
                 "target": "data",
                 "mime": "text/csv;;base64,",
                 "href": "/api/v1/admissions/{{admissionsId}}/schools/{{school._id}}/applications/{{_id}}/csv"
+              },
+              {
+                "title": "{{type}} Application",
+                "description": "{{application.type}}",
+                "rel": "preview",
+                "target": "new",
+                "importance": "callToAction",
+                "method": "GET",
+                "href": "/api/v1/applications/{{_id}}/schools/{{school._id}}"
               }
             ]
           }
@@ -344,6 +353,13 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Application Types",
+      "rel": "types",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/applications"
     },
     {
       "title": "Sign out",

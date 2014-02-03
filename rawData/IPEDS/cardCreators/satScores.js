@@ -1,11 +1,10 @@
 var SchoolModel = require('../../../server/models/school')
-  , CardModel = require('../../../server/models/card')
+  , CardModel = require('../../../server/models/schoolCard')
   , mongoose = require('mongoose')
   , rawImporter = require('../rawImporter')
   , _ = require('underscore');
 mongoose.connect('mongodb://localhost/psprt');
 rawImporter().then(function(schools) {
-  console.log('SAT Cards');
   _.each(schools, function(school) {
     console.log(school.institutionName);
     var newSchool = new SchoolModel({
