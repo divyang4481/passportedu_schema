@@ -252,7 +252,7 @@
             "links": [
               {
                 "rel": "{{_id}}",
-                "importance": "cards",
+                "importance": "nothing",
                 "template": "/templates/api/v1/card/{{type}}",
                 "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
                 "method": "GET"
@@ -262,6 +262,14 @@
         }
       },
       "links": [
+        {
+          "title": "Apply to {{school.data.institutionName}}",
+          "description": "{{school.data.institutionName}}",
+          "price": "{{school.data.applicationFee}}",
+          "rel": "remove_{{_id}}",
+          "importance": "content",
+          "template": "/templates/api/v1/card/students/schools/fee/stripe"
+        },
         {
           "title": "Cancel Application to {{school.data.institutionName}}",
           "description": "{{school.data.institutionName}}",

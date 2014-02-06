@@ -8,6 +8,7 @@ var config = require(__dirname + '/stripe-dev.config')
   , querystring = require('querystring')
   , authenticate = require('../server/helpers/authenticate')
   , user = require('../server/models/user')
+  , school = require('../server/models/school')
 /**
  * Authentication Middleware
  * Getting user from token
@@ -69,17 +70,17 @@ var getStripeToken = function(code) {
  */
 api.get('/connected', auth, function(req, res) {
   var code = req.query.code
-  var User = req.User;
+    , schoolId = req.query.state;
   getStripeToken(code).then(function(response) {
     var stripe = JSON.parse(response.toString());
-    User.stripe = {
-      access_token: stripe.access_token,
-      refresh_token: stripe.refresh_token,
-      user_id: stripe.stripe_user_id
-    };
-    User.save(function(err) {
-      res.set('Location', '/api/v1/' + req.authorization.userType + '/' + req.authorization.userId);
-      res.send(300);
+    school.findById(schoolId).exec(function(err, School) {
+      School.stripe = stripe;
+      console.log(School);
+      School.save(function(err) {
+        console.log(err, School);
+        res.set('Location', '/api/v1/' + req.authorization.userType + '/' + req.authorization.userId);
+        res.send(300);
+      });
     });
   });
 });
@@ -89,7 +90,6 @@ api.get('/webhooks', auth, function(req, res) {
  * Accounts
  */
 api.post('/:userId/accounts/new', auth, function(req, res) {
-
 });
 api.put('/:userId/accounts/:accountId', auth, function(req, res) {
 });

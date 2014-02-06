@@ -1,9 +1,8 @@
 var mongoose = require('mongoose')
-  , Schema = mongoose.Schema
-  , mediaTypes = [
-    "university",
-    "college"
-  ];
+  , Schema = mongoose.Schema;
+/**
+ *
+ */
 var SchoolSchema = new mongoose.Schema({
   data: {
     unitId: Number,
@@ -53,6 +52,10 @@ var SchoolSchema = new mongoose.Schema({
   mediaTypes: { type: String },
   cards: [
     {type: String, ref: "SchoolCard"}
-  ]
+  ],
+  stripe: Schema.Types.Mixed
 });
+/**
+ *
+ */
 module.exports = mongoose.model("School", SchoolSchema);

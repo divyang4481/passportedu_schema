@@ -20,6 +20,7 @@ studentSchools.school.get = function(req, res) {
     , schoolId = req.params.schoolId;
   school.findById(schoolId)
     .exec(function(err, School) {
+      user.find()
       var response = {
         studentId: studentId,
         schoolId: schoolId,

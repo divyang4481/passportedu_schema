@@ -71,4 +71,7 @@ admissionAuth.logout.get = function(req, res) {
     res.send(300);
   });
 };
-module.exports = authenticate;
+/**
+ *
+ */
+module.exports = admissionAuth;

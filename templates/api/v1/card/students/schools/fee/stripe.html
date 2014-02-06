@@ -1,0 +1,17 @@
+<div class="panel panel-default mediumCard">
+  <div class="panel-heading">
+    <h3 class="panel-title"> <span ng-bind="link._link.title"></span></h3>
+  </div>
+  <div class="panel-body">
+    <form method="POST">
+      <script src="https://checkout.stripe.com/checkout.js"
+        class="stripe-button"
+        data-key="pk_test_ycU9iE7hunE91CCDdjklqpEM"
+        data-image="/assets/images/passportEDU_nb.png"
+        data-name="{{link._link.title}}"
+        data-description="{{link._link.description}}"
+        data-amount="{{link._link.price * 100}}}}">
+      </script>
+    </form>
+  </div>
+</div>

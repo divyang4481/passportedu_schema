@@ -16,7 +16,6 @@ var UserSchema = new mongoose.Schema({
   fullName: String,
   email: String,
   token: String,
-  stripe: Schema.Types.Mixed,
   userPerms: [
     { type: String, enum: userPerms }
   ],

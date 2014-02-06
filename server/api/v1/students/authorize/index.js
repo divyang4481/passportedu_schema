@@ -6,15 +6,18 @@ var authenticate = require('../../../../helpers/authenticate')
 /**
  *
  */
-var register = {};
-var login = {};
-register.get = function(req, res) {
+var authorize = {
+  register: {},
+  login: {},
+  logout: {}
+}
+authorize.register.get = function(req, res) {
   res.json({});
 };
 /**
  *
  */
-register.post = function(req, res) {
+authorize.register.post = function(req, res) {
   var students = req.body;
   students.userPerms = ['students'];
   students.created = Math.round(new Date().getTime() / 1000);
@@ -41,13 +44,13 @@ register.post = function(req, res) {
  *
  */
 
-login.get = function(req, res) {
+authorize.login.get = function(req, res) {
   res.json({});
 };
 /**
  *
  */
-login.post = function(req, res) {
+authorize.login.post = function(req, res) {
   authenticate.login(req, res, req.body.username, req.body.password,
     function(err, authorization) {
       if (err || authorization.user.userType !== 'students') {
@@ -62,16 +65,11 @@ login.post = function(req, res) {
 /**
  *
  */
-var logout = {};
-logout.get = function(req, res) {
+authorize.logout.get = function(req, res) {
   authenticate.logout(req, function(err, auth) {
     res.set('Location', '/api/v1/students/login');
     res.send(300);
   });
 };
 //
-module.exports = {
-  register: register,
-  login: login,
-  logout: logout
-};
+module.exports = authorize;

@@ -68,6 +68,9 @@ require('fs').readFileSync(__dirname + '/CaliDataTabs.txt')
     }
     SchoolModel.findOne({"data.unitId": Number(school.unitId)},
       function(err, School) {
+        if (!School) {
+          return;
+        }
         var tags = [];
         School.data.schoolURL = school.schoolURL;
         School.data.applicationFee = school.applicationFee;

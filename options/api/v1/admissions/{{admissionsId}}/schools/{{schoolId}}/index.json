@@ -373,6 +373,13 @@
       "importance": "callToAction",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Accept Payments",
+      "rel": "stripe",
+      "importance": "callToAction",
+      "target": "external",
+      "href": "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_3PP3DsOtbvbsA4JfUHJRVTdUyiS8YxeU&state={{schoolId}}"
     }
   ]
 }
