@@ -185,7 +185,7 @@
     <div class="col-md-12">
       <!--Search Form-->
       <form ng-init='link = (client.links | semantics: {importance: "search"})[0]'>
-        <div class="panel panel-default heroCard  hidden-xs">
+        <div class="panel panel-default heroCard">
           <div class="panel-body">
             <!--Primary Search Field-->
             <div class="input-group">
@@ -250,6 +250,17 @@
     <div ng-repeat='link in client.links | semantics: {importance: "results"}'
       ng-include="link._link.template + '.html'"
       class="pin"></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <!--Paging-->
+      <ul class="pagination">
+        <li ng-repeat='link in client.links | semantics: {importance: "paging"}'
+          ng-click="traverse()" ng-class="{'active': link._link.rel == 'self'}">
+          <a ng-bind="link._link.title"></a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 <!--Toggle Links-->

@@ -112,12 +112,12 @@ and (orientation: portrait) {
     -webkit-column-break-inside: avoid;
     column-break-inside: avoid;
     display: inline-block;
-    margin: 0;
+    margin: 5px;
     padding: 0;
     border: none;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
     .container {
         width: 750px;
     }

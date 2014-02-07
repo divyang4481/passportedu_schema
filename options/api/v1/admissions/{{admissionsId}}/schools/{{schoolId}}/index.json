@@ -379,7 +379,7 @@
       "rel": "stripe",
       "importance": "callToAction",
       "target": "external",
-      "href": "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_3PP3DsOtbvbsA4JfUHJRVTdUyiS8YxeU&state={{schoolId}}"
+      "href": "https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=ca_3PP3DsOtbvbsA4JfUHJRVTdUyiS8YxeU&state={{schoolId}}"
     }
   ]
 }

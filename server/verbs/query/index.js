@@ -43,8 +43,8 @@ module.exports = function(model) {
           , prevOffset = Math.min(count - limit, Number(offset) - Number(limit))
           , meta = []
           , currentPage = (Math.ceil(queryVars.offset / queryVars.limit))
-          , minBound = Math.max(0, (currentPage - 10))
-          , maxBound = Math.min((count / limit), currentPage + 10);
+          , minBound = Math.max(0, (currentPage - 2))
+          , maxBound = Math.min((count / limit), currentPage + 1);
         firstPage.offset = 0;
         meta.push({
           query: querystring.stringify(firstPage),
@@ -54,7 +54,7 @@ module.exports = function(model) {
         prevPage.offset = prevOffset;
         meta.push({
           query: querystring.stringify(prevPage),
-          page: "prev <",
+          page: "<",
           rel: "prev"
         });
         var pages = _.range(minBound, maxBound, 1);
@@ -70,7 +70,7 @@ module.exports = function(model) {
         nextPage.offset = nextOffset;
         meta.push({
           query: querystring.stringify(nextPage),
-          page: "next >",
+          page: ">",
           rel: "next"
         });
         lastPage.offset = (Math.ceil(count / queryVars.limit) - 1) * queryVars.limit + 1;

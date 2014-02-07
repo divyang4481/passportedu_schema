@@ -13,9 +13,9 @@ var client = angular.module('client', ['schemaCrawler', 'MagicLink', 'dragAndDro
      * Traverse a link to a new URL, given the rel and the link params/data
      */
     $scope.traverse = function() {
-      $rootScope.client.traverse(this.link._link.rel, this.link)
-        .then(function(client) {
-        });
+      $rootScope.client.traverse(this.link._link.rel, this.link).then(function(client) {
+        console.log(client);
+      });
     };
     /**
      * Perform the link action on the Draggable
@@ -52,9 +52,10 @@ var client = angular.module('client', ['schemaCrawler', 'MagicLink', 'dragAndDro
     /**
      * Get the Schema Client
      */
-    var startURL = $location.url();
-    startURL = startURL ? startURL : '/api/v1';
-    new jsonSchema(startURL).then(function(client) {});
+    var startURL = $location.url() ? $location.url() : '/api/v1';
+    new jsonSchema(startURL).then(function(client) {
+      console.log(client);
+    });
   })
   .directive('autoSaveCard', function(debounce) {
     return {

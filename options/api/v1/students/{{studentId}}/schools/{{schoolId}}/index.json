@@ -254,7 +254,7 @@
                 "rel": "{{_id}}",
                 "importance": "nothing",
                 "template": "/templates/api/v1/card/{{type}}",
-                "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}",
+                "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{_id}}",
                 "method": "GET"
               }
             ]
@@ -265,8 +265,11 @@
         {
           "title": "Apply to {{school.data.institutionName}}",
           "description": "{{school.data.institutionName}}",
+          "key": "{{school.stripe.stripe_publishable_key}}",
           "price": "{{school.data.applicationFee}}",
-          "rel": "remove_{{_id}}",
+          "rel": "stripe_{{_id}}",
+          "method": "POST",
+          "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/charge",
           "importance": "content",
           "template": "/templates/api/v1/card/students/schools/fee/stripe"
         },

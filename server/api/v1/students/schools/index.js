@@ -34,6 +34,16 @@ studentSchools.school.get = function(req, res) {
 /**
  *
  */
+studentSchools.school.payApplicationFee = function(req, res) {
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId;
+  console.log(req.body.stripeToken);
+  res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId);
+  res.send(300, {username: req.username, token: req.token});
+};
+/**
+ *
+ */
 studentSchools.school.delete = function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
