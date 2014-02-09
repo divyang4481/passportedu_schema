@@ -1,24 +1,30 @@
 psprtDirectives
-  .directive('stripeButton', function($resource) {
-    var link = function(scope, element, attrs) {
+  .directive('stripeButton', function() {
+    var linkFunc = function(scope, element, attrs) {
+      scope.token = false;
+      scope.buttonAction = 'Connect with Stripe';
       var handler = StripeCheckout.configure({
         key: scope.link._link.key,
         image: '/assets/images/passportEDU_nb.png',
         token: function(token, args) {
-          console.log(token);
-//          scope.action({token: token});
-          // Use the token to create the charge with a server-side script.
+          scope.buttonAction = 'Pay with Stripe';
+          scope.token = true;
+          scope.link.token = token;
+          scope.$apply();
         }
       });
-
       element.on('click', function(e) {
         // Open Checkout with further options
-        handler.open({
-          name: scope.link._link.name,
-          description: scope.link._link.description,
-          amount: scope.link._link.amount
-        });
-        e.preventDefault();
+        if (scope.token) {
+          scope.action(scope.link);
+        } else {
+          handler.open({
+            name: scope.link._link.name,
+            description: scope.link._link.description,
+            amount: scope.link._link.amount
+          });
+          e.preventDefault();
+        }
       });
     };
     return {
@@ -28,9 +34,10 @@ psprtDirectives
       scope: {
         link: '=',
         image: '=',
+        amount: '=',
         action: '='
       },
-      link: link,
-      template: '<button class="btn btn-primary">Pay with Stripe</button>'
+      link: linkFunc,
+      template: '<button class="btn" ng-class="{\'btn-primary\': !token, \'btn-success\': token}"><span ng-bind="buttonAction"></span> <span ng-show="token" ng-bind="amount | currency"</button>'
     }
   });

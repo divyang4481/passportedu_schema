@@ -3,9 +3,9 @@
     <h3 class="panel-title"> <span ng-bind="link._link.title"></span></h3>
   </div>
   <div class="panel-body">
-    <stripe-button
-      image="'/assets/images/passportEDU_nb.png'"
+    <stripe-button image="'/assets/images/passportEDU_nb.png'"
       link="link"
-      action="traverse">Purchase</stripe-button>
+      amount="link._link.price"
+      action="performLink"></stripe-button>
   </div>
 </div>

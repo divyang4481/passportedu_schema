@@ -259,10 +259,14 @@ angular.module('schemaCrawler', ['ngResource', 'clientUtilities'])
             apiClient.resolveEmbeddedLinks(apiClient, angular.copy(apiClient.origSchema));
             apiClient.interpolateWholeSchema(angular.copy(apiClient.origSchema), data);
             deferred.resolve(apiClient);
+          }, function(err) {
+            console.log('resolve schema error', err);
           });
         }, function(err) {
-          console.log(err);
+          console.log('link error', err);
         });
+      }, function(err) {
+        console.log('find rel err', err);
       });
       return deferred.promise;
     };
@@ -303,6 +307,8 @@ angular.module('schemaCrawler', ['ngResource', 'clientUtilities'])
       apiClient.resourceURLTraverse(eLink._link.href, defaults, methods, method, payload, eLink._link.target, eLink._link.mime)
         .then(function(response) {
           deferred.resolve(response);
+        }, function(err) {
+          console.log('resource url traverse error', err);
         });
       return deferred.promise;
     }
@@ -328,7 +334,8 @@ angular.module('schemaCrawler', ['ngResource', 'clientUtilities'])
         window.open('#' + url);
         deferred.reject({});
       } else { // All other links are traversed in this window
-        $resource(url, defaults, methods)[method](payload, function(response, headersFunc) {
+        var resource = $resource(url, defaults, methods);
+        resource[method](payload, function(response, headersFunc) {
           var headers = headersFunc();
           if (angular.isDefined(headers['x-username']) && angular.isDefined(headers['x-token'])) {
             apiClient.setHeader('Authorization', null); // Clear the Auth header, to prevent sending password anymore
@@ -342,6 +349,8 @@ angular.module('schemaCrawler', ['ngResource', 'clientUtilities'])
             apiClient.url = url;
           }
           deferred.resolve(response);
+        }, function(httpResponse) {
+          console.log(httpResponse);
         });
       }
       return deferred.promise;

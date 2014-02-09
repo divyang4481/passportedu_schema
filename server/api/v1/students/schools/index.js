@@ -37,9 +37,28 @@ studentSchools.school.get = function(req, res) {
 studentSchools.school.payApplicationFee = function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
-  console.log(req.body.stripeToken);
-  res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId);
+  console.log(req.body.token, req.body.stripe);
+  res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/paid');
   res.send(300, {username: req.username, token: req.token});
+};
+/**
+ *
+ */
+studentSchools.school.paidFee = function(req, res) {
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId)
+    .exec(function(err, School) {
+      user.find()
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School
+      };
+      response.username = req.username;
+      response.token = req.token;
+      res.json(response);
+    });
 };
 /**
  *

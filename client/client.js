@@ -18,6 +18,16 @@ var client = angular.module('client', ['schemaCrawler', 'MagicLink', 'dragAndDro
       });
     };
     /**
+     * Perform a link traversal directly on a link object, with embedded _link property
+     */
+    $scope.performLink = function(link) {
+      $rootScope.client.link(link, link).then(function(client) {
+        console.log(client);
+      }, function(err) {
+        console.log(err);
+      });
+    };
+    /**
      * Perform the link action on the Draggable
      * @param drag
      */

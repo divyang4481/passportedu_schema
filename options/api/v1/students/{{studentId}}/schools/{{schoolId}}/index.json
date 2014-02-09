@@ -271,7 +271,15 @@
           "method": "POST",
           "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/charge",
           "importance": "content",
-          "template": "/templates/api/v1/card/students/schools/fee/stripe"
+          "template": "/templates/api/v1/card/students/schools/fee/stripe",
+          "properties": {
+            "stripe": {
+              "type": "object"
+            },
+            "token": {
+              "type": "object"
+            }
+          }
         },
         {
           "title": "Cancel Application to {{school.data.institutionName}}",
