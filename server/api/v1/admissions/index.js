@@ -10,7 +10,7 @@ var root = require('./root')
   , authorize = require('./authorize')
   , admissionsSchools = require('./schools')
   , admissionsSearch = require('./search')
-  , admissionsApplication = require('./application')
+  , admissionsApplication = require('./schools/application')
   , auth = require('./authenticate')
 /**
  * Register and Login Package
@@ -42,24 +42,24 @@ api.delete('/:admissionsId/search/schools/:schoolId/claim', auth, admissionsSear
 /**
  *
  */
-api.get('/:admissionsId/applications', auth, admissionsApplication.applications.get);
-api.post('/:admissionsId/applications', auth, admissionsApplication.applications.post);
+api.get('/:admissionsId/schools/:schoolId/applications', auth, admissionsApplication.applications.get);
+api.post('/:admissionsId/schools/:schoolId/applications', auth, admissionsApplication.applications.post);
 //
-api.get('/:admissionsId/applications/:applicationId', auth, admissionsApplication.applications.application.get);
-api.put('/:admissionsId/applications/:applicationId', auth, admissionsApplication.applications.application.put);
-api.delete('/:admissionsId/applications/:applicationId', auth, admissionsApplication.applications.application.delete);
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId', auth, admissionsApplication.applications.application.get);
+api.put('/:admissionsId/schools/:schoolId/applications/:applicationId', auth, admissionsApplication.applications.application.put);
+api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId', auth, admissionsApplication.applications.application.delete);
 //
-api.get('/:admissionsId/applications/:applicationId/removeCards', auth, admissionsApplication.applications.application.removeCards);
-api.post('/:admissionsId/applications/:applicationId/addCards/*', auth, admissionsApplication.applications.application.addCards.post);
-api.get('/:admissionsId/applications/:applicationId/addCards', auth, admissionsApplication.applications.application.addCards.get);
-api.get('/:admissionsId/applications/:applicationId/assign', auth, admissionsApplication.applications.application.assign.get);
-api.get('/:admissionsId/applications/:applicationId/arrange', auth, admissionsApplication.applications.application.arrange.get);
-api.put('/:admissionsId/applications/:applicationId/cards/:cardId/arrange', auth, admissionsApplication.applications.application.arrange.put);
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/removeCards', auth, admissionsApplication.applications.application.removeCards);
+api.post('/:admissionsId/schools/:schoolId/applications/:applicationId/addCards/*', auth, admissionsApplication.applications.application.addCards.post);
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/addCards', auth, admissionsApplication.applications.application.addCards.get);
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', auth, admissionsApplication.applications.application.assign.get);
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/arrange', auth, admissionsApplication.applications.application.arrange.get);
+api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/cards/:cardId/arrange', auth, admissionsApplication.applications.application.arrange.put);
 //
-api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', auth, admissionsApplication.applications.application.assign.put);
-api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', auth, admissionsApplication.applications.application.assign.delete);
-api.put('/:admissionsId/applications/:applicationId/cards/:cardId', auth, admissionsApplication.applications.application.card.put);
-api.delete('/:admissionsId/applications/:applicationId/cards/:cardId', auth, admissionsApplication.applications.application.card.delete);
+//api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', auth, admissionsApplication.applications.application.assign.put);
+//api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/assign', auth, admissionsApplication.applications.application.assign.delete);
+api.put('/:admissionsId/schools/:schoolId/applications/:applicationId/cards/:cardId', auth, admissionsApplication.applications.application.card.put);
+api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId/cards/:cardId', auth, admissionsApplication.applications.application.card.delete);
 /**
  *
  */

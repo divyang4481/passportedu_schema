@@ -2,10 +2,10 @@
  *
  */
 var _ = require('underscore')
-  , user = require('../../../../models/user')
-  , card = require('../../../../models/card')
-  , application = require('../../../../models/application')
-  , school = require('../../../../models/school')
+  , user = require('../../../../../models/user')
+  , card = require('../../../../../models/card')
+  , application = require('../../../../../models/application')
+  , school = require('../../../../../models/school')
   , q = require('q');
 /**
  *
@@ -32,8 +32,9 @@ var admissionsApplications = {
  *
  */
 admissionsApplications.applications.get = function(req, res) {
-  var admissionsId = req.params.admissionsId;
-  application.find({admissionsId: admissionsId}, function(err, Applications) {
+  var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId;
+  application.find({schools: schoolId}, function(err, Applications) {
     res.json({
       admissionsId: admissionsId,
       applications: Applications
@@ -44,17 +45,19 @@ admissionsApplications.applications.get = function(req, res) {
  *
  */
 admissionsApplications.applications.post = function(req, res) {
-  var admissionsId = req.params.admissionsId;
+  var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId;
   var app = {
     admissionsId: admissionsId,
     type: req.body.type,
     mediaType: req.body.mediaType,
-    data: req.body.data
+    data: req.body.data,
+    schools: [schoolId]
   }
   application.create(app, function(err, App) {
     var applicationId = App._id.toString();
     user.update({_id: admissionsId}, {$addToSet: {applications: applicationId}}, function(err) {
-      res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications/' + applicationId);
+      res.set('Location', '/api/v1/admissions/' + admissionsId + 'schools/' + schoolId + '/applications/' + applicationId);
       res.send(300);
     });
   });
@@ -62,7 +65,7 @@ admissionsApplications.applications.post = function(req, res) {
 /**
  *
  */
-var getApplicationCards = function(admissionsId, applicationId) {
+var getApplicationCards = function(admissionsId, schoolId, applicationId) {
   var deferred = q.defer();
   application.findById(applicationId).exec(function(err, App) {
     card.find({"owners.applications": applicationId})
@@ -70,6 +73,7 @@ var getApplicationCards = function(admissionsId, applicationId) {
       .exec(function(err, Cards) {
         deferred.resolve({
           admissionsId: admissionsId,
+          schoolId: schoolId,
           applicationId: applicationId,
           application: _.omit(App, ['_id']),
           cards: Cards
@@ -83,8 +87,9 @@ var getApplicationCards = function(admissionsId, applicationId) {
  */
 admissionsApplications.applications.application.get = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
-  getApplicationCards(admissionsId, applicationId).then(function(response) {
+  getApplicationCards(admissionsId, schoolId, applicationId).then(function(response) {
     res.json(response);
   });
 };
@@ -93,6 +98,7 @@ admissionsApplications.applications.application.get = function(req, res) {
  */
 admissionsApplications.applications.application.put = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
     , appPost = req.body;
   application.findOneAndUpdate(applicationId, appPost, function(err, App) {
@@ -105,18 +111,24 @@ admissionsApplications.applications.application.put = function(req, res) {
  */
 admissionsApplications.applications.application.delete = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
-  application.remove({_id: applicationId}, function(err) {
-    if (err) {
-      res.json({
-        "errors": [
-          {message: "There was an error when trying to delete your application."}
-        ]
+  school.findById(schoolId).exec(function(err, School) {
+    School.applications = _.without(school.applications, applicationId);
+    School.save(function(err) {
+      application.remove({_id: applicationId}, function(err) {
+        if (err) {
+          res.json({
+            "errors": [
+              {message: "There was an error when trying to delete your application."}
+            ]
+          });
+          return;
+        }
+        res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications');
+        res.send(300);
       });
-      return;
-    }
-    res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications');
-    res.send(300);
+    });
   });
 };
 /**
@@ -124,8 +136,9 @@ admissionsApplications.applications.application.delete = function(req, res) {
  */
 admissionsApplications.applications.application.removeCards = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
-  getApplicationCards(admissionsId, applicationId).then(function(response) {
+  getApplicationCards(admissionsId, schoolId, applicationId).then(function(response) {
     res.json(response);
   });
 };
@@ -134,6 +147,7 @@ admissionsApplications.applications.application.removeCards = function(req, res)
  */
 admissionsApplications.applications.application.addCards.post = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
     , cardBody = req.body;
   cardBody.owners = {};
@@ -147,7 +161,7 @@ admissionsApplications.applications.application.addCards.post = function(req, re
       res.send(415);
       return;
     }
-    getCardsAndApp(admissionsId, applicationId).then(function(response) {
+    getCardsAndApp(admissionsId, schoolId, applicationId).then(function(response) {
       res.json(response);
     });
   });
@@ -157,42 +171,47 @@ admissionsApplications.applications.application.addCards.post = function(req, re
  */
 admissionsApplications.applications.application.addCards.get = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
-  getCardsAndApp(admissionsId, applicationId).then(function(response) {
+  getCardsAndApp(admissionsId, schoolId, applicationId).then(function(response) {
     res.json(response);
   });
 };
 /**
  *
  */
-var getCardsAndApp = function(admissionsId, applicationId) {
+var getCardsAndApp = function(admissionsId, schoolId, applicationId) {
   var deferred = q.defer();
-  application.findById(applicationId).exec(function(err, App) {
-    var response = {
-      admissionsId: admissionsId,
-      applicationId: applicationId,
-      application: _.omit(App, ['_id']),
-      cards: [
-        {type: "application/attendance/term"},
-        {type: "application/attendance/period"},
-        {type: "application/documents/transcript"},
-        {type: "application/documents/passport"},
-        {type: "application/documents/government"},
-        {type: "application/contact/basic"},
-        {type: "application/contact/guardian"},
-        {type: "application/contact/address/home"},
-        {type: "application/contact/address/mailing"},
-        {type: "application/nationality"},
-        {type: "application/demographic"},
-        {type: "application/language"},
-        {type: "application/academic/exams/sat"},
-        {type: "application/academic/exams/gre"},
-        {type: "application/academic/exams/gmat"},
-        {type: "application/academic/schools/previous"}
-      ]
-    };
-    deferred.resolve(response);
-  });
+  application.findById(applicationId)
+    .populate('schools')
+    .exec(function(err, App) {
+      var response = {
+        admissionsId: admissionsId,
+        schoolId: schoolId,
+        applicationId: applicationId,
+        application: _.omit(App, ['_id']),
+        cards: [
+          {type: "application/fee"},
+          {type: "application/attendance/term"},
+          {type: "application/attendance/period"},
+          {type: "application/documents/transcript"},
+          {type: "application/documents/passport"},
+          {type: "application/documents/government"},
+          {type: "application/contact/basic"},
+          {type: "application/contact/guardian"},
+          {type: "application/contact/address/home"},
+          {type: "application/contact/address/mailing"},
+          {type: "application/nationality"},
+          {type: "application/demographic"},
+          {type: "application/language"},
+          {type: "application/academic/exams/sat"},
+          {type: "application/academic/exams/gre"},
+          {type: "application/academic/exams/gmat"},
+          {type: "application/academic/schools/previous"}
+        ]
+      };
+      deferred.resolve(response);
+    });
   return deferred.promise;
 };
 /**
@@ -200,6 +219,7 @@ var getCardsAndApp = function(admissionsId, applicationId) {
  */
 admissionsApplications.applications.application.assign.get = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
   user.findById(admissionsId)
     .populate("schools")
@@ -219,6 +239,7 @@ admissionsApplications.applications.application.assign.get = function(req, res) 
  */
 admissionsApplications.applications.application.assign.put = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
     , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
@@ -269,8 +290,9 @@ admissionsApplications.applications.application.assign.delete = function(req, re
  */
 admissionsApplications.applications.application.arrange.get = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
-  getApplicationCards(admissionsId, applicationId).then(function(response) {
+  getApplicationCards(admissionsId, schoolId, applicationId).then(function(response) {
     res.json(response);
   });
 };
@@ -279,12 +301,13 @@ admissionsApplications.applications.application.arrange.get = function(req, res)
  */
 admissionsApplications.applications.application.arrange.put = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId
     , dragAndDrop = req.body;
   card.find({"owners.applications": applicationId}).sort('order').exec(function(err, Cards) {
     reArrangeCards(cardId, Cards, dragAndDrop).then(function(savedCards) {
-      getApplicationCards(admissionsId, applicationId).then(function(response) {
+      getApplicationCards(admissionsId, schoolId, applicationId).then(function(response) {
         res.json(response);
       });
     });
@@ -325,6 +348,7 @@ var reArrangeCards = function(cardId, Cards, dragAndDrop) {
  */
 admissionsApplications.applications.application.card.put = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId
     , cardPost = req.body;
@@ -339,10 +363,11 @@ admissionsApplications.applications.application.card.put = function(req, res) {
  */
 admissionsApplications.applications.application.card.delete = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
     , cardId = req.params.cardId;
   card.findOneAndRemove({_id: cardId}, function(err) {
-    getApplicationCards(admissionsId, applicationId).then(function(response) {
+    getApplicationCards(admissionsId, schoolId, applicationId).then(function(response) {
       res.json(response);
     });
   });

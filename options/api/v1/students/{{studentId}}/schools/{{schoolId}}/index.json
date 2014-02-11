@@ -263,7 +263,7 @@
       },
       "links": [
         {
-          "title": "Apply to {{school.data.institutionName}}",
+          "title": "Pay Application Fee and Apply",
           "description": "{{school.data.institutionName}}",
           "key": "{{school.stripe.stripe_publishable_key}}",
           "price": "{{school.data.applicationFee}}",

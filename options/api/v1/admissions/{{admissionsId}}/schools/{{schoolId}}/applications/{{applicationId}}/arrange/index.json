@@ -1,11 +1,17 @@
 {
-  "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
+  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/arrange",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Arrange Cards",
   "type": "object",
   "description": "Arrange card order for {{application.type}} application type",
   "properties": {
     "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "schoolId": {
       "title": "Unique ID of an Admissions Agent",
       "readonly": true,
       "identity": true,
@@ -28,7 +34,7 @@
           "rel": "self",
           "importance": "navigation",
           "method": "GET",
-          "href": "/api/v1/admissions/{{admissionsId}}/applications/{{_id}}"
+          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{_id}}"
         }
       ]
     },
@@ -52,7 +58,7 @@
             "method": "PUT",
             "target": "refresh",
             "template": "/templates/api/v1/card/{{type}}",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/cards/{{_id}}/arrange",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/cards/{{_id}}/arrange",
             "properties": {
               "drag": {
                 "type": "object"
@@ -79,7 +85,7 @@
       "rel": "types",
       "importance": "navigation",
       "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications"
     },
     {
       "title": "Sign out",
@@ -93,7 +99,7 @@
       "rel": "application",
       "importance": "callToAction",
       "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}"
     }
   ]
 }

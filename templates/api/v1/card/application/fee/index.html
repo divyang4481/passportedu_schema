@@ -1,0 +1,15 @@
+<div class="panel panel-default mediumCard">
+  <div class="panel-heading">
+    <h3 class="panel-title">Pay Application Fee ({{link.school.data.applicationFee}})</h3>
+  </div>
+  <div class="panel-body">
+    <form class="form" role="form">
+      <stripe-button
+        image="'/assets/images/passportEDU_nb.png'"
+        link="link"
+        amount="link.school.data.applicationFee"
+        key="link.school.stripe.access_token">
+      </stripe-button>
+    </form>
+  </div>
+</div>

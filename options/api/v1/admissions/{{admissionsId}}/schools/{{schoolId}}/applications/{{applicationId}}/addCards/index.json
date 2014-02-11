@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}",
+  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/addCards",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Add More Cards to {{application.type}}",
   "type": "object",
@@ -7,6 +7,12 @@
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "schoolId": {
+      "title": "Unique ID of an School",
       "readonly": true,
       "identity": true,
       "type": "string"
@@ -60,7 +66,7 @@
             "importance": "cards",
             "target": "nofollow",
             "template": "/templates/api/v1/card/{{type}}",
-            "href": "/api/v1/admissions/{{admissionsId}}/applications/{{applicationId}}/addCards/{{type}}",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/addCards/{{type}}",
             "method": "POST"
           }
         ]
@@ -80,7 +86,7 @@
       "rel": "types",
       "importance": "navigation",
       "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications"
     },
     {
       "title": "Sign out",
@@ -93,7 +99,7 @@
       "rel": "view",
       "importance": "callToAction",
       "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications/{{application._id}}"
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}"
     },
     {
       "title": "Drop Cards Here",

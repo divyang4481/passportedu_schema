@@ -1,0 +1,100 @@
+{
+  "id": "/api/v1/students/{{studentId}}/schools/{{schoolId}}",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "{{school.data.institutionName}}",
+  "type": "object",
+  "description": "Your application fee payment failed.",
+  "properties": {
+    "school": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "title": "_id ",
+          "description": "_id ",
+          "identity": true,
+          "readonly": true,
+          "type": "string"
+        },
+        "data": {
+          "title": "data",
+          "description": "data",
+          "type": "object"
+        },
+        "cards": {
+          "title": "Cards",
+          "description": "Cards for this school",
+          "identity": false,
+          "readonly": false,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {},
+            "links": [
+              {
+                "rel": "{{_id}}",
+                "importance": "nothing",
+                "template": "/templates/api/v1/card/{{type}}",
+                "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{_id}}",
+                "method": "GET"
+              }
+            ]
+          }
+        }
+      },
+      "links": [
+        {
+          "title": "Try Again to Apply",
+          "description": "{{school.data.institutionName}}",
+          "key": "{{school.stripe.stripe_publishable_key}}",
+          "price": "{{school.data.applicationFee}}",
+          "rel": "stripe_{{_id}}",
+          "method": "POST",
+          "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/charge",
+          "importance": "content",
+          "template": "/templates/api/v1/card/students/schools/fee/stripe",
+          "properties": {
+            "stripe": {
+              "type": "object"
+            },
+            "token": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "title": "My Dashboard",
+      "rel": "dashboard",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "My Application",
+      "rel": "applications",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/application"
+    },
+    {
+      "title": "Search Schools",
+      "rel": "search",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/search/schools"
+    },
+    {
+      "title": "{{school.data.institutionName}}",
+      "rel": "self",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/students/logout"
+    }
+  ]
+}

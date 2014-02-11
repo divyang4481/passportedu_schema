@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/admissions/{{admissionsId}}/applications",
+  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Application Types",
   "type": "object",

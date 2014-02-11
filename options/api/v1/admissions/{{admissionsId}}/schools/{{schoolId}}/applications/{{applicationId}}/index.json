@@ -1,0 +1,183 @@
+{
+  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "{{application.type}}",
+  "type": "object",
+  "description": "Your {{application.type}} Application",
+  "properties": {
+    "admissionsId": {
+      "title": "Unique ID of an Admissions Agent",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "schoolId": {
+      "title": "Unique ID of a School",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "applicationId": {
+      "title": "Unique ID of a Application",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "cards": {
+      "title": "Application Cards",
+      "type": "array",
+      "items": {
+        "title": "Card {{}}",
+        "type": "object",
+        "properties": {
+          "type": {
+            "title": "Card Type",
+            "description": "Type of the Card",
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "rel": "{{_id}}",
+            "importance": "cards",
+            "target": "refresh",
+            "template": "/templates/api/v1/card/{{type}}",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/cards/{{_id}}",
+            "method": "GET"
+          }
+        ]
+      }
+    },
+    "application": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "schools": {
+          "_id": {
+            "title": "_id ",
+            "description": "_id ",
+            "identity": true,
+            "readonly": true,
+            "type": "string"
+          },
+          "data": {
+            "title": "Info",
+            "description": "Info",
+            "identity": false,
+            "readonly": false,
+            "type": "object"
+          },
+          "mediaTypes": {
+            "title": "mediaTypes ",
+            "description": "mediaTypes ",
+            "identity": false,
+            "readonly": false,
+            "type": "string"
+          }
+        }
+      },
+      "links": [
+        {
+          "title": "{{data.institutionName}}",
+          "description": "{{data.institutionName}}",
+          "rel": "self",
+          "importance": "navigation",
+          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}"
+        }
+      ]
+    },
+    "applicants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "links": [
+          {
+            "title": "{{page}}",
+            "rel": "{{_id}}",
+            "method": "GET",
+            "importance": "cards",
+            "template": "/templates/api/v1/card/admissions/applicant",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/applicants/{{_id}}"
+          }
+        ]
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "My Dashboard",
+      "rel": "dashboard",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}"
+    },
+    {
+      "title": "Sign out",
+      "rel": "logout",
+      "importance": "administrative",
+      "href": "/api/v1/admissions/logout"
+    },
+    {
+      "title": "Accept Payments",
+      "rel": "stripe",
+      "importance": "callToAction",
+      "target": "external",
+      "href": "https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=ca_3PP3DsOtbvbsA4JfUHJRVTdUyiS8YxeU&state={{schoolId}}|{{applicationId}}"
+    },
+    {
+      "title": "CSV {{type}}",
+      "description": "{{type}}",
+      "rel": "csv_{{_id}}",
+      "importance": "callToAction",
+      "target": "data",
+      "mime": "text/csv;;base64,",
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/csv"
+    },
+    {
+      "title": "Add Cards",
+      "rel": "addCards",
+      "importance": "alsoCall",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}/addCards"
+    },
+    {
+      "title": "Remove Cards",
+      "rel": "removeCards",
+      "importance": "alsoCall",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}/removeCards"
+    },
+    {
+      "title": "Arrange Cards",
+      "description": "{{application.type}}",
+      "rel": "arrange",
+      "importance": "alsoCall",
+      "method": "GET",
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}/arrange"
+    },
+    {
+      "title": "Delete this Application",
+      "description": "{{application.type}}",
+      "rel": "delete",
+      "importance": "administrative",
+      "method": "DELETE",
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}"
+    }
+  ]
+}

@@ -20,8 +20,8 @@ root.student.get = function(req, res) {
     studentId: studentId
   };
   user.findById(studentId)
-    .populate('schools')
     .populate('applications')
+    .populate('applications.schools')
     .exec(function(err, Student) {
       response.student = Student;
       response.username = req.username;

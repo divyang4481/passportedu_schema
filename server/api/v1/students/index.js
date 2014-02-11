@@ -28,15 +28,16 @@ api.get('/:studentId', auth, root.student.get);
 /**
  * Application
  */
-api.get('/:studentId/application', auth, studentApplication.get);
-api.put('/:studentId/application/cards/:cardId', auth, studentApplication.cards.put);
-api.delete('/:studentId/application/cards/:cardId', auth, studentApplication.cards.delete);
+api.get('/:studentId/schools/:schoolId/application', auth, studentApplication.get);
+api.put('/:studentId/schools/:schoolId/application/cards/:cardId', auth, studentApplication.cards.put);
+api.delete('/:studentId/schools/:schoolId/application/cards/:cardId', auth, studentApplication.cards.delete);
 /**
  * Schools
  */
 api.get('/:studentId/schools/:schoolId', auth, studentSchools.school.get)
 api.post('/:studentId/schools/:schoolId/charge', studentSchools.school.payApplicationFee);
 api.get('/:studentId/schools/:schoolId/paid', studentSchools.school.paidFee);
+api.get('/:studentId/schools/:schoolId/fail', studentSchools.school.failedFee);
 api.delete('/:studentId/schools/:schoolId', auth, studentSchools.school.delete)
 api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', auth, studentSchools.school.apply)
 api.put('/:studentId/schools/:schoolId/application/:applicationId/save', auth, studentSchools.school.save)

@@ -109,13 +109,6 @@
       "href": "/api/v1/admissions/{{admissionsId}}"
     },
     {
-      "title": "Application Types",
-      "rel": "applications",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
-    },
-    {
       "title": "Claim a School",
       "rel": "search",
       "importance": "administrative",

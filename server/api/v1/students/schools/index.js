@@ -6,6 +6,8 @@ var _ = require('underscore')
   , card = require('../../../../models/card')
   , school = require('../../../../models/school')
   , q = require('q');
+var config = require('config')
+  , stripe = require('stripe')(config.stripe.secret_key)
 /**
  *
  */
@@ -37,14 +39,59 @@ studentSchools.school.get = function(req, res) {
 studentSchools.school.payApplicationFee = function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
-  console.log(req.body.token, req.body.stripe);
-  res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/paid');
-  res.send(300, {username: req.username, token: req.token});
+  user.findById(studentId, function(err, Student) {
+    school.findById(schoolId)
+      .exec(function(err, School) {
+        stripe.setApiKey(req.body.stripe.access_token);
+        var stripeToken = req.body.token;
+        var charge = stripe.charges.create({
+          amount: 1000,
+          currency: "usd",
+          card: stripeToken.id,
+          description: Student.fullName + ' ' + Student.email
+        }, function(err, charge) {
+          if (err) {
+            if (err.type === 'StripeCardError') {
+              // The card has been declined
+              res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/fail');
+              res.send(300, {username: req.username, token: req.token});
+            }
+            else {
+              // The card has been declined
+              res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/systemError');
+              res.send(300, {username: req.username, token: req.token});
+            }
+          } else {
+            res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/paid');
+            res.send(300, {username: req.username, token: req.token});
+          }
+        });
+      });
+  });
 };
 /**
- *
+ * Successfully paid fee
  */
 studentSchools.school.paidFee = function(req, res) {
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId)
+    .exec(function(err, School) {
+      user.find()
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School
+      };
+      response.username = req.username;
+      response.token = req.token;
+      res.json(response);
+    });
+};
+/**
+ * Failed paying fee
+ */
+studentSchools.school.failedFee = function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   school.findById(schoolId)
