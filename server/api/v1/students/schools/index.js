@@ -21,6 +21,8 @@ studentSchools.school.get = function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId;
   school.findById(schoolId)
+    .populate('applications')
+    .populate('cards')
     .exec(function(err, School) {
       user.find()
       var response = {

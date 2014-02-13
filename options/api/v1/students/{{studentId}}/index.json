@@ -21,54 +21,61 @@
         },
         "email": {
           "type": "string"
-        },
-        "applications": {
-          "type": "array",
-          "items": {
-            "description": "A school a student wants to apply to.",
-            "type": "object",
-            "properties": {
-              "_id": {
-                "title": "_id ",
-                "description": "_id ",
-                "identity": true,
-                "readonly": true,
-                "type": "string"
+        }
+      }
+    },
+    "applications": {
+      "type": "array",
+      "items": {
+        "description": "An Application at a school",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "schools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "title": "_id ",
+                  "description": "_id ",
+                  "identity": true,
+                  "readonly": true,
+                  "type": "string"
+                },
+                "data": {
+                  "title": "Info",
+                  "description": "",
+                  "identity": false,
+                  "readonly": false,
+                  "type": "object"
+                },
+                "cards": {
+                  "title": "Cards",
+                  "description": "cards",
+                  "identity": false,
+                  "readonly": false,
+                  "type": "array"
+                }
               },
-              "data": {
-                "title": "Info",
-                "description": "",
-                "identity": false,
-                "readonly": false,
-                "type": "object"
-              },
-              "mediaTypes": {
-                "title": "Media Types",
-                "description": "mediaTypes ",
-                "identity": false,
-                "readonly": false,
-                "type": ""
-              },
-              "cards": {
-                "title": "Card Ids",
-                "description": "cardIds ",
-                "identity": false,
-                "readonly": false,
-                "type": ""
-              }
-            },
-            "links": [
-              {
-                "title": "View Application {{data.type}}",
-                "description": "{{data.type}}",
-                "rel": "full_{{_id}}",
-                "template": "/templates/api/v1/card/students/application",
-                "method": "GET",
-                "card": "extraSmallCard",
-                "importance": "content",
-                "href": "/api/v1/students/{{studentId}}/applications/{{_id}}"
-              }
-            ]
+              "links": [
+                {
+                  "title": "{{type}} Application",
+                  "description": "{{data.institutionName}}",
+                  "rel": "full_{{_id}}",
+                  "template": "/templates/api/v1/card/students/application",
+                  "method": "GET",
+                  "card": "extraSmallCard",
+                  "importance": "content",
+                  "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
+                }
+              ]
+            }
           }
         }
       }
@@ -81,12 +88,6 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/students/{{studentId}}"
-    },
-    {
-      "title": "My Application",
-      "rel": "applications",
-      "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/application"
     },
     {
       "title": "Search Schools",

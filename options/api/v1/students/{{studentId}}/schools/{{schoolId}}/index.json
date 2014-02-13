@@ -16,229 +16,62 @@
           "readonly": true,
           "type": "string"
         },
-        "data.unitId": {
-          "title": "Unit Id",
-          "description": "Government Identifier",
+        "data": {
+          "title": "data",
+          "description": "data",
           "identity": false,
           "readonly": false,
-          "type": "number"
+          "type": "object"
         },
-        "data.institutionName": {
-          "title": "School Name",
-          "description": "Name of University or College",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.city": {
-          "title": "City",
-          "description": "City where school located",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.state": {
-          "title": "State ",
-          "description": "State where school located",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.zip": {
-          "title": "Zip",
-          "description": "Zip where school located",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.totalEnrollment": {
-          "title": "Total Enrollment",
-          "description": "Total Enrollment",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.applicationFee": {
-          "title": "Application Fee",
-          "description": "The cost of applying to school",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.totalUndergraduateEnrollment": {
-          "title": "Total Undergraduate Enrollment",
-          "description": "The number of undergraduates enrolled",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.percentInternationalStudents": {
-          "title": "Percentage International Students",
-          "description": "Percentage of student body arriving from foreign countries",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.percentFemaleStudent": {
-          "title": "Percentage Female Students",
-          "description": "Percentage of student body identifying as female",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.percentAdmitted": {
-          "title": "Percentage Admitted",
-          "description": "Percentage of applicants admitted",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.normalFeesTuition": {
-          "title": "Normal Fees & Tuition",
-          "description": "The cost of attending for an in-State student",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.outOfStateTuition": {
-          "title": "Out Of State Tuition",
-          "description": "The cost of tuition for an international student",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.outOfStateFees": {
-          "title": "Out Of State Fees ",
-          "description": "The fees for an international student",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATCriticalReading25": {
-          "title": "SAT Critical Reading 25th Percentile",
-          "description": "The lower end of the scores accepted",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATCriticalReading75": {
-          "title": "SAT Critical Reading 75the Percentile",
-          "description": "The higher end of the scores accepted",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATMath25": {
-          "title": "SAT Math 25the Percentile",
-          "description": "The lower end of the scores accepted",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATMath75": {
-          "title": "SAT Math 75th Percentile",
-          "description": "The higher end of the scores accepted",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATWriting25": {
-          "title": "data.SATWriting25 ",
-          "description": "data.SATWriting25 ",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SATWriting75": {
-          "title": "data.SATWriting75 ",
-          "description": "data.SATWriting75 ",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.SAT": {
-          "title": "data.SAT ",
-          "description": "data.SAT ",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.TOEFLScore": {
-          "title": "data.TOEFLScore ",
-          "description": "data.TOEFLScore ",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.IELTSScore": {
-          "title": "data.IELTSScore ",
-          "description": "data.IELTSScore ",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.GPA": {
-          "title": "data.GPA ",
-          "description": "data.GPA ",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.financesRequired": {
-          "title": "data.financesRequired ",
-          "description": "data.financesRequired ",
-          "identity": false,
-          "readonly": false,
-          "type": "number"
-        },
-        "data.diplomaRequired": {
-          "title": "data.diplomaRequired ",
-          "description": "data.diplomaRequired ",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.referencesRequired": {
-          "title": "data.referencesRequired ",
-          "description": "data.referencesRequired ",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.essaysRequired": {
-          "title": "data.essaysRequired ",
-          "description": "data.essaysRequired ",
-          "identity": false,
-          "readonly": false,
-          "type": "string"
-        },
-        "data.tags": {
-          "title": "data.tags ",
-          "description": "data.tags ",
-          "identity": false,
-          "readonly": false,
-          "type": ""
-        },
-        "data.deadlines": {
-          "title": "data.deadlines ",
-          "description": "data.deadlines ",
-          "identity": false,
-          "readonly": false,
-          "type": ""
-        },
-        "data.requiredHealthTests": {
-          "title": "data.requiredHealthTests ",
-          "description": "data.requiredHealthTests ",
-          "identity": false,
-          "readonly": false,
-          "type": ""
-        },
-        "data.categories": {
-          "title": "data.categories ",
-          "description": "data.categories ",
-          "identity": false,
-          "readonly": false,
-          "type": ""
+        "applications": {
+          "type": "array",
+          "items": {
+            "description": "An Application at a school",
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "stripe": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "stripe_publishable_key": {
+                      "type": "string"
+                    },
+                    "access_token": {
+                      "type": "string"
+                    }
+                  },
+                  "links": [
+                    {
+                      "title": "Pay Application Fee and Apply",
+                      "description": "{{school.data.institutionName}}",
+                      "key": "{{school.stripe.stripe_publishable_key}}",
+                      "price": "{{school.data.applicationFee}}",
+                      "rel": "stripe_{{_id}}",
+                      "method": "POST",
+                      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/charge",
+                      "importance": "content",
+                      "template": "/templates/api/v1/card/students/schools/fee/stripe",
+                      "properties": {
+                        "stripe": {
+                          "type": "object"
+                        },
+                        "token": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
         },
         "cards": {
           "title": "Cards",
@@ -263,25 +96,6 @@
       },
       "links": [
         {
-          "title": "Pay Application Fee and Apply",
-          "description": "{{school.data.institutionName}}",
-          "key": "{{school.stripe.stripe_publishable_key}}",
-          "price": "{{school.data.applicationFee}}",
-          "rel": "stripe_{{_id}}",
-          "method": "POST",
-          "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/charge",
-          "importance": "content",
-          "template": "/templates/api/v1/card/students/schools/fee/stripe",
-          "properties": {
-            "stripe": {
-              "type": "object"
-            },
-            "token": {
-              "type": "object"
-            }
-          }
-        },
-        {
           "title": "Cancel Application to {{school.data.institutionName}}",
           "description": "{{school.data.institutionName}}",
           "rel": "remove_{{_id}}",
@@ -299,18 +113,6 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/students/{{studentId}}"
-    },
-    {
-      "title": "My Application",
-      "rel": "applications",
-      "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/application"
-    },
-    {
-      "title": "Search Schools",
-      "rel": "search",
-      "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/search/schools"
     },
     {
       "title": "{{school.data.institutionName}}",
