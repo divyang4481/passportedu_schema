@@ -15,7 +15,13 @@ var express = require('express')
  */
 var admissionsSchools = {
   school: {
-    application: {},
+    application: {
+      applicants: {
+        applicant: {
+
+        }
+      }
+    },
     applicant: {}
   }
 };
@@ -35,6 +41,29 @@ admissionsSchools.school.get = function(req, res) {
             admissionsId: admissionsId,
             schoolId: schoolId,
             school: School,
+            applicants: Applicants
+          }
+          res.json(response);
+        })
+    });
+};
+/**
+ *
+ */
+admissionsSchools.school.application.applicants.get = function(req, res) {
+  var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
+    , applicationId = req.params.applicationId;
+  application.findById(applicationId)
+    .populate('schools')
+    .exec(function(err, Application) {
+      user.find({applications: applicationId, userPerms: 'students'})
+        .populate("cards")
+        .exec(function(err, Applicants) {
+          var response = {
+            admissionsId: admissionsId,
+            schoolId: schoolId,
+            application: Application,
             applicants: Applicants
           }
           res.json(response);
@@ -123,7 +152,7 @@ admissionsSchools.school.delete = function(req, res) {
 /**
  *
  */
-admissionsSchools.school.applicant.get = function(req, res) {
+admissionsSchools.school.application.applicants.applicant.get = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicantId = req.params.applicantId;

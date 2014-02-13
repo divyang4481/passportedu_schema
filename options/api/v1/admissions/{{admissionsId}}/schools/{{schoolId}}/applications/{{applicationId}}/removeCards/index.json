@@ -12,7 +12,6 @@
       "type": "string"
     },
     "application": {
-      "title": "Admissions Application",
       "type": "object",
       "properties": {
         "_id": {
@@ -20,6 +19,51 @@
         },
         "type": {
           "type": "string"
+        },
+        "schools": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "title": "_id ",
+                "description": "_id ",
+                "identity": true,
+                "readonly": true,
+                "type": "string"
+              },
+              "data": {
+                "title": "Info",
+                "description": "Info",
+                "identity": false,
+                "readonly": false,
+                "type": "object"
+              },
+              "mediaTypes": {
+                "title": "mediaTypes ",
+                "description": "mediaTypes ",
+                "identity": false,
+                "readonly": false,
+                "type": "string"
+              }
+            },
+            "links": [
+              {
+                "title": "{{data.institutionName}}",
+                "description": "{{data.institutionName}}",
+                "rel": "school",
+                "importance": "navigation",
+                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
+              },
+              {
+                "title": "{{type}}",
+                "description": "{{type}}",
+                "rel": "self",
+                "importance": "navigation",
+                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}"
+              }
+            ]
+          }
         }
       }
     },
@@ -47,27 +91,6 @@
           }
         ]
       }
-    },
-    "errors": {
-      "title": "Errors",
-      "type":"array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        },
-        "links": [
-          {
-            "title": "Try Again",
-            "rel": "Try Again",
-            "method": "GET",
-            "importance": "content",
-            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}"
-          }
-        ]
-      }
     }
   },
   "links": [
@@ -79,24 +102,10 @@
       "href": "/api/v1/admissions/{{admissionsId}}"
     },
     {
-      "title": "Application Types",
-      "rel": "types",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications"
-    },
-    {
       "title": "Sign out",
       "rel": "logout",
       "importance": "administrative",
       "href": "/api/v1/admissions/logout"
-    },
-    {
-      "title": "Remove Cards",
-      "rel": "self",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}/removeCards"
     },
     {
       "title": "Back to Application",

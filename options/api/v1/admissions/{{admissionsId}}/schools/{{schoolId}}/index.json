@@ -88,6 +88,13 @@
           "rel": "self",
           "importance": "navigation",
           "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
+        },
+        {
+          "title": "Create a New Application Type",
+          "rel": "create",
+          "importance": "callToAction",
+          "method": "GET",
+          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/new"
         }
       ]
     }

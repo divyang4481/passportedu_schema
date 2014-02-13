@@ -31,7 +31,6 @@ api.get('/:admissionsId', auth, root.admissions.get);
 api.get('/:admissionsId/schools/:schoolId', auth, admissionsSchools.school.get);
 api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/csv', auth, admissionsSchools.school.application.csv);
 api.delete('/:admissionsId/schools/:schoolId', auth, admissionsSchools.school.delete);
-api.get('/:admissionsId/schools/:schoolId/applicants/:applicantId', auth, admissionsSchools.school.applicant.get);
 /**
  *
  */
@@ -43,11 +42,14 @@ api.delete('/:admissionsId/search/schools/:schoolId/claim', auth, admissionsSear
  *
  */
 api.get('/:admissionsId/schools/:schoolId/applications', auth, admissionsApplication.applications.get);
+api.get('/:admissionsId/schools/:schoolId/applications/new', auth,  admissionsSearch.schools.school.get);
 api.post('/:admissionsId/schools/:schoolId/applications', auth, admissionsApplication.applications.post);
 //
 api.get('/:admissionsId/schools/:schoolId/applications/:applicationId', auth, admissionsApplication.applications.application.get);
 api.put('/:admissionsId/schools/:schoolId/applications/:applicationId', auth, admissionsApplication.applications.application.put);
 api.delete('/:admissionsId/schools/:schoolId/applications/:applicationId', auth, admissionsApplication.applications.application.delete);
+//
+api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/applicants', auth, admissionsSchools.school.application.applicants.get);
 //
 api.get('/:admissionsId/schools/:schoolId/applications/:applicationId/removeCards', auth, admissionsApplication.applications.application.removeCards);
 api.post('/:admissionsId/schools/:schoolId/applications/:applicationId/addCards/*', auth, admissionsApplication.applications.application.addCards.post);

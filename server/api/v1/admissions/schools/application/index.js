@@ -56,8 +56,8 @@ admissionsApplications.applications.post = function(req, res) {
   }
   application.create(app, function(err, App) {
     var applicationId = App._id.toString();
-    user.update({_id: admissionsId}, {$addToSet: {applications: applicationId}}, function(err) {
-      res.set('Location', '/api/v1/admissions/' + admissionsId + 'schools/' + schoolId + '/applications/' + applicationId);
+    school.update({_id: schoolId}, {$addToSet: {applications: applicationId}}, function(err) {
+      res.set('Location', '/api/v1/admissions/' + admissionsId + '/schools/' + schoolId + '/applications/' + applicationId);
       res.send(300);
     });
   });
@@ -67,19 +67,21 @@ admissionsApplications.applications.post = function(req, res) {
  */
 var getApplicationCards = function(admissionsId, schoolId, applicationId) {
   var deferred = q.defer();
-  application.findById(applicationId).exec(function(err, App) {
-    card.find({"owners.applications": applicationId})
-      .sort({'order': 1})
-      .exec(function(err, Cards) {
-        deferred.resolve({
-          admissionsId: admissionsId,
-          schoolId: schoolId,
-          applicationId: applicationId,
-          application: _.omit(App, ['_id']),
-          cards: Cards
+  application.findById(applicationId)
+    .populate('schools')
+    .exec(function(err, App) {
+      card.find({"owners.applications": applicationId})
+        .sort({'order': 1})
+        .exec(function(err, Cards) {
+          deferred.resolve({
+            admissionsId: admissionsId,
+            schoolId: schoolId,
+            applicationId: applicationId,
+            application: _.omit(App, ['_id']),
+            cards: Cards
+          });
         });
-      });
-  });
+    });
   return deferred.promise;
 };
 /**
@@ -125,7 +127,7 @@ admissionsApplications.applications.application.delete = function(req, res) {
           });
           return;
         }
-        res.set('Location', '/api/v1/admissions/' + admissionsId + '/applications');
+        res.set('Location', '/api/v1/admissions/' + admissionsId + '/schools/' + schoolId);
         res.send(300);
       });
     });
@@ -191,7 +193,6 @@ var getCardsAndApp = function(admissionsId, schoolId, applicationId) {
         applicationId: applicationId,
         application: _.omit(App, ['_id']),
         cards: [
-          {type: "application/fee"},
           {type: "application/attendance/term"},
           {type: "application/attendance/period"},
           {type: "application/documents/transcript"},
@@ -241,7 +242,6 @@ admissionsApplications.applications.application.assign.put = function(req, res) 
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
-    , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
     School.applications = _.union(School.applications, [applicationId]);
     School.save(function(err) {
@@ -265,8 +265,8 @@ admissionsApplications.applications.application.assign.put = function(req, res) 
  */
 admissionsApplications.applications.application.assign.delete = function(req, res) {
   var admissionsId = req.params.admissionsId
+    , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
-    , schoolId = req.params.schoolId;
   school.findById(schoolId, function(err, School) {
     School.applications = _.without(School.applications, applicationId);
     School.save(function(err, Sc) {

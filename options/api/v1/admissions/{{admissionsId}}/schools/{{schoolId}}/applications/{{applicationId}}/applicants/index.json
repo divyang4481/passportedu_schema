@@ -1,9 +1,9 @@
 {
-  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/addCards",
+  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Add More Cards to {{application.type}}",
+  "title": "{{application.type}}",
   "type": "object",
-  "description": "You may add these cards to your application for {{application.type}}",
+  "description": "Applicants to {{application.type}} Program",
   "properties": {
     "admissionsId": {
       "title": "Unique ID of an Admissions Agent",
@@ -12,13 +12,13 @@
       "type": "string"
     },
     "schoolId": {
-      "title": "Unique ID of an School",
+      "title": "Unique ID of a School",
       "readonly": true,
       "identity": true,
       "type": "string"
     },
     "applicationId": {
-      "title": "Unique ID of an Application",
+      "title": "Unique ID of a Application",
       "readonly": true,
       "identity": true,
       "type": "string"
@@ -70,37 +70,45 @@
               {
                 "title": "{{type}}",
                 "description": "{{type}}",
+                "rel": "type",
+                "importance": "navigation",
+                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}"
+              },
+              {
+                "title": "Applicants",
                 "rel": "self",
                 "importance": "navigation",
-                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}"
+                "method": "GET",
+                "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications/{{application._id}}/applicants"
               }
             ]
           }
         }
       }
     },
-    "cards": {
-      "title": "Application Cards",
+    "applicants": {
       "type": "array",
       "items": {
-        "title": "Card {{}}",
         "type": "object",
         "properties": {
-          "type": {
-            "title": "Card Type",
-            "description": "Type of the Card",
+          "_id": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
             "type": "string"
           }
         },
         "links": [
           {
-            "rel": "{{type}}",
-            "description": "Add Card to Application",
+            "title": "{{page}}",
+            "rel": "{{_id}}",
+            "method": "GET",
             "importance": "cards",
-            "target": "nofollow",
-            "template": "/templates/api/v1/card/{{type}}",
-            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/addCards/{{type}}",
-            "method": "POST"
+            "template": "/templates/api/v1/card/admissions/applicant",
+            "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/applicants/{{_id}}"
           }
         ]
       }
@@ -109,7 +117,7 @@
   "links": [
     {
       "title": "My Dashboard",
-      "rel": "myHome",
+      "rel": "dashboard",
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}"
@@ -121,18 +129,13 @@
       "href": "/api/v1/admissions/logout"
     },
     {
-      "title": "Back To Application",
-      "rel": "view",
+      "title": "CSV {{type}}",
+      "description": "{{type}}",
+      "rel": "csv_{{_id}}",
       "importance": "callToAction",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{application._id}}"
-    },
-    {
-      "title": "Drop Cards Here",
-      "description": "to add them to this Application",
-      "rel": "addToApp",
-      "importance": "drop",
-      "href": ""
+      "target": "data",
+      "mime": "text/csv;;base64,",
+      "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/{{applicationId}}/csv"
     }
   ]
 }

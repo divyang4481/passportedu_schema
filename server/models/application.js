@@ -14,7 +14,9 @@ var ApplicationSchema = new mongoose.Schema({
   schemaCards: [
     {group: String, mediaType: String}
   ],
-  stripe: Schema.Types.Mixed
+  stripe: [
+    Schema.Types.Mixed
+  ]
 });
 /**
  *

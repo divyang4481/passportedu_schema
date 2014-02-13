@@ -71,19 +71,14 @@ var getStripeToken = function(code) {
  */
 api.get('/connected', auth, function(req, res) {
   var code = req.query.code
-    , applicationId = req.query.state
     , state = req.query.state;
   getStripeToken(code).then(function(response) {
     var stripe = JSON.parse(response.toString());
     var route = state.split('|');
-    var routePath = route.join('/');
-    console.log(route);
     application.findById(route[1]).exec(function(err, Application) {
-      Application.stripe = stripe;
-      console.log(Application);
+      Application.stripe = [stripe];
       Application.save(function(err) {
         var location = '/api/v1/' + req.authorization.userType + '/' + req.authorization.userId + '/schools/' + route[0] + '/applications/' + route[1];
-        console.log(err, location);
         res.set('Location', location);
         res.send(300);
       });

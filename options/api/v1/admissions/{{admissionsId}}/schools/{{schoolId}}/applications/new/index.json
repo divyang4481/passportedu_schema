@@ -1,5 +1,5 @@
 {
-  "id": "/api/v1/admissions/{{admissionsId}}/applications",
+  "id": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/new",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "A New Application",
   "type": "object",
@@ -10,6 +10,83 @@
       "readonly": true,
       "identity": true,
       "type": "string"
+    },
+    "schoolId": {
+      "title": "Unique ID of a School",
+      "readonly": true,
+      "identity": true,
+      "type": "string"
+    },
+    "school": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "title": "_id ",
+          "description": "_id ",
+          "identity": true,
+          "readonly": true,
+          "type": "string"
+        },
+        "data": {
+          "title": "data.categories ",
+          "description": "data.categories ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "mediaTypes": {
+          "title": "mediaTypes ",
+          "description": "mediaTypes ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        },
+        "cards": {
+          "title": "cardIds ",
+          "description": "cardIds ",
+          "identity": false,
+          "readonly": false,
+          "type": "string"
+        }
+      },
+      "links": [
+        {
+          "title": "Un-claim this School",
+          "description": "{{data.institutionName}}",
+          "rel": "unclaim",
+          "importance": "administrative",
+          "method": "DELETE",
+          "href": "/api/v1/admissions/{{admissionsId}}/search/schools/{{_id}}/claim"
+        },
+        {
+          "title": "{{data.institutionName}}",
+          "description": "{{data.institutionName}}",
+          "rel": "school",
+          "importance": "navigation",
+          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}"
+        },
+        {
+          "title": "Create a New Application Type",
+          "rel": "self",
+          "importance": "navigation",
+          "method": "GET",
+          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{schoolId}}/applications/new"
+        },
+        {
+          "title": "Create a New Application Type",
+          "rel": "create",
+          "importance": "content",
+          "template": "/templates/api/v1/card/admissions/newApplication",
+          "method": "POST",
+          "href": "/api/v1/admissions/{{admissionsId}}/schools/{{_id}}/applications",
+          "properties": {
+            "type": {
+              "title": "Program Name",
+              "type": "string"
+            }
+          }
+        }
+      ]
     }
   },
   "links": [
@@ -19,34 +96,6 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/admissions/{{admissionsId}}"
-    },
-    {
-      "title": "Application Types",
-      "rel": "types",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications"
-    },
-    {
-      "title": "Application Types",
-      "rel": "self",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications/new"
-    },
-    {
-      "title": "Create a New Application Type",
-      "rel": "create",
-      "importance": "content",
-      "template": "/templates/api/v1/card/admissions/newApplication",
-      "method": "POST",
-      "href": "/api/v1/admissions/{{admissionsId}}/applications",
-      "properties": {
-        "type": {
-          "title": "Program Name",
-          "type": "string"
-        }
-      }
     }
   ]
 }

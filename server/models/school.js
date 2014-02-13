@@ -52,8 +52,7 @@ var SchoolSchema = new mongoose.Schema({
   mediaTypes: { type: String },
   cards: [
     {type: String, ref: "SchoolCard"}
-  ],
-  stripe: Schema.Types.Mixed
+  ]
 });
 /**
  *
