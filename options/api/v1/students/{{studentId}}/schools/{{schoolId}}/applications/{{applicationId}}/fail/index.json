@@ -3,8 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "{{school.data.institutionName}}",
   "type": "object",
-  "name": "Found a School?",
-  "description": "",
+  "description": "Your application fee payment failed.",
   "properties": {
     "school": {
       "type": "object",
@@ -19,8 +18,6 @@
         "data": {
           "title": "data",
           "description": "data",
-          "identity": false,
-          "readonly": false,
           "type": "object"
         },
         "applications": {
@@ -49,23 +46,11 @@
                   },
                   "links": [
                     {
-                      "title": "Pay Application Fee and Apply",
+                      "title": "Try Again",
                       "description": "{{school.data.institutionName}}",
-                      "key": "{{stripe_publishable_key}}",
-                      "price": "10000",
                       "rel": "stripe_{{_id}}",
-                      "method": "POST",
-                      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{_id}}/charge",
-                      "importance": "content",
-                      "template": "/templates/api/v1/card/students/schools/fee/stripe",
-                      "properties": {
-                        "stripe": {
-                          "type": "object"
-                        },
-                        "token": {
-                          "type": "object"
-                        }
-                      }
+                      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}",
+                      "importance": "callToAction"
                     }
                   ]
                 }
@@ -93,17 +78,7 @@
             ]
           }
         }
-      },
-      "links": [
-        {
-          "title": "Cancel Application to {{school.data.institutionName}}",
-          "description": "{{school.data.institutionName}}",
-          "rel": "remove_{{_id}}",
-          "importance": "administrative",
-          "method": "DELETE",
-          "href": "/api/v1/students/{{studentId}}/schools/{{_id}}"
-        }
-      ]
+      }
     }
   },
   "links": [
@@ -113,6 +88,18 @@
       "importance": "navigation",
       "method": "GET",
       "href": "/api/v1/students/{{studentId}}"
+    },
+    {
+      "title": "My Application",
+      "rel": "applications",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/application"
+    },
+    {
+      "title": "Search Schools",
+      "rel": "search",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/search/schools"
     },
     {
       "title": "{{school.data.institutionName}}",

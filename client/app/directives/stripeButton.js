@@ -4,7 +4,7 @@ psprtDirectives
       scope.token = false;
       scope.buttonAction = 'Pay Application Fee';
       var handler = StripeCheckout.configure({
-        key: scope.key,
+        key: scope.link.stripe_publishable_key,
         image: '/assets/images/passportEDU_nb.png',
         token: function(token, args) {
           scope.buttonAction = 'Confirm Payment';
@@ -20,7 +20,7 @@ psprtDirectives
           handler.open({
             name: scope.link._link.name,
             description: scope.link._link.description,
-            amount: scope.link._link.amount
+            amount: 1000
           });
           e.preventDefault();
         }
@@ -39,6 +39,6 @@ psprtDirectives
       },
       link: linkFunc,
       template: '<button class="btn" ng-class="{\'btn-primary\': !token, \'btn-success\': token}">' +
-        '<span ng-bind="buttonAction"></span> <span ng-show="token" ng-bind="amount | currency"</button>'
+        '<span ng-bind="buttonAction"></span> <span ng-show="token" ng-bind="amount / 100 | currency"</button>'
     }
   });

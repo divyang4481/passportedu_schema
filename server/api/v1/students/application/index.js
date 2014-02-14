@@ -4,9 +4,18 @@
 var _ = require('underscore')
   , user = require('../../../../models/user')
   , card = require('../../../../models/card')
+  , school = require('../../../../models/school')
+  , application = require('../../../../models/application')
   , q = require('q')
   , awsUpload = require('../../../../../servers/aws-upload')
-var studentApplication = {};
+  , config = require('config')
+  , stripe = require('stripe')(config.stripe.secret_key)
+/**
+ *
+ */
+var studentApplication = {
+  cards: {}
+};
 /**
  *
  */
@@ -34,7 +43,6 @@ var getApplication = function(studentId) {
 /**
  *
  */
-studentApplication.cards = {};
 studentApplication.cards.put = function(req, res) {
   var studentId = req.params.studentId
     , cardId = req.params.cardId
@@ -63,12 +71,78 @@ studentApplication.cards.put = function(req, res) {
 /**
  *
  */
-studentApplication.cards.delete = function(req, res) {
+studentApplication.payApplicationFee = function(req, res) {
   var studentId = req.params.studentId
-    , cardId = req.params.cardId;
-  card.findOneAndRemove({_id: cardId}, function(err) {
-    res.set('Location', '/api/v1/students/' + studentId + '/application');
-    res.send(300, {username: req.username, token: req.token});
-  });
+    , schoolId = req.params.schoolId
+    , applicationId = req.params.applicationId;
+  user.findById(studentId, function(err, Student) {
+    application.findById(applicationId)
+      .exec(function(err, Application) {
+        stripe.setApiKey(Application.stripe.access_token);
+        var stripeToken = req.body.token;
+        var charge = stripe.charges.create({
+          amount: 1000,
+          currency: "usd",
+          card: stripeToken.id,
+          description: Student.fullName + ' ' + Student.email
+        }, function(err, charge) {
+          if (err) {
+            if (err.type === 'StripeCardError') {
+              // The card has been declined
+              res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/applications/' + applicationId + '/fail');
+              res.send(300, {username: req.username, token: req.token});
+            }
+            else {
+              // The card has been declined
+              res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/applications/' + applicationId + '/systemError');
+              res.send(300, {username: req.username, token: req.token});
+            }
+          } else {
+            res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/applications/' + applicationId + '/paid');
+            res.send(300, {username: req.username, token: req.token});
+          }
+        });
+      });
+  })
+};
+/**
+ * Successfully paid fee
+ */
+studentApplication.paidFee = function(req, res) {
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId)
+    .populate('applications')
+    .exec(function(err, School) {
+      user.find()
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School
+      };
+      response.username = req.username;
+      response.token = req.token;
+      res.json(response);
+    });
+};
+/**
+ * Failed paying fee
+ */
+studentApplication.failedFee = function(req, res) {
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId;
+  school.findById(schoolId)
+    .populate('applications')
+    .exec(function(err, School) {
+      user.find()
+      var response = {
+        studentId: studentId,
+        schoolId: schoolId,
+        school: School
+      };
+      response.username = req.username;
+      response.token = req.token;
+      res.json(response);
+    });
 };
 module.exports = studentApplication;

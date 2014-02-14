@@ -20,6 +20,44 @@
           "description": "data",
           "type": "object"
         },
+        "applications": {
+          "type": "array",
+          "items": {
+            "description": "An Application at a school",
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "stripe": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "stripe_publishable_key": {
+                      "type": "string"
+                    },
+                    "access_token": {
+                      "type": "string"
+                    }
+                  },
+                  "links": [
+                    {
+                      "title": "Try Again",
+                      "description": "{{school.data.institutionName}}",
+                      "rel": "stripe_{{_id}}",
+                      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}",
+                      "importance": "callToAction"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
         "cards": {
           "title": "Cards",
           "description": "Cards for this school",
@@ -42,25 +80,6 @@
         }
       },
       "links": [
-        {
-          "title": "Try Again to Apply",
-          "description": "{{school.data.institutionName}}",
-          "key": "{{school.stripe.stripe_publishable_key}}",
-          "price": "{{school.data.applicationFee}}",
-          "rel": "stripe_{{_id}}",
-          "method": "POST",
-          "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/charge",
-          "importance": "content",
-          "template": "/templates/api/v1/card/students/schools/fee/stripe",
-          "properties": {
-            "stripe": {
-              "type": "object"
-            },
-            "token": {
-              "type": "object"
-            }
-          }
-        }
       ]
     }
   },

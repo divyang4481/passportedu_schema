@@ -30,17 +30,20 @@ api.get('/:studentId', auth, root.student.get);
  */
 api.get('/:studentId/schools/:schoolId/application', auth, studentApplication.get);
 api.put('/:studentId/schools/:schoolId/application/cards/:cardId', auth, studentApplication.cards.put);
-api.delete('/:studentId/schools/:schoolId/application/cards/:cardId', auth, studentApplication.cards.delete);
+/**
+ *
+ */
+api.post('/:studentId/schools/:schoolId/applications/:applicationId/charge', studentApplication.payApplicationFee);
+api.get('/:studentId/schools/:schoolId/applications/:applicationId/paid', studentApplication.paidFee);
+api.get('/:studentId/schools/:schoolId/applications/:applicationId/fail', studentApplication.failedFee);
+api.get('/:studentId/schools/:schoolId/applications/:applicationId/systemError', studentApplication.failedFee);
 /**
  * Schools
  */
 api.get('/:studentId/schools/:schoolId', auth, studentSchools.school.get)
-api.post('/:studentId/schools/:schoolId/charge', studentSchools.school.payApplicationFee);
-api.get('/:studentId/schools/:schoolId/paid', studentSchools.school.paidFee);
-api.get('/:studentId/schools/:schoolId/fail', studentSchools.school.failedFee);
 api.delete('/:studentId/schools/:schoolId', auth, studentSchools.school.delete)
-api.put('/:studentId/schools/:schoolId/application/:applicationId/apply', auth, studentSchools.school.apply)
-api.put('/:studentId/schools/:schoolId/application/:applicationId/save', auth, studentSchools.school.save)
+api.put('/:studentId/schools/:schoolId/applications/:applicationId/apply', auth, studentSchools.school.apply)
+api.put('/:studentId/schools/:schoolId/applications/:applicationId/save', auth, studentSchools.school.save)
 /**
  * School Search
  */
