@@ -6,39 +6,24 @@
   "description": "Congratulations, your application fee of [{{school.data.applicationFee | currency}}] has been paid!",
   "properties": {
     "school": {
-      "type": "object",
       "properties": {
         "_id": {
-          "title": "_id ",
-          "description": "_id ",
-          "identity": true,
-          "readonly": true,
           "type": "string"
         },
-        "data": {
-          "title": "data",
-          "description": "data",
-          "type": "object"
+        "institutionName": {
+          "type": "string"
+        }
+      },
+      "links": [
+      ]
+    },
+    "application": {
+      "properties": {
+        "_id": {
+          "type": "string"
         },
-        "cards": {
-          "title": "Cards",
-          "description": "Cards for this school",
-          "identity": false,
-          "readonly": false,
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {},
-            "links": [
-              {
-                "rel": "{{_id}}",
-                "importance": "nothing",
-                "template": "/templates/api/v1/card/{{type}}",
-                "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{_id}}",
-                "method": "GET"
-              }
-            ]
-          }
+        "institutionName": {
+          "type": "string"
         }
       },
       "links": [
@@ -54,18 +39,6 @@
       "href": "/api/v1/students/{{studentId}}"
     },
     {
-      "title": "My Application",
-      "rel": "applications",
-      "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/application"
-    },
-    {
-      "title": "Search Schools",
-      "rel": "search",
-      "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/search/schools"
-    },
-    {
       "title": "{{school.data.institutionName}}",
       "rel": "self",
       "importance": "navigation",
@@ -76,6 +49,13 @@
       "rel": "logout",
       "importance": "administrative",
       "href": "/api/v1/students/logout"
+    },
+    {
+      "title": "My Dashboard",
+      "rel": "dashboard",
+      "importance": "navigation",
+      "method": "GET",
+      "href": "/api/v1/students/{{studentId}}"
     }
   ]
 }

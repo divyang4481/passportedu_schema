@@ -28,8 +28,8 @@ api.get('/:studentId', auth, root.student.get);
 /**
  * Application
  */
-api.get('/:studentId/schools/:schoolId/application', auth, studentApplication.get);
-api.put('/:studentId/schools/:schoolId/application/cards/:cardId', auth, studentApplication.cards.put);
+api.get('/:studentId/schools/:schoolId/applications/:applicationId', auth, studentApplication.get);
+api.put('/:studentId/schools/:schoolId/applications/:applicationId/cards/:cardId', auth, studentApplication.cards.put);
 /**
  *
  */

@@ -20,17 +20,28 @@ var studentApplication = {
  *
  */
 studentApplication.get = function(req, res) {
-  var studentId = req.params.studentId;
-  getApplication(studentId).then(function(response) {
-    response.username = req.username;
-    response.token = req.token;
-    res.json(response);
+  var studentId = req.params.studentId
+    , schoolId = req.params.schoolId
+    , applicationId = req.params.applicationId;
+  getApplicationCard(studentId).then(function(response) {
+    application.findById(applicationId)
+      .exec(function(err, Application) {
+        school.findById(schoolId).exec(function(err, School) {
+          response.username = req.username;
+          response.token = req.token;
+          response.applicationId = applicationId;
+          response.schoolId = schoolId;
+          response.application = Application;
+          response.school = School;
+          res.json(response);
+        });
+      });
   });
 };
 /**
  *
  */
-var getApplication = function(studentId) {
+var getApplicationCard = function(studentId) {
   var deferred = q.defer();
   user.findById(studentId).populate('cards').exec(function(err, Student) {
     deferred.resolve({
@@ -51,7 +62,7 @@ studentApplication.cards.put = function(req, res) {
     awsUpload.uploadImage(cardPost.data.file, studentId).then(function(s3FilePath) {
       cardPost.data.file = s3FilePath;
       card.update({_id: cardId}, cardPost, function(err, affected, Card) {
-        getApplication(studentId).then(function(response) {
+        getApplicationCard(studentId).then(function(response) {
           response.username = req.username;
           response.token = req.token;
           res.json(response);
@@ -60,7 +71,7 @@ studentApplication.cards.put = function(req, res) {
     });
   } else {
     card.update({_id: cardId}, cardPost, function(err, affected, Card) {
-      getApplication(studentId).then(function(response) {
+      getApplicationCard(studentId).then(function(response) {
         response.username = req.username;
         response.token = req.token;
         res.json(response);
