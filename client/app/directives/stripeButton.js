@@ -3,7 +3,7 @@ psprtDirectives
     var linkFunc = function(scope, element, attrs) {
       scope.token = false;
       scope.paid = false;
-      if (scope.link._link.paid) {
+      if (scope.link._link.paid > 0) {
         scope.token = true;
         scope.buttonAction = 'PAID';
         return;

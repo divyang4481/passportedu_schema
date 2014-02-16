@@ -46,19 +46,19 @@
                     "access_token": {
                       "type": "string"
                     }
-                  },
-                  "links": [
-                    {
-                      "title": "Edit {{type}} Application",
-                      "description": "{{school.data.institutionName}}",
-                      "rel": "application_{{_id}}",
-                      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{_id}}",
-                      "importance": "callToAction"
-                    }
-                  ]
+                  }
                 }
               }
-            }
+            },
+            "links": [
+              {
+                "title": "Edit {{type}} Application",
+                "description": "{{school.data.institutionName}}",
+                "rel": "application_{{_id}}",
+                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{_id}}",
+                "importance": "callToAction"
+              }
+            ]
           }
         },
         "cards": {

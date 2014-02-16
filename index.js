@@ -3,6 +3,7 @@
  */
 var express = require('express')
   , http = require('http')
+  , https = require('https')
   , path = require('path')
   , fs = require('fs')
   , mongoose = require('mongoose')
@@ -28,8 +29,8 @@ io = io.listen(server);
 module.exports = {
   io: io
 };
-app.set('port', 8081);
-//app.use(express.logger());
+//app.set('port', 80);
+app.use(express.logger());
 app.use(app.router);
 /**
  * Static resources
@@ -75,6 +76,11 @@ app.get('/templates*', templates);
 /**
  * Start Server
  */
-server.listen(app.get('port'), function() {
-  console.log('Listening on port ' + app.get('port'));
+server.listen(80, function() {
+  console.log('Listening on port ' + 80);
 });
+var options = {
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.crt')
+};
+https.createServer(options, app).listen(443);

@@ -1,4 +1,4 @@
-var config = require('config').stripe
+var config = require('config').stripe.live
   , _ = require('underscore')
   , q = require('q')
   , stripe = require('stripe')(config.secret_key)

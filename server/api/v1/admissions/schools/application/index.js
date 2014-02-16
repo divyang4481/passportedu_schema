@@ -6,6 +6,7 @@ var _ = require('underscore')
   , card = require('../../../../../models/card')
   , application = require('../../../../../models/application')
   , school = require('../../../../../models/school')
+  , config = require('config')
   , q = require('q');
 /**
  *
@@ -31,7 +32,9 @@ var admissionsApplications = {
 /**
  *
  */
-admissionsApplications.applications.get = function(req, res) {
+admissionsApplications
+  .applications
+  .get = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   application.find({schools: schoolId}, function(err, Applications) {
@@ -44,7 +47,9 @@ admissionsApplications.applications.get = function(req, res) {
 /**
  *
  */
-admissionsApplications.applications.post = function(req, res) {
+admissionsApplications
+  .applications
+  .post = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId;
   var app = {
@@ -87,18 +92,26 @@ var getApplicationCards = function(admissionsId, schoolId, applicationId) {
 /**
  *
  */
-admissionsApplications.applications.application.get = function(req, res) {
+admissionsApplications
+  .applications
+  .application
+  .get = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
-  getApplicationCards(admissionsId, schoolId, applicationId).then(function(response) {
+  getApplicationCards(admissionsId, schoolId, applicationId)
+    .then(function(response) {
+    response.stripekey = config.stripe.live.client_id
     res.json(response);
   });
 };
 /**
  *
  */
-admissionsApplications.applications.application.put = function(req, res) {
+admissionsApplications
+  .applications
+  .application
+  .put = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
@@ -111,7 +124,10 @@ admissionsApplications.applications.application.put = function(req, res) {
 /**
  *
  */
-admissionsApplications.applications.application.delete = function(req, res) {
+admissionsApplications
+  .applications
+  .application
+  .delete = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
@@ -136,7 +152,10 @@ admissionsApplications.applications.application.delete = function(req, res) {
 /**
  *
  */
-admissionsApplications.applications.application.removeCards = function(req, res) {
+admissionsApplications
+  .applications
+  .application
+  .removeCards = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
@@ -147,7 +166,11 @@ admissionsApplications.applications.application.removeCards = function(req, res)
 /**
  *
  */
-admissionsApplications.applications.application.addCards.post = function(req, res) {
+admissionsApplications
+  .applications
+  .application
+  .addCards
+  .post = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId
@@ -171,7 +194,11 @@ admissionsApplications.applications.application.addCards.post = function(req, re
 /**
  *
  */
-admissionsApplications.applications.application.addCards.get = function(req, res) {
+admissionsApplications
+  .applications
+  .application
+  .addCards
+  .get = function(req, res) {
   var admissionsId = req.params.admissionsId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
