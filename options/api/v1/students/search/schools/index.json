@@ -14,229 +14,19 @@
       "items": {
         "type": "object",
         "properties": {
-          "data.unitId": {
-            "title": "Unit ID",
-            "description": "Unique ID of School",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.institutionName": {
-            "title": "School Name",
-            "description": "",
-            "identity": false,
-            "readonly": false,
+          "_id": {
+            "title": "_id ",
+            "description": "_id ",
+            "identity": true,
+            "readonly": true,
             "type": "string"
           },
-          "data.city": {
-            "title": "City",
-            "description": "City in which school is",
-            "identity": false,
-            "readonly": false,
-            "type": "string"
-          },
-          "data.state": {
-            "title": "State",
-            "description": "State where school is",
-            "identity": false,
-            "readonly": false,
-            "type": "string"
-          },
-          "data.zip": {
-            "title": "Zip",
-            "description": "Zip code of school",
-            "identity": false,
-            "readonly": false,
-            "type": "string"
-          },
-          "data.totalEnrollment": {
-            "title": "Total Enrollment",
-            "description": "Total number of students currently enrolled",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.applicationFee": {
-            "title": "Application Fee",
-            "description": "The cost in USD of applying to school",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.totalUndergraduateEnrollment": {
-            "title": "Total Undergraduate Enrollment",
-            "description": "Total number of students enrolled in undergraduate programs",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.percentInternationalStudents": {
-            "title": "Percent International Students",
+          "data": {
+            "title": "Data",
             "description": "",
             "identity": false,
             "readonly": false,
-            "type": "number"
-          },
-          "data.percentFemaleStudent": {
-            "title": "Percent Female Student",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.percentAdmitted": {
-            "title": "Percent Admitted",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.normalFeesTuition": {
-            "title": "Normal Fees Tuition",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.outOfStateTuition": {
-            "title": "Out Of State Tuition",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.outOfStateFees": {
-            "title": "Out Of State Fees",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.SATCriticalReading25": {
-            "title": "SAT Critical Reading 25th Percentile",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.SATCriticalReading75": {
-            "title": "SAT Critical Reading 75th Percentile",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.SATMath25": {
-            "title": "SAT Math 25th Percentile",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.SATMath75": {
-            "title": "SAT Math 75th Percentile",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.SATWriting25": {
-            "title": "SAT Writing 25th Percentile",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.SATWriting75": {
-            "title": "SAT Writing 75th Percentile",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.SAT": {
-            "title": "SAT Score",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.TOEFLScore": {
-            "title": "TOEFL Score",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.IELTSScore": {
-            "title": "IELTS Score",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.GPA": {
-            "title": "GPA",
-            "description": "Grade Point Average",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.financesRequired": {
-            "title": "Finances Required",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "number"
-          },
-          "data.diplomaRequired": {
-            "title": "Diploma Required",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "string"
-          },
-          "data.referencesRequired": {
-            "title": "References Required",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "string"
-          },
-          "data.essaysRequired": {
-            "title": "Essays Required",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": "string"
-          },
-          "data.tags": {
-            "title": "Tags",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": ""
-          },
-          "data.deadlines": {
-            "title": "Deadlines",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": ""
-          },
-          "data.requiredHealthTests": {
-            "title": "Required Health Tests",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": ""
-          },
-          "data.categories": {
-            "title": "Categories",
-            "description": "",
-            "identity": false,
-            "readonly": false,
-            "type": ""
+            "type": "object"
           },
           "mediaTypes": {
             "title": "Media Types",
@@ -245,19 +35,12 @@
             "readonly": false,
             "type": ""
           },
-          "cardIds": {
+          "cards": {
             "title": "Card Ids",
             "description": "cardIds ",
             "identity": false,
             "readonly": false,
             "type": ""
-          },
-          "_id": {
-            "title": "_id ",
-            "description": "_id ",
-            "identity": true,
-            "readonly": true,
-            "type": "string"
           }
         },
         "links": [
