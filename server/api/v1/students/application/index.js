@@ -26,14 +26,18 @@ studentApplication.get = function(req, res) {
   getApplicationCards(studentId).then(function(response) {
     application.findById(applicationId)
       .exec(function(err, Application) {
-        school.findById(schoolId).exec(function(err, School) {
-          response.username = req.username;
-          response.token = req.token;
-          response.applicationId = applicationId;
-          response.schoolId = schoolId;
-          response.application = Application;
-          response.school = School;
-          res.json(response);
+        user.findById(studentId).exec(function(err, Student) {
+          school.findById(schoolId).exec(function(err, School) {
+            var feesPaid = _.where(Student.feesPaid, {applicationId: applicationId}).length;
+            response.feesPaid = feesPaid;
+            response.username = req.username;
+            response.token = req.token;
+            response.applicationId = applicationId;
+            response.schoolId = schoolId;
+            response.application = Application;
+            response.school = School;
+            res.json(response);
+          });
         });
       });
   });
