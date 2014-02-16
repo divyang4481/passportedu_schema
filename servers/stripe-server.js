@@ -1,4 +1,4 @@
-var config = require(__dirname + '/stripe-dev.config')
+var config = require('config').stripe
   , _ = require('underscore')
   , q = require('q')
   , stripe = require('stripe')(config.secret_key)
