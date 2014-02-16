@@ -75,7 +75,12 @@ var getApplicationCards = function(admissionsId, schoolId, applicationId) {
   application.findById(applicationId)
     .populate('schools')
     .exec(function(err, App) {
-      card.find({"owners.applications": applicationId})
+      card.find(
+        {
+          "owners.applications": applicationId,
+          "owners.students": {$exists: 0}
+        }
+      )
         .sort({'order': 1})
         .exec(function(err, Cards) {
           deferred.resolve({
