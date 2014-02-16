@@ -1,0 +1,31 @@
+{
+  "__v": 5,
+  "_id": ObjectId("52d3a252c0fdcace2100125e"),
+"applications" : [
+"52eb5e80bc63541b4d49cddc"
+],
+"cards" : [ ],
+"data" : {
+"unitId" : 239488,
+"institutionName" : "Northeast Wisconsin Technical College",
+"totalEnrollment" : 9549,
+"totalUndergraduateEnrollment" : 9549,
+"percentInternationalStudents" : 0,
+"percentFemaleStudent" : 59,
+"percentAdmitted" : null,
+"normalFeesTuition" : 3722,
+"outOfStateTuition" : 5033,
+"outOfStateFees" : 367,
+"SATCriticalReading25" : null,
+"SATCriticalReading75" : null,
+"SATMath25" : null,
+"SATMath75" : null,
+"SATWriting25" : null,
+"SATWriting75" : null,
+"categories" : [ ],
+"requiredHealthTests" : [ ],
+"deadlines" : [ ],
+"tags" : [ ]
+},
+"mediaTypes" : "/api/v1/schools/university.json"
+}

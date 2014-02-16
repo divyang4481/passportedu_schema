@@ -305,12 +305,6 @@
       "href": "/api/v1/students/{{studentId}}"
     },
     {
-      "title": "My Application",
-      "rel": "applications",
-      "importance": "navigation",
-      "href": "/api/v1/students/{{studentId}}/application"
-    },
-    {
       "title": "Search Schools",
       "rel": "self",
       "importance": "navigation",

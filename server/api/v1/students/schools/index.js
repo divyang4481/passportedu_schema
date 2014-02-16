@@ -6,7 +6,6 @@ var _ = require('underscore')
   , card = require('../../../../models/card')
   , school = require('../../../../models/school')
   , q = require('q');
-
 /**
  *
  */
@@ -61,7 +60,7 @@ studentSchools.school.apply = function(req, res) {
     Student.schools = _.union(Student.schools, [schoolId]);
     Student.applications = _.union(Student.applications, [applicationId]);
     addApplicationCardsToStudent(Student, applicationId).then(function() {
-      res.set('Location', '/api/v1/students/' + studentId + '/application');
+      res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/applications/' + applicationId);
       res.send(300, {username: req.username, token: req.token});
     });
   });
