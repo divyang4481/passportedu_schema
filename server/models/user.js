@@ -22,6 +22,9 @@ var UserSchema = new mongoose.Schema({
   applications: [
     {type: String, ref: "Application"}
   ],
+  feesPaid: [
+    {type: Schema.Types.Mixed}
+  ],
   schools: [
     {type: String, ref: "School"}
   ],

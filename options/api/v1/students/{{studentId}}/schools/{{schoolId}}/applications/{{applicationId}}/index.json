@@ -44,7 +44,7 @@
                 "title": "Pay Application Fee and Apply",
                 "description": "{{school.data.institutionName}}",
                 "key": "{{stripe_publishable_key}}",
-                "price": "10000",
+                "price": "{{application.fee}}",
                 "rel": "stripe_{{_id}}",
                 "method": "POST",
                 "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{application._id}}/charge",

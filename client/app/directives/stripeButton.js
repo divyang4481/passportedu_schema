@@ -2,7 +2,7 @@ psprtDirectives
   .directive('stripeButton', function() {
     var linkFunc = function(scope, element, attrs) {
       scope.token = false;
-      scope.buttonAction = 'Pay Application Fee';
+      scope.buttonAction = 'Pay Application Fee ($' + scope.link._link.price + ')';
       var handler = StripeCheckout.configure({
         key: scope.link.stripe_publishable_key,
         image: '/assets/images/passportEDU_nb.png',
@@ -20,7 +20,7 @@ psprtDirectives
           handler.open({
             name: scope.link._link.name,
             description: scope.link._link.description,
-            amount: 1000
+            amount: (scope.link._link.price * 100)
           });
           e.preventDefault();
         }
@@ -39,6 +39,6 @@ psprtDirectives
       },
       link: linkFunc,
       template: '<button class="btn" ng-class="{\'btn-primary\': !token, \'btn-success\': token}">' +
-        '<span ng-bind="buttonAction"></span> <span ng-show="token" ng-bind="amount / 100 | currency"</button>'
+        '<span ng-bind="buttonAction"></span> <span ng-show="token" ng-bind="amount | currency"</button>'
     }
   });

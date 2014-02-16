@@ -49,26 +49,7 @@
                   },
                   "links": [
                     {
-                      "title": "Pay Application Fee and Apply",
-                      "description": "{{school.data.institutionName}}",
-                      "key": "{{stripe_publishable_key}}",
-                      "price": "10000",
-                      "rel": "stripe_{{_id}}",
-                      "method": "POST",
-                      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{_id}}/charge",
-                      "importance": "content",
-                      "template": "/templates/api/v1/card/students/schools/fee/stripe",
-                      "properties": {
-                        "stripe": {
-                          "type": "object"
-                        },
-                        "token": {
-                          "type": "object"
-                        }
-                      }
-                    },
-                    {
-                      "title": "Edit Application",
+                      "title": "Edit {{type}} Application",
                       "description": "{{school.data.institutionName}}",
                       "rel": "application_{{_id}}",
                       "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{_id}}",
@@ -92,7 +73,7 @@
             "links": [
               {
                 "rel": "{{_id}}",
-                "importance": "nothing",
+                "importance": "cards",
                 "template": "/templates/api/v1/card/{{type}}",
                 "href": "/api/v1/students/{{studentId}}/applications/{{applicationId}}/cards/{{_id}}",
                 "method": "GET"

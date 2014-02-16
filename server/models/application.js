@@ -5,6 +5,7 @@ var mongoose = require('mongoose')
  */
 var ApplicationSchema = new mongoose.Schema({
   type: String,
+  fee: Number,
   admissionsId: String,
   schools: [
     {type: String, ref: "School"}

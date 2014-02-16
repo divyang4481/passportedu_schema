@@ -23,7 +23,7 @@ studentApplication.get = function(req, res) {
   var studentId = req.params.studentId
     , schoolId = req.params.schoolId
     , applicationId = req.params.applicationId;
-  getApplicationCard(studentId).then(function(response) {
+  getApplicationCards(studentId).then(function(response) {
     application.findById(applicationId)
       .exec(function(err, Application) {
         school.findById(schoolId).exec(function(err, School) {
@@ -41,7 +41,7 @@ studentApplication.get = function(req, res) {
 /**
  *
  */
-var getApplicationCard = function(studentId) {
+var getApplicationCards = function(studentId) {
   var deferred = q.defer();
   user.findById(studentId).populate('cards').exec(function(err, Student) {
     deferred.resolve({
@@ -62,7 +62,7 @@ studentApplication.cards.put = function(req, res) {
     awsUpload.uploadImage(cardPost.data.file, studentId).then(function(s3FilePath) {
       cardPost.data.file = s3FilePath;
       card.update({_id: cardId}, cardPost, function(err, affected, Card) {
-        getApplicationCard(studentId).then(function(response) {
+        getApplicationCards(studentId).then(function(response) {
           response.username = req.username;
           response.token = req.token;
           res.json(response);
@@ -71,7 +71,7 @@ studentApplication.cards.put = function(req, res) {
     });
   } else {
     card.update({_id: cardId}, cardPost, function(err, affected, Card) {
-      getApplicationCard(studentId).then(function(response) {
+      getApplicationCards(studentId).then(function(response) {
         response.username = req.username;
         response.token = req.token;
         res.json(response);
@@ -80,7 +80,7 @@ studentApplication.cards.put = function(req, res) {
   }
 };
 /**
- *
+ * Charging the application fee, stored in the application model
  */
 studentApplication.payApplicationFee = function(req, res) {
   var studentId = req.params.studentId
@@ -92,10 +92,10 @@ studentApplication.payApplicationFee = function(req, res) {
         stripe.setApiKey(Application.stripe.access_token);
         var stripeToken = req.body.token;
         var charge = stripe.charges.create({
-          amount: 1000,
+          amount: (Application.fee * 100),
           currency: "usd",
           card: stripeToken.id,
-          description: Student.fullName + ' ' + Student.email
+          description: Student.fullName + ' ' + Student.username + ' appId:' + applicationId
         }, function(err, charge) {
           if (err) {
             if (err.type === 'StripeCardError') {
@@ -109,8 +109,17 @@ studentApplication.payApplicationFee = function(req, res) {
               res.send(300, {username: req.username, token: req.token});
             }
           } else {
-            res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/applications/' + applicationId + '/paid');
-            res.send(300, {username: req.username, token: req.token});
+            Student.feesPaid.push(
+              {
+                charge: charge,
+                applicationId: applicationId
+              }
+            );
+            Student.markModified('feesPaid');
+            Student.save(function(err) {
+              res.set('Location', '/api/v1/students/' + studentId + '/schools/' + schoolId + '/applications/' + applicationId + '/paid');
+              res.send(300, {username: req.username, token: req.token});
+            });
           }
         });
       });
@@ -121,39 +130,43 @@ studentApplication.payApplicationFee = function(req, res) {
  */
 studentApplication.paidFee = function(req, res) {
   var studentId = req.params.studentId
-    , schoolId = req.params.schoolId;
-  school.findById(schoolId)
-    .populate('applications')
-    .exec(function(err, School) {
-      user.find()
-      var response = {
-        studentId: studentId,
-        schoolId: schoolId,
-        school: School
-      };
-      response.username = req.username;
-      response.token = req.token;
-      res.json(response);
-    });
+    , schoolId = req.params.schoolId
+    , applicationId = req.params.applicationId;
+  getApplicationCards(studentId).then(function(response) {
+    application.findById(applicationId)
+      .exec(function(err, Application) {
+        school.findById(schoolId).exec(function(err, School) {
+          response.username = req.username;
+          response.token = req.token;
+          response.applicationId = applicationId;
+          response.schoolId = schoolId;
+          response.application = Application;
+          response.school = School;
+          res.json(response);
+        });
+      });
+  });
 };
 /**
  * Failed paying fee
  */
 studentApplication.failedFee = function(req, res) {
   var studentId = req.params.studentId
-    , schoolId = req.params.schoolId;
-  school.findById(schoolId)
-    .populate('applications')
-    .exec(function(err, School) {
-      user.find()
-      var response = {
-        studentId: studentId,
-        schoolId: schoolId,
-        school: School
-      };
-      response.username = req.username;
-      response.token = req.token;
-      res.json(response);
-    });
+    , schoolId = req.params.schoolId
+    , applicationId = req.params.applicationId;
+  getApplicationCards(studentId).then(function(response) {
+    application.findById(applicationId)
+      .exec(function(err, Application) {
+        school.findById(schoolId).exec(function(err, School) {
+          response.username = req.username;
+          response.token = req.token;
+          response.applicationId = applicationId;
+          response.schoolId = schoolId;
+          response.application = Application;
+          response.school = School;
+          res.json(response);
+        });
+      });
+  });
 };
 module.exports = studentApplication;

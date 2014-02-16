@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "You Applied to {{school.data.institutionName}}",
   "type": "object",
-  "description": "Congratulations, your application fee of [{{school.data.applicationFee | currency}}] has been paid!",
+  "description": "Congratulations, your application fee of [{{application.fee | currency}}] has been paid!",
   "properties": {
     "school": {
       "properties": {
@@ -35,27 +35,31 @@
       "title": "My Dashboard",
       "rel": "dashboard",
       "importance": "navigation",
-      "method": "GET",
       "href": "/api/v1/students/{{studentId}}"
     },
     {
       "title": "{{school.data.institutionName}}",
-      "rel": "self",
+      "rel": "school",
       "importance": "navigation",
       "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}"
+    },
+    {
+      "title": "{{application.type}}",
+      "rel": "self",
+      "importance": "navigation",
+      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{application._id}}"
+    },
+    {
+      "title": "Back to Application",
+      "rel": "self",
+      "importance": "callToAction",
+      "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{application._id}}"
     },
     {
       "title": "Sign out",
       "rel": "logout",
       "importance": "administrative",
       "href": "/api/v1/students/logout"
-    },
-    {
-      "title": "My Dashboard",
-      "rel": "dashboard",
-      "importance": "navigation",
-      "method": "GET",
-      "href": "/api/v1/students/{{studentId}}"
     }
   ]
 }
