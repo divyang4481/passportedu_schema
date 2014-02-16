@@ -59,7 +59,7 @@
                 "rel": "addSchool_{{_id}}",
                 "importance": "callToAction",
                 "method": "PUT",
-                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/apply"
+                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{_id}}/apply"
               },
               {
                 "title": "Apply to {{type}} Later",
@@ -68,7 +68,7 @@
                 "rel": "saveSchool_{{_id}}",
                 "importance": "callToAction",
                 "method": "PUT",
-                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/application/{{_id}}/save"
+                "href": "/api/v1/students/{{studentId}}/schools/{{school._id}}/applications/{{_id}}/save"
               }
             ]
           }
