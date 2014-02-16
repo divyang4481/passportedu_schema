@@ -14,7 +14,6 @@ var client = angular.module('client', ['schemaCrawler', 'MagicLink', 'dragAndDro
      */
     $scope.traverse = function() {
       $rootScope.client.traverse(this.link._link.rel, this.link).then(function(client) {
-        console.log(client);
       });
     };
     /**
@@ -22,7 +21,6 @@ var client = angular.module('client', ['schemaCrawler', 'MagicLink', 'dragAndDro
      */
     $scope.performLink = function(link) {
       $rootScope.client.link(link, link).then(function(client) {
-        console.log(client);
       }, function(err) {
         console.log(err);
       });
