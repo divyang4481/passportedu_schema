@@ -5,20 +5,20 @@
   <div class="panel-body">
     <form class="form" role="form">
       <div class="form-group">
-        <label for="inputStreet" class="control-label">Street Address</label>
-        <input ng-model="link.data.street" type="text" class="form-control" id="inputStreet" placeholder="Street Address">
+        <label for="lineOne" class="control-label">Address Line One</label>
+        <input ng-model="link.data.lineOne" type="text" class="form-control" id="lineOne" placeholder="Address Line One">
       </div>
       <div class="form-group">
-        <label for="unit" class="control-label">Unit Number/Letter</label>
-        <input ng-model="link.data.unit" type="text" class="form-control" id="unit" placeholder="Unit Number/Letter">
+        <label for="lineTwo" class="control-label">Address Line Two</label>
+        <input ng-model="link.data.lineTwo" type="text" class="form-control" id="lineTwo" placeholder="Line Two">
       </div>
       <div class="form-group">
         <label for="inputCity" class="control-label sr-only">City</label>
         <input ng-model="link.data.city" type="text" class="form-control" id="inputCity" placeholder="City">
         <label for="inputState" class="control-label sr-only">State/Province</label>
         <input ng-model="link.data.state" type="text" class="form-control col" id="inputState" placeholder="State/Province">
-        <label for="inputZip" class="control-label sr-only">Zip</label>
-        <input ng-model="link.data.zip" type="text" class="form-control col col-lg-3" id="inputZip" placeholder="Zip">
+        <label for="inputZip" class="control-label sr-only">Zip/Postal Code</label>
+        <input ng-model="link.data.zip" type="text" class="form-control col col-lg-3" id="inputZip" placeholder="Zip/Postal">
         <label class="control-label sr-only">Country</label>
         <country-select value="link.data.country" type="text" class="form-control"></country-select>
       </div>

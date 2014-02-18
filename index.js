@@ -83,4 +83,6 @@ var options = {
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('server.crt')
 };
-https.createServer(options, app).listen(443);
+https.createServer(options, app).listen(443, function() {
+  console.log('Listening on port ' + 443);
+});
